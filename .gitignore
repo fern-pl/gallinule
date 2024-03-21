@@ -1,0 +1,16 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/gallinule
+gallinule.so
+gallinule.dylib
+gallinule.dll
+gallinule.a
+gallinule.lib
+gallinule-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst

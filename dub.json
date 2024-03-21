@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"cet"
+	],
+	"copyright": "Copyright © 2024, cet",
+	"dependencies": {
+		"tern": "~>0.2.11"
+	},
+	"description": "X86 and ARM JIT and inline assemblers.",
+	"license": "AGPL-3.0-only",
+	"name": "gallinule"
+}
