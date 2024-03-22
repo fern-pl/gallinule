@@ -13,6 +13,8 @@ void main()
     {
         /* vaddpd(xmm0, xmm1, xmm2); */
         vaddpd(xmm0, xmm1, xmmwordPtr(r11));
+        lock(add(rax, rbx));
+        idsse3();
         /* add(rax, qwordPtr(r11));
         add(rax, r11);
         add(qwordPtr(r11), rax);
