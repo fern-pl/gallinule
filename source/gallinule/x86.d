@@ -167,7 +167,7 @@ public enum CRID
     PKS,
     UINTR
 }
-// TODO: PCOMMIT
+
 public enum CPUID7_EBX
 {
     FSGSBASE,
@@ -200,7 +200,6 @@ public enum CPUID7_EBX
     // CLAC and STAC
     SMAP, 
     AVX512IFMA,
-    // PCOMMIT
     PCOMMIT, 
     // CLFLUSHOPT
     CLFLUSHOPT, 
@@ -215,8 +214,7 @@ public enum CPUID7_EBX
     AVX512BW,
     AVX512VL
 }
-// TODO: Move WRSS, WRUSS
-// TODO: ENDBR32, ENDBR64
+
 public enum CPUID7_ECX
 {
     PREFETCHWT1,
@@ -1056,7 +1054,7 @@ public:
     auto idsgxlc() => cpuid(7) + shr(ecx, CPUID7_ECX.SGX_LC) + and(ecx, 1);
 
     auto idavx512qvnniw() => cpuid(7) + shr(edx, CPUID7_EDX.AVX512QVNNIW) + and(edx, 1);
-    auto idavx512fma() => cpuid(7) + shr(edx, CPUID7_EDX.AVX512FMA) + and(edx, 1);
+    auto idavx512qfma() => cpuid(7) + shr(edx, CPUID7_EDX.AVX512QFMA) + and(edx, 1);
     auto idpconfig() => cpuid(7) + shr(edx, CPUID7_EDX.PCONFIG) + and(edx, 1);
     auto idibrsibpb() => cpuid(7) + shr(edx, CPUID7_EDX.IBRS_IBPB) + and(edx, 1);
     auto idstibp() => cpuid(7) + shr(edx, CPUID7_EDX.STIBP) + and(edx, 1);
@@ -1269,7 +1267,7 @@ public:
     auto xacquire_lock(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0xf2~0xf0~buffer[(buffer.length - size)..$];
-        return size + 1;
+        return size + 2;
     }
         
     auto xrelease(size_t size)
@@ -1804,6 +1802,9 @@ public:
     auto rstorssp(Address!64 dst) => emit!5(0xf3, 0x0f, 0x01, dst);
     auto saveprevssp() => emit!5(0xf3, 0x0f, 0x01, 0xae, edx);
 
+    auto endbr32() => emit!0(0xf3, 0x0f, 0x1e, 0xfb);
+    auto endbr64() => emit!0(0xf3, 0x0f, 0x1e, 0xfa);
+
     /* ====== FSGSBASE ====== */
 
     auto rdfsbase(Reg!32 dst) => emit!0(0xf3, 0x0f, 0xae, dst);
@@ -1916,6 +1917,24 @@ public:
     auto vaddps(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, DEFAULT, 0)(0x58, dst, src, stor);
 
     /* ====== MAIN ====== */
+
+    // NOTE: Branch hints are generally useless in the modern day, AMD CPUs don't even acknowledge them;
+    // and thus these should not be used on any modern CPU.
+
+    auto not_taken(size_t size)
+    {
+        buffer = buffer[0..(buffer.length - size)]~0x2e~buffer[(buffer.length - size)..$];
+        return size + 1;
+    }
+
+    auto taken(size_t size)
+    {
+        buffer = buffer[0..(buffer.length - size)]~0x3e~buffer[(buffer.length - size)..$];
+        return size + 1;
+    }
+
+    auto enqcmd(Reg!32 dst, Address!512 src) => emit!0(0xf2, 0x0f, 0x38, 0xf8, dst, src);
+    auto enqcmd(Reg!64 dst, Address!512 src) => emit!0(0xf2, 0x0f, 0x38, 0xf8, dst, src);
 
     auto cmpxchg(RM)(RM dst, Reg!8 src) if (isRM!(RM, 8)) => emit!0(0x0f, 0xb0, dst, src);
     auto cmpxchg(RM)(RM dst, Reg!16 src) if (isRM!(RM, 16)) => emit!0(0x0f, 0xb1, dst, src);
