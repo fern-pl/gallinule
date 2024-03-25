@@ -80,19 +80,21 @@ enum isRM(T, short RS, short AS) = is(T == Reg!RS) || is(T == Address!AS);
 enum M = 0;
 // Used for generating instructions with directly encoded registers.
 enum NRM = 1;
-// Used for generating instructions without prefixes.
+// Used for generating instructions without REX prefixes.
 enum NP = 2;
 enum VEX = 3;
 // Used for generating integer VEX instructions.
 enum VEXI = 4;
 enum EVEX = 5;
 enum MVEX = 6;
-// Used for generating instructions without REX prefixes, namely SSE instructions.
+// Exactly the same as NP except flips dst and src.
 enum SSE = 7;
 
 // map_select
 enum XOP = 0;
 enum DEFAULT = 1;
+enum F38 = 2;
+enum F3A = 3;
 enum MSR = 7;
 
 /* ====== FRONT-END ====== */
@@ -326,7 +328,7 @@ public enum CPUID1_EDX
     MMX,
     // FXSAVE/FXRSTOR
     FXSR,
-    SSE,
+    NP,
     SSE2,
     SS,
     HTT,
@@ -547,7 +549,7 @@ public:
                         (isInstanceOf!(Reg, ARGS[INDEX + 1]) || isInstanceOf!(Address, ARGS[INDEX + 1])) && isRM1!(INDEX + 2);
             }
 
-            static if (SELECTOR == M || SELECTOR == NRM || SELECTOR == SSE)
+            static if (SELECTOR == M || SELECTOR == NRM || SELECTOR == NP || SELECTOR == SSE)
             void generatePrefix(SRC, DST, STOR = int)(SRC src, DST dst, STOR stor = STOR.init)
             {
                 prefixed = true;
@@ -594,7 +596,7 @@ public:
                         buffer = dst.segment~buffer;
                 }
 
-                static if (SELECTOR != SSE)
+                static if (SELECTOR != NP && SELECTOR != SSE)
                 if (hasRex)
                 {
                     ubyte rex = 0b01000000;
@@ -636,9 +638,6 @@ public:
                 }
             }
 
-            static if (SELECTOR == NP)
-            void generatePrefix(SRC, DST, STOR = int)(SRC src, DST dst, STOR stor = STOR.init) { }
-
             static if (SELECTOR == VEX || SELECTOR == VEXI)
             void generatePrefix(SRC, DST, STOR = int)(SRC src, DST dst, STOR stor = STOR.init)
             {
@@ -646,11 +645,11 @@ public:
                 bool r;
                 bool x;
                 bool b;
-                ubyte map_select = MAP;
-                bool we = SELECTOR != VEX && SELECTOR != VEXI;
+                immutable ubyte map_select = MAP;
+                bool we = SELECTOR == VEX;
                 ubyte vvvv = 0b1111;
                 immutable bool l = SIZE != 128;
-                ubyte pp = (PREFIX == 0x66) ? 1 : ((PREFIX == 0xf3) ? 2 : ((PREFIX == 0xf2) ? 3 : 0));
+                immutable ubyte pp = (PREFIX == 0x66) ? 1 : ((PREFIX == 0xf3) ? 2 : ((PREFIX == 0xf2) ? 3 : 0));
 
                 static if (isInstanceOf!(Reg, STOR))
                 {
@@ -674,27 +673,27 @@ public:
                 static if (isInstanceOf!(Reg, SRC))
                 {
                     static if (SELECTOR == VEXI)
-                        we = is(SRC == REG!64);
-                    r = src.index >= 8;
+                        we = is(SRC == Reg!64);
+                    b = src.index >= 8;
                 }
                 else static if (isInstanceOf!(Address, SRC))
                 {
                     static if (SELECTOR == VEXI)
                         we = is(SRC == Address!64);
-                    x = src.register >= 8;
+                    b = src.register >= 8;
                 }
                 
                 static if (isInstanceOf!(Reg, DST))
                 {
                     static if (SELECTOR == VEXI)
                         we = is(DST == Reg!64);
-                    b = dst.index >= 8;
+                    r = dst.index >= 8;
                 }
                 else static if (isInstanceOf!(Address, DST))
                 {
                     static if (SELECTOR == VEXI)
                         we = is(DST == Address!64);
-                    b = dst.register >= 8;
+                    x = dst.register >= 8;
                 }
 
                 static if (isInstanceOf!(Address, SRC))
@@ -712,30 +711,16 @@ public:
                 if (map_select != 1 || r || x || b || MAP == XOP)
                 {
                     static if (SELECTOR != VEXI)
-                        we = true;
+                        we = false;
 
                     vex ~= MAP == XOP ? 0x8f : 0xc4;
                     vex ~= (cast(ubyte)(((r ? 0 : 1) << 5) | ((x ? 0 : 1) << 6) | ((b ? 0 : 1) << 7))) | (map_select & 0b00011111);
                 }
                 else
                     vex ~= 0xc5;
-                vex ~= (we ? 0 : 1) << 7 | (vvvv & 0b00001111) << 3 | (l ? 1 : 0) << 2 | (pp & 0b00000011);
+                vex ~= we << 7 | (vvvv & 0b00001111) << 3 | (l ? 1 : 0) << 2 | (pp & 0b00000011);
                 
-                size_t pos = 0;
-                foreach (i; 0..5)
-                {
-                    if (buffer[pos] == 0xf2)
-                        pos++;
-                    else if (buffer[pos] == 0xf3)
-                        pos++;
-                    else if (buffer[pos] == 0xf0)
-                        pos++;
-                    else if (buffer[pos] == 0x66)
-                        pos++;
-                    else if (buffer[pos] == 0x67)
-                        pos++;
-                }
-                buffer = buffer[0..pos]~vex~buffer[pos..$];
+                buffer = vex~buffer;
                 
                 static if (isInstanceOf!(Address, SRC))
                 {
@@ -772,7 +757,6 @@ public:
                 {
                     auto dst = arg;
                     auto src = Reg!(TemplateArgsOf!(typeof(arg)))(0);
-                    // I don't know why vector instructions need the dst and src flipped, but I don't care enough to look into it.
                     static if (SELECTOR == M || SELECTOR == NP || SELECTOR == NRM)
                         buffer ~= generateModRM!OP(dst, src);
                     else
@@ -804,10 +788,10 @@ public:
 
             if (!prefixed)
             {
-                static if (SELECTOR != M && SELECTOR != NP && SELECTOR != SSE && SELECTOR != NRM)
+                static if (SELECTOR != M && SELECTOR != NP && SELECTOR != NP && SELECTOR != NRM)
                     generatePrefix(Reg!(typeof(args[0]).sizeof * 128)(0), Reg!(typeof(args[0]).sizeof * 128)(0));
 
-                static if (SELECTOR == M || SELECTOR == NP || SELECTOR == SSE || SELECTOR == NRM)
+                static if (SELECTOR == M || SELECTOR == NP || SELECTOR == NP || SELECTOR == NRM)
                 foreach (i, arg; args)
                 {
                     static if (!is(typeof(arg) == int))
@@ -958,8 +942,6 @@ public:
                 buffer ~= (cast(ubyte*)&rel)[0..4];
 
             this.buffer = this.buffer[0..branch[0]]~buffer~this.buffer[branch[0]..$];
-            import std.stdio;
-            writeln(abs);
             abs += buffer.length;
         }
         branches = null;
@@ -1105,7 +1087,7 @@ public:
     auto idacpi() => cpuid(1) + shr(edx, CPUID1_EDX.ACPI) + and(edx, 1);
     auto idmmx() => cpuid(1) + shr(edx, CPUID1_EDX.MMX) + and(edx, 1);
     auto idfxsr() => cpuid(1) + shr(edx, CPUID1_EDX.FXSR) + and(edx, 1);
-    auto idsse() => cpuid(1) + shr(edx, CPUID1_EDX.SSE) + and(edx, 1);
+    auto idsse() => cpuid(1) + shr(edx, CPUID1_EDX.NP) + and(edx, 1);
     auto idsse2() => cpuid(1) + shr(edx, CPUID1_EDX.SSE2) + and(edx, 1);
     auto idss() => cpuid(1) + shr(edx, CPUID1_EDX.SS) + and(edx, 1);
     auto idhtt() => cpuid(1) + shr(edx, CPUID1_EDX.HTT) + and(edx, 1);
@@ -1277,6 +1259,9 @@ public:
     auto lzcnt(RM)(Reg!16 dst, RM src) if (isRM!(RM, 16)) => emit!0(0xf3, 0x0f, 0xbd, dst, src);
     auto lzcnt(RM)(Reg!32 dst, RM src) if (isRM!(RM, 32)) => emit!0(0xf3, 0x0f, 0xbd, dst, src);
     auto lzcnt(RM)(Reg!64 dst, RM src) if (isRM!(RM, 64)) => emit!0(0xf3, 0x0f, 0xbd, dst, src);
+
+    auto andn(RM)(Reg!32 dst, Reg!32 src, RM stor) if (isRM!(RM, 32)) => emit!(0, VEXI, 128, F38, 0)(0xf2, dst, src, stor);
+    auto andn(RM)(Reg!64 dst, Reg!64 src, RM stor) if (isRM!(RM, 64)) => emit!(0, VEXI, 128, F38, 0)(0xf2, dst, src, stor);
 
     /* ====== SGX ====== */
 
@@ -1927,38 +1912,50 @@ public:
     /* ====== AES ====== */
 
     auto aesdec(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xde, dst, src);
-    auto vaesdec(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, 2, 0x66)(0xde, dst, src, stor);
-    auto vaesdec(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, 2, 0x66)(0xde, dst, src, stor);
+    auto vaesdec(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xde, dst, src, stor);
+    auto vaesdec(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xde, dst, src, stor);
 
     auto aesdec128kl(Reg!128 dst, Address!384 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xdd, dst, src);
     auto aesdec256kl(Reg!128 dst, Address!512 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xdf, dst, src);
 
     auto aesdeclast(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdf, dst, src);
-    auto vaesdeclast(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, 2, 0x66)(0xdf, dst, src, stor);
-    auto vaesdeclast(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, 2, 0x66)(0xdf, dst, src, stor);
+    auto vaesdeclast(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdf, dst, src, stor);
+    auto vaesdeclast(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xdf, dst, src, stor);
 
     auto aesdecwide128kl(Address!384 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, ecx);
     auto aesdecwide256kl(Address!512 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, ebx);
 
     auto aesenc(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdc, dst, src);
-    auto vaesenc(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, 2, 0x66)(0xdc, dst, src, stor);
-    auto vaesenc(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, 2, 0x66)(0xdc, dst, src, stor);
+    auto vaesenc(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdc, dst, src, stor);
+    auto vaesenc(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xdc, dst, src, stor);
 
     auto aesenc128kl(Reg!128 dst, Address!384 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xdc, dst, src);
     auto aesenc256kl(Reg!128 dst, Address!512 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xde, dst, src);
 
     auto aesenclast(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdd, dst, src);
-    auto vaesenclast(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, 2, 0x66)(0xdd, dst, src, stor);
-    auto vaesenclast(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, 2, 0x66)(0xdd, dst, src, stor);
+    auto vaesenclast(RM)(Reg!128 dst, Reg!128 src, RM stor) if (isRM!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdd, dst, src, stor);
+    auto vaesenclast(RM)(Reg!256 dst, Reg!256 src, RM stor) if (isRM!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xdd, dst, src, stor);
 
     auto aesencwide128kl(Address!384 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, eax);
     auto aesencwide256kl(Address!512 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, edx);
 
     auto aesimc(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdb, dst, src);
-    auto vaesimc(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, VEX, 128, 2, 0x66)(0xdb, dst, src);
+    auto vaesimc(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdb, dst, src);
 
     auto aeskeygenassist(RM)(Reg!128 dst, RM src, ubyte imm8) if (isRM!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x3a, 0xdf, dst, src, imm8);
-    auto vaeskeygenassist(RM)(Reg!128 dst, RM src, ubyte imm8) if (isRM!(RM, 128)) => emit!(0, VEX, 128, 3, 0x66)(0xdf, dst, src, imm8);
+    auto vaeskeygenassist(RM)(Reg!128 dst, RM src, ubyte imm8) if (isRM!(RM, 128)) => emit!(0, VEX, 128, F3A, 0x66)(0xdf, dst, src, imm8);
+
+    /* ====== SHA ====== */
+
+    auto sha1msg1(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xc9, dst, src);
+    auto sha1msg2(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xca, dst, src);
+    auto sha1nexte(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xc8, dst, src);
+
+    auto sha256msg1(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xcc, dst, src);
+
+    auto sha1rnds4(RM)(Reg!128 dst, RM src, ubyte imm8) if (isRM!(RM, 128)) => emit!(0, SSE)(0x0f, 0x3a, 0xcc, dst, src, imm8);
+
+    auto sha256rnds2(RM)(Reg!128 dst, RM src) if (isRM!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xcb, dst, src);
 
     /* ====== MAIN ====== */
 
@@ -1976,6 +1973,13 @@ public:
         buffer = buffer[0..(buffer.length - size)]~0x3e~buffer[(buffer.length - size)..$];
         return size + 1;
     }
+
+    auto crc32(RM)(Reg!32 dst, RM src) if (isRM!(RM, 8)) => emit!0(0xf2, 0x0f, 0x38, 0xf0, dst, src);
+    auto crc32(RM)(Reg!32 dst, RM src) if (isRM!(RM, 16)) => emit!0(0xf2, 0x0f, 0x38, 0xf1, dst, src);
+    auto crc32(RM)(Reg!32 dst, RM src) if (isRM!(RM, 32)) => emit!0(0xf2, 0x0f, 0x38, 0xf1, dst, src);
+
+    auto crc32(RM)(Reg!64 dst, RM src) if (isRM!(RM, 8)) => emit!0(0xf2, 0x0f, 0x38, 0xf0, dst, src);
+    auto crc32(RM)(Reg!64 dst, RM src) if (isRM!(RM, 64)) => emit!0(0xf2, 0x0f, 0x38, 0xf1, dst, src);
 
     auto enqcmd(Reg!32 dst, Address!512 src) => emit!0(0xf2, 0x0f, 0x38, 0xf8, dst, src);
     auto enqcmd(Reg!64 dst, Address!512 src) => emit!0(0xf2, 0x0f, 0x38, 0xf8, dst, src);
