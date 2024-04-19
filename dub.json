@@ -4,9 +4,10 @@
 	],
 	"copyright": "Copyright © 2024, cet",
 	"dependencies": {
-		"tern": "~>0.2.11"
+		"tern": "~>0.2.12"
 	},
 	"description": "X86 and ARM JIT and inline assemblers.",
 	"license": "AGPL-3.0-only",
-	"name": "gallinule"
+	"name": "gallinule",
+    "targetType": "autodetect"
 }
