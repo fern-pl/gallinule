@@ -774,7 +774,7 @@ public enum OpCode : ushort
     FSUBRP,
     FISUBR,
 
-    FCMOVCC = 10000,
+    FCMOVCC,
     //
     RDMSR,
     WRMSR,
@@ -785,7 +785,7 @@ public enum OpCode : ushort
     SYSEXITC,
     SYSEXIT,
     //
-    CMOVCC = 10001,
+    CMOVCC,
     //
     CLFLUSH,
     //
@@ -1090,10 +1090,10 @@ public enum OpCode : ushort
     MOVSQ,
 
     CALL,
-    LOOPCC = 10002,
+    LOOPCC,
     JMP,
-    JCC = 10003,
-    REPCC = 10004,
+    JCC,
+    REPCC,
 
     CMPSB,
     CMPSW,
@@ -1130,7 +1130,7 @@ public enum OpCode : ushort
     OUTSW,
     OUTSD,
 
-    SETCC = 10005
+    SETCC
 }
 
 public enum TypeModifiers : ubyte
@@ -2080,6 +2080,1809 @@ public:
         return this.buffer;
     }
     
+    auto emit(Instruction instr)
+    {
+        auto _emit(string opcode)()
+        {
+            import std.stdio;
+            debug writeln(opcode, instr);
+        }
+
+        with (OpCode) switch (instr.opcode)
+        {
+            case CRIDVME:
+                _emit!"cridvme";
+                break;
+            case CRIDPVI:
+                _emit!"cridpvi";
+                break;
+            case CRIDTSD:
+                _emit!"cridtsd";
+                break;
+            case CRIDDE:
+                _emit!"cridde";
+                break;
+            case CRIDPSE:
+                _emit!"cridpse";
+                break;
+            case CRIDPAE:
+                _emit!"cridpae";
+                break;
+            case CRIDMCE:
+                _emit!"cridmce";
+                break;
+            case CRIDPGE:
+                _emit!"cridpge";
+                break;
+            case CRIDPCE:
+                _emit!"cridpce";
+                break;
+            case CRIDOSFXSR:
+                _emit!"cridosfxsr";
+                break;
+            case CRIDOSXMMEXCPT:
+                _emit!"cridosxmmexcpt";
+                break;
+            case CRIDUMIP:
+                _emit!"cridumip";
+                break;
+            case CRIDVMXE:
+                _emit!"cridvmxe";
+                break;
+            case CRIDSMXE:
+                _emit!"cridsmxe";
+                break;
+            case CRIDFSGSBASE:
+                _emit!"cridfsgsbase";
+                break;
+            case CRIDPCIDE:
+                _emit!"cridpcide";
+                break;
+            case CRIDOSXSAVE:
+                _emit!"cridosxsave";
+                break;
+            case CRIDSMEP:
+                _emit!"cridsmep";
+                break;
+            case CRIDSMAP:
+                _emit!"cridsmap";
+                break;
+            case CRIDPKE:
+                _emit!"cridpke";
+                break;
+            case CRIDCET:
+                _emit!"cridcet";
+                break;
+            case CRIDPKS:
+                _emit!"cridpks";
+                break;
+            case CRIDUINTR:
+                _emit!"criduintr";
+                break;
+            case IDAVX512VL:
+                _emit!"idavx512vl";
+                break;
+            case IDAVX512BW:
+                _emit!"idavx512bw";
+                break;
+            case IDSHA:
+                _emit!"idsha";
+                break;
+            case IDAVX512CD:
+                _emit!"idavx512cd";
+                break;
+            case IDAVX512ER:
+                _emit!"idavx512er";
+                break;
+            case IDAVX512PF:
+                _emit!"idavx512pf";
+                break;
+            case IDPT:
+                _emit!"idpt";
+                break;
+            case IDCLWB:
+                _emit!"idclwb";
+                break;
+            case IDCLFLUSHOPT:
+                _emit!"idclflushopt";
+                break;
+            case IDPCOMMIT:
+                _emit!"idpcommit";
+                break;
+            case IDAVX512IFMA:
+                _emit!"idavx512ifma";
+                break;
+            case IDSMAP:
+                _emit!"idsmap";
+                break;
+            case IDADX:
+                _emit!"idadx";
+                break;
+            case IDRDSEED:
+                _emit!"idrdseed";
+                break;
+            case IDAVX512DQ:
+                _emit!"idavx512dq";
+                break;
+            case IDAVX512F:
+                _emit!"idavx512f";
+                break;
+            case IDPQE:
+                _emit!"idpqe";
+                break;
+            case IDRTM:
+                _emit!"idrtm";
+                break;
+            case IDINVPCID:
+                _emit!"idinvpcid";
+                break;
+            case IDERMS:
+                _emit!"iderms";
+                break;
+            case IDBMI2:
+                _emit!"idbmi2";
+                break;
+            case IDSMEP:
+                _emit!"idsmep";
+                break;
+            case IDFPDP:
+                _emit!"idfpdp";
+                break;
+            case IDAVX2:
+                _emit!"idavx2";
+                break;
+            case IDHLE:
+                _emit!"idhle";
+                break;
+            case IDBMI1:
+                _emit!"idbmi1";
+                break;
+            case IDSGX:
+                _emit!"idsgx";
+                break;
+            case IDTSCADJ:
+                _emit!"idtscadj";
+                break;
+            case IDFSGSBASE:
+                _emit!"idfsgsbase";
+                break;
+            case IDPREFETCHWT1:
+                _emit!"idprefetchwt1";
+                break;
+            case IDAVX512VBMI:
+                _emit!"idavx512vbmi";
+                break;
+            case IDUMIP:
+                _emit!"idumip";
+                break;
+            case IDPKU:
+                _emit!"idpku";
+                break;
+            case IDAVX512VBMI2:
+                _emit!"idavx512vbmi2";
+                break;
+            case IDCET:
+                _emit!"idcet";
+                break;
+            case IDGFNI:
+                _emit!"idgfni";
+                break;
+            case IDVAES:
+                _emit!"idvaes";
+                break;
+            case IDVPCL:
+                _emit!"idvpcl";
+                break;
+            case IDAVX512VNNI:
+                _emit!"idavx512vnni";
+                break;
+            case IDAVX512BITALG:
+                _emit!"idavx512bitalg";
+                break;
+            case IDTME:
+                _emit!"idtme";
+                break;
+            case IDAVX512VP:
+                _emit!"idavx512vp";
+                break;
+            case IDVA57:
+                _emit!"idva57";
+                break;
+            case IDRDPID:
+                _emit!"idrdpid";
+                break;
+            case IDSGXLC:
+                _emit!"idsgxlc";
+                break;
+            case IDAVX512QVNNIW:
+                _emit!"idavx512qvnniw";
+                break;
+            case IDAVX512QFMA:
+                _emit!"idavx512qfma";
+                break;
+            case IDPCONFIG:
+                _emit!"idpconfig";
+                break;
+            case IDIBRSIBPB:
+                _emit!"idibrsibpb";
+                break;
+            case IDSTIBP:
+                _emit!"idstibp";
+                break;
+            case IDSSE3:
+                _emit!"idsse3";
+                break;
+            case IDPCLMUL:
+                _emit!"idpclmul";
+                break;
+            case IDDDTES64:
+                _emit!"idddtes64";
+                break;
+            case IDMON:
+                _emit!"idmon";
+                break;
+            case IDDSCPL:
+                _emit!"iddscpl";
+                break;
+            case IDVMX:
+                _emit!"idvmx";
+                break;
+            case IDSMX:
+                _emit!"idsmx";
+                break;
+            case IDEST:
+                _emit!"idest";
+                break;
+            case IDTM2:
+                _emit!"idtm2";
+                break;
+            case IDSSSE3:
+                _emit!"idssse3";
+                break;
+            case IDCID:
+                _emit!"idcid";
+                break;
+            case IDSDBG:
+                _emit!"idsdbg";
+                break;
+            case IDFMA:
+                _emit!"idfma";
+                break;
+            case IDCX16:
+                _emit!"idcx16";
+                break;
+            case IDXTPR:
+                _emit!"idxtpr";
+                break;
+            case IDPDCM:
+                _emit!"idpdcm";
+                break;
+            case IDPCID:
+                _emit!"idpcid";
+                break;
+            case IDDCA:
+                _emit!"iddca";
+                break;
+            case IDSSE41:
+                _emit!"idsse41";
+                break;
+            case IDSSE42:
+                _emit!"idsse42";
+                break;
+            case IDX2APIC:
+                _emit!"idx2apic";
+                break;
+            case IDMOVBE:
+                _emit!"idmovbe";
+                break;
+            case IDPOPCNT:
+                _emit!"idpopcnt";
+                break;
+            case IDTSCD:
+                _emit!"idtscd";
+                break;
+            case IDAES:
+                _emit!"idaes";
+                break;
+            case IDXSAVE:
+                _emit!"idxsave";
+                break;
+            case IDOSXSAVE:
+                _emit!"idosxsave";
+                break;
+            case IDAVX:
+                _emit!"idavx";
+                break;
+            case IDF16C:
+                _emit!"idf16c";
+                break;
+            case IDRDRAND:
+                _emit!"idrdrand";
+                break;
+            case IDHV:
+                _emit!"idhv";
+                break;
+            case IDFPU:
+                _emit!"idfpu";
+                break;
+            case IDVME:
+                _emit!"idvme";
+                break;
+            case IDDE:
+                _emit!"idde";
+                break;
+            case IDPSE:
+                _emit!"idpse";
+                break;
+            case IDTSC:
+                _emit!"idtsc";
+                break;
+            case IDMSR:
+                _emit!"idmsr";
+                break;
+            case IDPAE:
+                _emit!"idpae";
+                break;
+            case IDCX8:
+                _emit!"idcx8";
+                break;
+            case IDAPIC:
+                _emit!"idapic";
+                break;
+            case IDSEP:
+                _emit!"idsep";
+                break;
+            case IDMTRR:
+                _emit!"idmtrr";
+                break;
+            case IDPGE:
+                _emit!"idpge";
+                break;
+            case IDMCA:
+                _emit!"idmca";
+                break;
+            case IDCMOV:
+                _emit!"idcmov";
+                break;
+            case IDPAT:
+                _emit!"idpat";
+                break;
+            case IDPSE36:
+                _emit!"idpse36";
+                break;
+            case IDPSN:
+                _emit!"idpsn";
+                break;
+            case IDCLFL:
+                _emit!"idclfl";
+                break;
+            case IDDS:
+                _emit!"idds";
+                break;
+            case IDACPI:
+                _emit!"idacpi";
+                break;
+            case IDMMX:
+                _emit!"idmmx";
+                break;
+            case IDFXSR:
+                _emit!"idfxsr";
+                break;
+            case IDSSE:
+                _emit!"idsse";
+                break;
+            case IDSSE2:
+                _emit!"idsse2";
+                break;
+            case IDSS:
+                _emit!"idss";
+                break;
+            case IDHTT:
+                _emit!"idhtt";
+                break;
+            case IDTM:
+                _emit!"idtm";
+                break;
+            case IDIA64:
+                _emit!"idia64";
+                break;
+            case IDPBE:
+                _emit!"idpbe";
+                break;
+            case PFADD:
+                _emit!"pfadd";
+                break;
+            case PFSUB:
+                _emit!"pfsub";
+                break;
+            case PFSUBR:
+                _emit!"pfsubr";
+                break;
+            case PFMUL:
+                _emit!"pfmul";
+                break;
+            case PFCMPEQ:
+                _emit!"pfcmpeq";
+                break;
+            case PFCMPGE:
+                _emit!"pfcmpge";
+                break;
+            case PFCMPGT:
+                _emit!"pfcmpgt";
+                break;
+            case PF2ID:
+                _emit!"pf2id";
+                break;
+            case PI2FD:
+                _emit!"pi2fd";
+                break;
+            case PF2IW:
+                _emit!"pf2iw";
+                break;
+            case PI2FW:
+                _emit!"pi2fw";
+                break;
+            case PFMAX:
+                _emit!"pfmax";
+                break;
+            case PFMIN:
+                _emit!"pfmin";
+                break;
+            case PFRCP:
+                _emit!"pfrcp";
+                break;
+            case PFRSQRT:
+                _emit!"pfrsqrt";
+                break;
+            case PFRCPIT1:
+                _emit!"pfrcpit1";
+                break;
+            case PFRSQIT1:
+                _emit!"pfrsqit1";
+                break;
+            case PFRCPIT2:
+                _emit!"pfrcpit2";
+                break;
+            case PFACC:
+                _emit!"pfacc";
+                break;
+            case PFNACC:
+                _emit!"pfnacc";
+                break;
+            case PFPNACC:
+                _emit!"pfpnacc";
+                break;
+            case PMULHRW:
+                _emit!"pmulhrw";
+                break;
+            case PAVGUSB:
+                _emit!"pavgusb";
+                break;
+            case PSWAPD:
+                _emit!"pswapd";
+                break;
+            case FEMMS:
+                _emit!"femms";
+                break;
+            case ICEBP:
+                _emit!"icebp";
+                break;
+            case PTWRITE:
+                _emit!"ptwrite";
+                break;
+            case CLWB:
+                _emit!"clwb";
+                break;
+            case CLFLUSHOPT:
+                _emit!"clflushopt";
+                break;
+            case STAC:
+                _emit!"stac";
+                break;
+            case CLAC:
+                _emit!"clac";
+                break;
+            case ADC:
+                _emit!"adc";
+                break;
+            case ADCX:
+                _emit!"adcx";
+                break;
+            case ADOX:
+                _emit!"adox";
+                break;
+            case RDSEED:
+                _emit!"rdseed";
+                break;
+            case BNDCL:
+                _emit!"bndcl";
+                break;
+            case BNDCU:
+                _emit!"bndcu";
+                break;
+            case BNDLDX:
+                _emit!"bndldx";
+                break;
+            case BNDSTX:
+                _emit!"bndstx";
+                break;
+            case BNDMK:
+                _emit!"bndmk";
+                break;
+            case BNDMOV:
+                _emit!"bndmov";
+                break;
+            case BOUND:
+                _emit!"bound";
+                break;
+            case XEND:
+                _emit!"xend";
+                break;
+            case XABORT:
+                _emit!"xabort";
+                break;
+            case XBEGIN:
+                _emit!"xbegin";
+                break;
+            case XTEST:
+                _emit!"xtest";
+                break;
+            case INVPCID:
+                _emit!"invpcid";
+                break;
+            case XACQUIRE:
+                _emit!"xacquire";
+                break;
+            case XRELEASE:
+                _emit!"xrelease";
+                break;
+            case TZCNT:
+                _emit!"tzcnt";
+                break;
+            case LZCNT:
+                _emit!"lzcnt";
+                break;
+            case ANDN:
+                _emit!"andn";
+                break;
+            case ECREATE:
+                _emit!"ecreate";
+                break;
+            case EINIT:
+                _emit!"einit";
+                break;
+            case EREMOVE:
+                _emit!"eremove";
+                break;
+            case EDBGRD:
+                _emit!"edbgrd";
+                break;
+            case EDBGWR:
+                _emit!"edbgwr";
+                break;
+            case EEXTEND:
+                _emit!"eextend";
+                break;
+            case ELDB:
+                _emit!"eldb";
+                break;
+            case ELDU:
+                _emit!"eldu";
+                break;
+            case EBLOCK:
+                _emit!"eblock";
+                break;
+            case EPA:
+                _emit!"epa";
+                break;
+            case EWB:
+                _emit!"ewb";
+                break;
+            case ETRACK:
+                _emit!"etrack";
+                break;
+            case EAUG:
+                _emit!"eaug";
+                break;
+            case EMODPR:
+                _emit!"emodpr";
+                break;
+            case EMODT:
+                _emit!"emodt";
+                break;
+            case ERDINFO:
+                _emit!"erdinfo";
+                break;
+            case ETRACKC:
+                _emit!"etrackc";
+                break;
+            case ELDBC:
+                _emit!"eldbc";
+                break;
+            case ELDUC:
+                _emit!"elduc";
+                break;
+            case EREPORT:
+                _emit!"ereport";
+                break;
+            case EGETKEY:
+                _emit!"egetkey";
+                break;
+            case EENTER:
+                _emit!"eenter";
+                break;
+            case EEXIT:
+                _emit!"eexit";
+                break;
+            case EACCEPT:
+                _emit!"eaccept";
+                break;
+            case EMODPE:
+                _emit!"emodpe";
+                break;
+            case EACCEPTCOPY:
+                _emit!"eacceptcopy";
+                break;
+            case EDECCSSA:
+                _emit!"edeccssa";
+                break;
+            case EDECVIRTCHILD:
+                _emit!"edecvirtchild";
+                break;
+            case EINCVIRTCHILD:
+                _emit!"eincvirtchild";
+                break;
+            case ESETCONTEXT:
+                _emit!"esetcontext";
+                break;
+            case MONITOR:
+                _emit!"monitor";
+                break;
+            case MWAIT:
+                _emit!"mwait";
+                break;
+            case INVVPID:
+                _emit!"invvpid";
+                break;
+            case INVEPT:
+                _emit!"invept";
+                break;
+            case VMCALL:
+                _emit!"vmcall";
+                break;
+            case VMFUNC:
+                _emit!"vmfunc";
+                break;
+            case VMCLEAR:
+                _emit!"vmclear";
+                break;
+            case VMLAUNCH:
+                _emit!"vmlaunch";
+                break;
+            case VMRESUME:
+                _emit!"vmresume";
+                break;
+            case VMXOFF:
+                _emit!"vmxoff";
+                break;
+            case VMXON:
+                _emit!"vmxon";
+                break;
+            case VMWRITE:
+                _emit!"vmwrite";
+                break;
+            case VMREAD:
+                _emit!"vmread";
+                break;
+            case VMPTRST:
+                _emit!"vmptrst";
+                break;
+            case VMPTRLD:
+                _emit!"vmptrld";
+                break;
+            case CAPABILITIES:
+                _emit!"capabilities";
+                break;
+            case ENTERACCS:
+                _emit!"enteraccs";
+                break;
+            case EXITAC:
+                _emit!"exitac";
+                break;
+            case SENTER:
+                _emit!"senter";
+                break;
+            case SEXIT:
+                _emit!"sexit";
+                break;
+            case PARAMETERS:
+                _emit!"parameters";
+                break;
+            case SMCTRL:
+                _emit!"smctrl";
+                break;
+            case WAKEUP:
+                _emit!"wakeup";
+                break;
+            case CMPXCHG16B:
+                _emit!"cmpxchg16b";
+                break;
+            case POPCNT:
+                _emit!"popcnt";
+                break;
+            case XGETBV:
+                _emit!"xgetbv";
+                break;
+            case XSETBV:
+                _emit!"xsetbv";
+                break;
+            case XRSTOR:
+                _emit!"xrstor";
+                break;
+            case XSAVE:
+                _emit!"xsave";
+                break;
+            case XRSTORS:
+                _emit!"xrstors";
+                break;
+            case XSAVES:
+                _emit!"xsaves";
+                break;
+            case XSAVEOPT:
+                _emit!"xsaveopt";
+                break;
+            case XSAVEC:
+                _emit!"xsavec";
+                break;
+            case RDRAND:
+                _emit!"rdrand";
+                break;
+            case FABS:
+                _emit!"fabs";
+                break;
+            case FCHS:
+                _emit!"fchs";
+                break;
+            case FCLEX:
+                _emit!"fclex";
+                break;
+            case FNCLEX:
+                _emit!"fnclex";
+                break;
+            case FADD:
+                _emit!"fadd";
+                break;
+            case FADDP:
+                _emit!"faddp";
+                break;
+            case FIADD:
+                _emit!"fiadd";
+                break;
+            case FBLD:
+                _emit!"fbld";
+                break;
+            case FBSTP:
+                _emit!"fbstp";
+                break;
+            case FCOM:
+                _emit!"fcom";
+                break;
+            case FCOMP:
+                _emit!"fcomp";
+                break;
+            case FCOMPP:
+                _emit!"fcompp";
+                break;
+            case FCOMI:
+                _emit!"fcomi";
+                break;
+            case FCOMIP:
+                _emit!"fcomip";
+                break;
+            case FUCOMI:
+                _emit!"fucomi";
+                break;
+            case FUCOMIP:
+                _emit!"fucomip";
+                break;
+            case FICOM:
+                _emit!"ficom";
+                break;
+            case FICOMP:
+                _emit!"ficomp";
+                break;
+            case FUCOM:
+                _emit!"fucom";
+                break;
+            case FUCOMP:
+                _emit!"fucomp";
+                break;
+            case FUCOMPP:
+                _emit!"fucompp";
+                break;
+            case FTST:
+                _emit!"ftst";
+                break;
+            case F2XM1:
+                _emit!"f2xm1";
+                break;
+            case FYL2X:
+                _emit!"fyl2x";
+                break;
+            case FYL2XP1:
+                _emit!"fyl2xp1";
+                break;
+            case FCOS:
+                _emit!"fcos";
+                break;
+            case FSIN:
+                _emit!"fsin";
+                break;
+            case FSINCOS:
+                _emit!"fsincos";
+                break;
+            case FSQRT:
+                _emit!"fsqrt";
+                break;
+            case FPTAN:
+                _emit!"fptan";
+                break;
+            case FPATAN:
+                _emit!"fpatan";
+                break;
+            case FPREM:
+                _emit!"fprem";
+                break;
+            case FPREM1:
+                _emit!"fprem1";
+                break;
+            case FDECSTP:
+                _emit!"fdecstp";
+                break;
+            case FINCSTP:
+                _emit!"fincstp";
+                break;
+            case FILD:
+                _emit!"fild";
+                break;
+            case FIST:
+                _emit!"fist";
+                break;
+            case FISTP:
+                _emit!"fistp";
+                break;
+            case FISTTP:
+                _emit!"fisttp";
+                break;
+            case FLDCW:
+                _emit!"fldcw";
+                break;
+            case FSTCW:
+                _emit!"fstcw";
+                break;
+            case FNSTCW:
+                _emit!"fnstcw";
+                break;
+            case FLDENV:
+                _emit!"fldenv";
+                break;
+            case FSTENV:
+                _emit!"fstenv";
+                break;
+            case FNSTENV:
+                _emit!"fnstenv";
+                break;
+            case FSTSW:
+                _emit!"fstsw";
+                break;
+            case FNSTSW:
+                _emit!"fnstsw";
+                break;
+            case FLD:
+                _emit!"fld";
+                break;
+            case FLD1:
+                _emit!"fld1";
+                break;
+            case FLDL2T:
+                _emit!"fldl2t";
+                break;
+            case FLDL2E:
+                _emit!"fldl2e";
+                break;
+            case FLDPI:
+                _emit!"fldpi";
+                break;
+            case FLDLG2:
+                _emit!"fldlg2";
+                break;
+            case FLDLN2:
+                _emit!"fldln2";
+                break;
+            case FLDZ:
+                _emit!"fldz";
+                break;
+            case FST:
+                _emit!"fst";
+                break;
+            case FSTP:
+                _emit!"fstp";
+                break;
+            case FDIV:
+                _emit!"fdiv";
+                break;
+            case FDIVP:
+                _emit!"fdivp";
+                break;
+            case FIDIV:
+                _emit!"fidiv";
+                break;
+            case FDIVR:
+                _emit!"fdivr";
+                break;
+            case FDIVRP:
+                _emit!"fdivrp";
+                break;
+            case FIDIVR:
+                _emit!"fidivr";
+                break;
+            case FSCALE:
+                _emit!"fscale";
+                break;
+            case FRNDINT:
+                _emit!"frndint";
+                break;
+            case FEXAM:
+                _emit!"fexam";
+                break;
+            case FFREE:
+                _emit!"ffree";
+                break;
+            case FXCH:
+                _emit!"fxch";
+                break;
+            case FXTRACT:
+                _emit!"fxtract";
+                break;
+            case FNOP:
+                _emit!"fnop";
+                break;
+            case FNINIT:
+                _emit!"fninit";
+                break;
+            case FINIT:
+                _emit!"finit";
+                break;
+            case FSAVE:
+                _emit!"fsave";
+                break;
+            case FNSAVE:
+                _emit!"fnsave";
+                break;
+            case FRSTOR:
+                _emit!"frstor";
+                break;
+            case FXSAVE:
+                _emit!"fxsave";
+                break;
+            case FXRSTOR:
+                _emit!"fxrstor";
+                break;
+            case FMUL:
+                _emit!"fmul";
+                break;
+            case FMULP:
+                _emit!"fmulp";
+                break;
+            case FIMUL:
+                _emit!"fimul";
+                break;
+            case FSUB:
+                _emit!"fsub";
+                break;
+            case FSUBP:
+                _emit!"fsubp";
+                break;
+            case FISUB:
+                _emit!"fisub";
+                break;
+            case FSUBR:
+                _emit!"fsubr";
+                break;
+            case FSUBRP:
+                _emit!"fsubrp";
+                break;
+            case FISUBR:
+                _emit!"fisubr";
+                break;
+            case FCMOVCC:
+                _emit!"fcmovcc";
+                break;
+            case RDMSR:
+                _emit!"rdmsr";
+                break;
+            case WRMSR:
+                _emit!"wrmsr";
+                break;
+            case CMPXCHG8B:
+                _emit!"cmpxchg8b";
+                break;
+            case SYSENTER:
+                _emit!"sysenter";
+                break;
+            case SYSEXITC:
+                _emit!"sysexitc";
+                break;
+            case SYSEXIT:
+                _emit!"sysexit";
+                break;
+            case CMOVCC:
+                _emit!"cmovcc";
+                break;
+            case CLFLUSH:
+                _emit!"clflush";
+                break;
+            case HRESET:
+                _emit!"hreset";
+                break;
+            case INCSSPD:
+                _emit!"incsspd";
+                break;
+            case INCSSPQ:
+                _emit!"incsspq";
+                break;
+            case CLRSSBSY:
+                _emit!"clrssbsy";
+                break;
+            case SETSSBSY:
+                _emit!"setssbsy";
+                break;
+            case RDSSPD:
+                _emit!"rdsspd";
+                break;
+            case RDSSPQ:
+                _emit!"rdsspq";
+                break;
+            case WRSSD:
+                _emit!"wrssd";
+                break;
+            case WRSSQ:
+                _emit!"wrssq";
+                break;
+            case WRUSSD:
+                _emit!"wrussd";
+                break;
+            case WRUSSQ:
+                _emit!"wrussq";
+                break;
+            case RSTORSSP:
+                _emit!"rstorssp";
+                break;
+            case SAVEPREVSSP:
+                _emit!"saveprevssp";
+                break;
+            case ENDBR32:
+                _emit!"endbr32";
+                break;
+            case ENDBR64:
+                _emit!"endbr64";
+                break;
+            case RDFSBASE:
+                _emit!"rdfsbase";
+                break;
+            case RDGSBASE:
+                _emit!"rdgsbase";
+                break;
+            case WRFSBASE:
+                _emit!"wrfsbase";
+                break;
+            case WRGSBASE:
+                _emit!"wrgsbase";
+                break;
+            case RDPID:
+                _emit!"rdpid";
+                break;
+            case WRPKRU:
+                _emit!"wrpkru";
+                break;
+            case RDPKRU:
+                _emit!"rdpkru";
+                break;
+            case TESTUI:
+                _emit!"testui";
+                break;
+            case STUI:
+                _emit!"stui";
+                break;
+            case CLUI:
+                _emit!"clui";
+                break;
+            case UIRET:
+                _emit!"uiret";
+                break;
+            case SENDUIPI:
+                _emit!"senduipi";
+                break;
+            case UMWAIT:
+                _emit!"umwait";
+                break;
+            case UMONITOR:
+                _emit!"umonitor";
+                break;
+            case TPAUSE:
+                _emit!"tpause";
+                break;
+            case CLDEMOTE:
+                _emit!"cldemote";
+                break;
+            case XRESLDTRK:
+                _emit!"xresldtrk";
+                break;
+            case XSUSLDTRK:
+                _emit!"xsusldtrk";
+                break;
+            case SERIALIZE:
+                _emit!"serialize";
+                break;
+            case PCONFIG:
+                _emit!"pconfig";
+                break;
+            case RDPMC:
+                _emit!"rdpmc";
+                break;
+            case WBINVD:
+                _emit!"wbinvd";
+                break;
+            case WBNOINVD:
+                _emit!"wbnoinvd";
+                break;
+            case INVD:
+                _emit!"invd";
+                break;
+            case LGDT:
+                _emit!"lgdt";
+                break;
+            case SGDT:
+                _emit!"sgdt";
+                break;
+            case LLDT:
+                _emit!"lldt";
+                break;
+            case SLDT:
+                _emit!"sldt";
+                break;
+            case LIDT:
+                _emit!"lidt";
+                break;
+            case SIDT:
+                _emit!"sidt";
+                break;
+            case LMSW:
+                _emit!"lmsw";
+                break;
+            case SMSW:
+                _emit!"smsw";
+                break;
+            case INVLPG:
+                _emit!"invlpg";
+                break;
+            case SAHF:
+                _emit!"sahf";
+                break;
+            case LAHF:
+                _emit!"lahf";
+                break;
+            case SARX:
+                _emit!"sarx";
+                break;
+            case SHLX:
+                _emit!"shlx";
+                break;
+            case SHRX:
+                _emit!"shrx";
+                break;
+            case MOVQ:
+                _emit!"movq";
+                break;
+            case MOVD:
+                _emit!"movd";
+                break;
+            case ADDPD:
+                _emit!"addpd";
+                break;
+            case ADDPS:
+                _emit!"addps";
+                break;
+            case ADDSS:
+                _emit!"addss";
+                break;
+            case ADDSD:
+                _emit!"addsd";
+                break;
+            case LFENCE:
+                _emit!"lfence";
+                break;
+            case SFENCE:
+                _emit!"sfence";
+                break;
+            case MFENCE:
+                _emit!"mfence";
+                break;
+            case ADDSUBPS:
+                _emit!"addsubps";
+                break;
+            case ADDSUBPD:
+                _emit!"addsubpd";
+                break;
+            case VADDPD:
+                _emit!"vaddpd";
+                break;
+            case VADDPS:
+                _emit!"vaddps";
+                break;
+            case VADDSD:
+                _emit!"vaddsd";
+                break;
+            case VADDSS:
+                _emit!"vaddss";
+                break;
+            case VADDSUBPD:
+                _emit!"vaddsubpd";
+                break;
+            case VADDSUBPS:
+                _emit!"vaddsubps";
+                break;
+            case VMOVQ:
+                _emit!"vmovq";
+                break;
+            case VMOVD:
+                _emit!"vmovd";
+                break;
+            case AESDEC:
+                _emit!"aesdec";
+                break;
+            case VAESDEC:
+                _emit!"vaesdec";
+                break;
+            case AESDEC128KL:
+                _emit!"aesdec128kl";
+                break;
+            case AESDEC256KL:
+                _emit!"aesdec256kl";
+                break;
+            case AESDECLAST:
+                _emit!"aesdeclast";
+                break;
+            case VAESDECLAST:
+                _emit!"vaesdeclast";
+                break;
+            case AESDECWIDE128KL:
+                _emit!"aesdecwide128kl";
+                break;
+            case AESDECWIDE256KL:
+                _emit!"aesdecwide256kl";
+                break;
+            case AESENC:
+                _emit!"aesenc";
+                break;
+            case VAESENC:
+                _emit!"vaesenc";
+                break;
+            case AESENC128KL:
+                _emit!"aesenc128kl";
+                break;
+            case AESENC256KL:
+                _emit!"aesenc256kl";
+                break;
+            case AESENCLAST:
+                _emit!"aesenclast";
+                break;
+            case VAESENCLAST:
+                _emit!"vaesenclast";
+                break;
+            case AESENCWIDE128KL:
+                _emit!"aesencwide128kl";
+                break;
+            case AESENCWIDE256KL:
+                _emit!"aesencwide256kl";
+                break;
+            case AESIMC:
+                _emit!"aesimc";
+                break;
+            case VAESIMC:
+                _emit!"vaesimc";
+                break;
+            case AESKEYGENASSIST:
+                _emit!"aeskeygenassist";
+                break;
+            case VAESKEYGENASSIST:
+                _emit!"vaeskeygenassist";
+                break;
+            case SHA1MSG1:
+                _emit!"sha1msg1";
+                break;
+            case SHA1MSG2:
+                _emit!"sha1msg2";
+                break;
+            case SHA1NEXTE:
+                _emit!"sha1nexte";
+                break;
+            case SHA256MSG1:
+                _emit!"sha256msg1";
+                break; 
+            case SHA1RNDS4:
+                _emit!"sha1rnds4";
+                break;
+            case SHA256RNDS2:
+                _emit!"sha256rnds2";
+                break;
+            case CRC32:
+                _emit!"crc32";
+                break;
+            case ENDQCMD:
+                _emit!"endqcmd";
+                break;
+            case CMPXCHG:
+                _emit!"cmpxchg";
+                break;
+            case AAA:
+                _emit!"aaa";
+                break;
+            case AAD:
+                _emit!"aad";
+                break;
+            case AAM:
+                _emit!"aam";
+                break;
+            case AAS:
+                _emit!"aas";
+                break;
+            case ADD:
+                _emit!"add";
+                break;
+            case AND:
+                _emit!"and";
+                break;
+            case ARPL:
+                _emit!"arpl";
+                break;
+            case BSF:
+                _emit!"bsf";
+                break;
+            case BSR:
+                _emit!"bsr";
+                break;
+            case BSWAP:
+                _emit!"bswap";
+                break;
+            case BT:
+                _emit!"bt";
+                break;
+            case BTC:
+                _emit!"btc";
+                break;
+            case BTR:
+                _emit!"btr";
+                break;
+            case BTS:
+                _emit!"bts";
+                break;
+            case CMP:
+                _emit!"cmp";
+                break;
+            case CWD:
+                _emit!"cwd";
+                break;
+            case CDQ:
+                _emit!"cdq";
+                break;
+            case CQO:
+                _emit!"cqo";
+                break;
+            case CBW:
+                _emit!"cbw";
+                break;
+            case CWDE:
+                _emit!"cwde";
+                break;
+            case CDQE:
+                _emit!"cdqe";
+                break;
+            case CPUID:
+                _emit!"cpuid";
+                break;
+            case CLC:
+                _emit!"clc";
+                break;
+            case CLD:
+                _emit!"cld";
+                break;
+            case CLI:
+                _emit!"cli";
+                break;
+            case CLTS:
+                _emit!"clts";
+                break;
+            case CMC:
+                _emit!"cmc";
+                break;
+            case DEC:
+                _emit!"dec";
+                break;
+            case INT:
+                _emit!"int";
+                break;
+            case INTO:
+                _emit!"into";
+                break;
+            case UD:
+                _emit!"ud";
+                break;
+            case IRET:
+                _emit!"iret";
+                break;
+            case IRETD:
+                _emit!"iretd";
+                break;
+            case IRETQ:
+                _emit!"iretq";
+                break;
+            case INC:
+                _emit!"inc";
+                break;
+            case HLT:
+                _emit!"hlt";
+                break;
+            case PAUSE:
+                _emit!"pause";
+                break;
+            case SWAPGS:
+                _emit!"swapgs";
+                break;
+            case LOCK:
+                _emit!"lock";
+                break;
+            case WAIT:
+                _emit!"wait";
+                break;
+            case FWAIT:
+                _emit!"fwait";
+                break;
+            case SYSRETC:
+                _emit!"sysretc";
+                break;
+            case SYSRET:
+                _emit!"sysret";
+                break;
+            case SYSCALL:
+                _emit!"syscall";
+                break;
+            case RSM:
+                _emit!"rsm";
+                break;
+            case LEAVE:
+                _emit!"leave";
+                break;
+            case ENTER:
+                _emit!"enter";
+                break;
+            case LEA:
+                _emit!"lea";
+                break;
+            case LDS:
+                _emit!"lds";
+                break;
+            case LSS:
+                _emit!"lss";
+                break;
+            case LES:
+                _emit!"les";
+                break;
+            case LFS:
+                _emit!"lfs";
+                break;
+            case LGS:
+                _emit!"lgs";
+                break;
+            case LSL:
+                _emit!"lsl";
+                break;
+            case LTR:
+                _emit!"ltr";
+                break;
+            case STR:
+                _emit!"str";
+                break;
+            case NEG:
+                _emit!"neg";
+                break;
+            case NOP:
+                _emit!"nop";
+                break;
+            case NOT:
+                _emit!"not";
+                break;
+            case RET:
+                _emit!"ret";
+                break;
+            case RETF:
+                _emit!"retf";
+                break;
+            case STC:
+                _emit!"stc";
+                break;
+            case STD:
+                _emit!"std";
+                break;
+            case STI:
+                _emit!"sti";
+                break;
+            case SUB:
+                _emit!"sub";
+                break;
+            case SBB:
+                _emit!"sbb";
+                break;
+            case XOR:
+                _emit!"xor";
+                break;
+            case OR:
+                _emit!"or";
+                break;
+            case SAL:
+                _emit!"sal";
+                break;
+            case SAR:
+                _emit!"sar";
+                break;
+            case SHL:
+                _emit!"shl";
+                break;
+            case SHR:
+                _emit!"shr";
+                break;
+            case RCL:
+                _emit!"rcl";
+                break;
+            case RCR:
+                _emit!"rcr";
+                break;
+            case ROL:
+                _emit!"rol";
+                break;
+            case ROR:
+                _emit!"ror";
+                break;
+            case VERR:
+                _emit!"verr";
+                break;
+            case VERW:
+                _emit!"verw";
+                break;
+            case TEST:
+                _emit!"test";
+                break;
+            case POP:
+                _emit!"pop";
+                break;
+            case POPDS:
+                _emit!"popds";
+                break;
+            case POPES:
+                _emit!"popes";
+                break;
+            case POPSS:
+                _emit!"popss";
+                break;
+            case POPFS:
+                _emit!"popfs";
+                break;
+            case POPGS:
+                _emit!"popgs";
+                break;
+            case POPA:
+                _emit!"popa";
+                break;
+            case POPF:
+                _emit!"popf";
+                break;
+            case PUSH:
+                _emit!"push";
+                break;
+            case PUSHCS:
+                _emit!"pushcs";
+                break;
+            case PUSHSS:
+                _emit!"pushss";
+                break;
+            case PUSHDS:
+                _emit!"pushds";
+                break;
+            case PUSHES:
+                _emit!"pushes";
+                break;
+            case PUSHFS:
+                _emit!"pushfs";
+                break;
+            case PUSHGS:
+                _emit!"pushgs";
+                break;  
+            case PUSHA:
+                _emit!"pusha";
+                break;
+            case PUSHF:
+                _emit!"pushf";
+                break;
+            case XADD:
+                _emit!"xadd";
+                break;
+            case XCHG:
+                _emit!"xchg";
+                break;
+            case XLAT:
+                _emit!"xlat";
+                break;
+            case XLATB:
+                _emit!"xlatb";
+                break;
+            case LAR:
+                _emit!"lar";
+                break;
+            case DAA:
+                _emit!"daa";
+                break;
+            case DAS:
+                _emit!"das";
+                break;
+            case MUL:
+                _emit!"mul";
+                break;
+            case IMUL:
+                _emit!"imul";
+                break;
+            case DIV:
+                _emit!"div";
+                break;
+            case IDIV:
+                _emit!"idiv";
+                break;
+            case MOV:
+                _emit!"mov";
+                break;
+            case MOVSX:
+                _emit!"movsx";
+                break;
+            case MOVSXD:
+                _emit!"movsxd";
+                break;
+            case MOVZX:
+                _emit!"movzx";
+                break;
+            case MOVS:
+                _emit!"movs";
+                break;
+            case MOVSB:
+                _emit!"movsb";
+                break;
+            case MOVSW:
+                _emit!"movsw";
+                break;
+            case MOVSD:
+                _emit!"movsd";
+                break;
+            case MOVSQ:
+                _emit!"movsq";
+                break;
+            case CALL:
+                _emit!"call";
+                break;
+            case LOOPCC:
+                _emit!"loop";
+                break;
+            case JMP:
+                _emit!"jmp";
+                break;
+            case JCC:
+                _emit!"jcc";
+                break;
+            case REPCC:
+                _emit!"repcc";
+                break;
+            case CMPSB:
+                _emit!"cmpsb";
+                break;
+            case CMPSW:
+                _emit!"cmpsw";
+                break;
+            case CMPSD:
+                _emit!"cmpsd";
+                break;
+            case CMPSQ:
+                _emit!"cmpsq";
+                break;
+            case SCAS:
+                _emit!"scas";
+                break;
+            case SCASB:
+                _emit!"scasb";
+                break;
+            case SCASW:
+                _emit!"scasw";
+                break;
+            case SCASD:
+                _emit!"scasd";
+                break;
+            case SCASQ:
+                _emit!"scasq";
+                break;
+            case LODS:
+                _emit!"lods";
+                break;
+            case LODSB:
+                _emit!"lodsb";
+                break;
+            case LODSW:
+                _emit!"lodsw";
+                break;
+            case LODSD:
+                _emit!"lodsd";  
+                break;
+            case LODSQ:
+                _emit!"lodsq";
+                break;
+            case STOS:
+                _emit!"stos";
+                break;
+            case STOSB:
+                _emit!"stosb";
+                break;
+            case STOSW:
+                _emit!"stosw";
+                break;
+            case STOSD:
+                _emit!"stosd";
+                break;
+            case STOSQ:
+                _emit!"stosq";
+                break;
+            case IN:
+                _emit!"in";
+                break;
+            case INS:
+                _emit!"ins";
+                break;
+            case INSB:
+                _emit!"insb";
+                break;
+            case INSW:
+                _emit!"insw";
+                break;
+            case INSD:
+                _emit!"insd";
+                break;
+            case OUT:
+                _emit!"out";
+                break; 
+            case OUTS:
+                _emit!"outs";
+                break;
+            case OUTSB:
+                _emit!"outsb";
+                break;
+            case OUTSW:
+                _emit!"outsw";
+                break;
+            case OUTSD:
+                _emit!"outsd";
+                break;
+            case SETCC:
+                _emit!"setcc";
+                break;
+            default:
+                assert(0, "Unsupported instruction opcode!");
+        }
+    }
+
     auto label(string name) => labels[name] = buffer.length;
     
     // These categories are intended to separate instructions based on their corresponding flag,
