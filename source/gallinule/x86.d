@@ -560,6 +560,7 @@ public enum OpCode : ushort
     //
     BNDCL,
     BNDCU,
+    BNDCN,
     BNDLDX,
     BNDSTX,
     BNDMK,
@@ -820,6 +821,9 @@ public enum OpCode : ushort
     //
     WRPKRU,
     RDPKRU,
+    //
+    RDTSC,
+    RDTSCP,
     //
     TESTUI,
     STUI,
@@ -1179,6 +1183,7 @@ public enum Details
     NZERO = 1 << 21,
     TAKEN = 1 << 22,
     NOT_TAKEN = 1 << 23
+    // TODO: Lock and stuff here
 }
 
 public enum MarkerKind : ubyte
@@ -1409,7 +1414,7 @@ final:
 
     this(OpCode opcode, Variable[] operands...)
     {
-        Details pollute(string fmt) pure
+        Details detail(string fmt) pure
         {
             Details ret;
             foreach (i, c; fmt)
@@ -1432,6 +1437,14 @@ final:
                         else if (i == 2)
                             ret |= Details.WRITE3;
                         break;
+                    case 'x':
+                        if (i == 0)
+                            ret |= Details.WRITE1 | Details.READ1;
+                        else if (i == 1)
+                            ret |= Details.WRITE2 | Details.READ2;
+                        else if (i == 2)
+                            ret |= Details.WRITE3 | Details.READ3;
+                        break;
                     case 'a':
                         ret |= Details.POLLUTE_AX;
                         break;
@@ -1443,6 +1456,8 @@ final:
                         break;
                     case 'd':
                         ret |= Details.POLLUTE_DX;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -1460,7 +1475,7 @@ final:
             case LOOPCC:
             case CALL:
                 if (markFormat("n"))
-                    details = pollute("r");
+                    details = detail("r");
                 break;
             case ADD:
             case SUB:
@@ -1481,15 +1496,15 @@ final:
             case TEST:
             case ADC:
                 if (operands.length == 1)
-                    details = pollute("ra");
+                    details = detail("ra");
                 else
-                    details = pollute("rr");
+                    details = detail("xr");
                 break;
             case ADCX:
             case ADOX:
             case PFADD:
             case PFSUB:
-            case PFDSUBR:
+            case PFSUBR:
             case PFMUL:
             case PFCMPEQ:
             case PFCMPGE:
@@ -1511,6 +1526,8 @@ final:
             case PMULHRW:
             case PAVGUSB:
             case PSWAPD:
+                details = detail("xr");
+                break;
             case BNDCL:
             case BNDCU:
             case BNDCN:
@@ -1519,8 +1536,7 @@ final:
             case INVPCID:
             case INVVPID:
             case INVEPT:
-            case VMREAD:
-                details = pollute("rr");
+                details = detail("rr");
                 break;
             case LTR:
             case INC:
@@ -1542,11 +1558,16 @@ final:
             case UMONITOR:
             case TPAUSE:
             case CLDEMOTE:
-                details = pollute("r");
+            case SGDT:
+            case SLDT:
+            case SIDT:
+            case SMSW:
+            case INVLPG:
+                details = detail("r");
                 break;
             case NOP:
                 if (operands.length == 1)
-                    details = pollute("r");
+                    details = detail("r");
                 break;
             case STR:
             case POP:
@@ -1559,25 +1580,29 @@ final:
             case XSAVES:
             case XSAVEOPT:
             case XSAVEC:
-                details = pollute("w");
+            case LLDT:
+            case LGDT:
+            case LIDT:
+            case LMSW:
+                details = detail("w");
                 break;
             case CMPXCHG16B:
             case CMPXCHG8B:
-                details = pollute("rabcd");
+                details = detail("xabcd");
                 break;
             case CMPXCHG:
-                details = pollute("rra");
+                details = detail("xra");
                 break;
             case IDIV:
             case DIV:
             case MUL:
-                details = pollute("rad");
+                details = detail("xad");
                 break;
             case IMUL:
                 if (operands.length == 1)
-                    details = pollute("rad");
+                    details = detail("rad");
                 else
-                    details = pollute("rr");
+                    details = detail("xr");
                 break;
             case MOVSX:
             case MOVSXD:
@@ -1590,7 +1615,7 @@ final:
             case LFS:
             case LGS:
             case LSL:
-            case CMOV:
+            case CMOVCC:
             case LZCNT:
             case TZCNT:
             case BSF:
@@ -1600,8 +1625,7 @@ final:
             case BNDMOV:
             case VMREAD:
             case POPCNT:
-            case CMOVCC:
-                details = pollute("wr");
+                details = detail("wr");
                 break;
             case CRIDCET:
             case CRIDDE:
@@ -1670,7 +1694,9 @@ final:
             case SAHF:
             case CPUID:
             case VMFUNC:
-                details = pollute("a");
+            case RDTSC:
+            case RDTSCP:
+                details = detail("a");
                 break;
             case IDACPI:
             case IDADX:
@@ -1785,7 +1811,8 @@ final:
             case RDMSR:
             case WRMSR:
             case RDPMC:
-                details = pollute("abcd");
+            case PCONFIG:
+                details = detail("abcd");
                 break;
             case RET:
             case INT:
@@ -1826,9 +1853,30 @@ final:
             case UIRET:
             case XRESLDTRK:
             case XSUSLDTRK:
+            case SERIALIZE:
+            case WBINVD:
+            case WBNOINVD:
+            case INVD:
+            case CLTS:
+            case CMC:
+            case IRET:
+            case HLT:
+            case PAUSE:
+            case SWAPGS:
+            case WAIT:
+            case FWAIT:
+            case RSM:
+            case LEAVE:
                 break;
             case ANDN:
-                details = pollute("wrr");
+            case SARX:
+            case SHLX:
+            case SHRX:
+                details = detail("wrr");
+                break;
+            case UD:
+                if (firstMark(0).d != 2)
+                    details = detail("rr");
                 break;
             default:
                 assert(0, "Unimplemented instruction opcode!");
@@ -3799,7 +3847,6 @@ public:
                 enum ofn = "rdpid";
                 break;
             case WRPKRU:
-            // TODO: Pollution for this and MSR?
                 enum ofn = "wrpkru";
                 mixin(ofn~"();");
                 break;
@@ -5293,7 +5340,6 @@ public:
 
     /* ====== TSC ====== */
 
-    // TODO: Not in the new enum?
     auto rdtsc() => emit!0(0x0f, 0x31);
     auto rdtscp() => emit!0(0x0f, 0x01, 0xf9);
 
