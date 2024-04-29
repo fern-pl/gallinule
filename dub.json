@@ -6,7 +6,7 @@
 	"dependencies": {
 		"tern": "~>0.2.12"
 	},
-	"description": "X86 and ARM JIT and inline assemblers.",
+	"description": "Runtime dynamic assembler for JIT compilation.",
 	"license": "AGPL-3.0-only",
 	"name": "gallinule",
     "targetType": "autodetect"
