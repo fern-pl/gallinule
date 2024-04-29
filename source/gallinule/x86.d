@@ -1287,6 +1287,41 @@ final:
     }
 }
 
+/*public struct Function
+{
+public:
+final:
+    Variable[string] variables;
+    Instruction[] instructions;
+
+    void contaminate()
+    {
+        foreach (i, ref instr; instructions)
+        {
+            foreach (j, ref operand; instr.operands)
+            {
+                if (operand.name == null || variables[operand.name].score != 0)
+                    continue;
+                
+                if (instr.details.hasFlag(Details.READ1) != 0 && j == 0)
+                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
+                else if (instr.details.hasFlag(Details.READ2) != 0 && j == 1)
+                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
+                else if (instr.details.hasFlag(Details.READ3) && j == 2)
+                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
+
+                if (variables[operand.name].modifiers.hasFlag(TypeModifiers.STRING))
+                    variables[operand.name].score = int.max - 1;
+                else if (variables[operand.name].modifiers.hasFlag(TypeModifiers.VECTOR))
+                    variables[operand.name].score = int.max;
+                else
+                    variables[operand.name].score++;
+            }
+        }
+    }
+} 
+*/
+
 public struct Variable
 {
 public:
@@ -1307,6 +1342,11 @@ final:
     {
         assert(markers.length > 0, "Attempted to retrieve the last mark of an unmarked variable!");
         return markers[$-1];
+    }
+
+    this(T)(T val)
+    {
+        markers ~= Marker(val);
     }
 }
 
@@ -1414,6 +1454,14 @@ final:
 
         with (OpCode) switch (opcode)
         {
+            // TODO: Floats, add more flags??
+            case JMP:
+            case JCC:
+            case LOOPCC:
+            case CALL:
+                if (markFormat("n"))
+                    details = pollute("r");
+                break;
             case ADD:
             case SUB:
             case ROL:
@@ -1431,10 +1479,49 @@ final:
             case BTR:
             case BTS:
             case TEST:
+            case ADC:
                 if (operands.length == 1)
                     details = pollute("ra");
                 else
                     details = pollute("rr");
+                break;
+            case ADCX:
+            case ADOX:
+            case PFADD:
+            case PFSUB:
+            case PFDSUBR:
+            case PFMUL:
+            case PFCMPEQ:
+            case PFCMPGE:
+            case PFCMPGT:
+            case PF2ID:
+            case PI2FD:
+            case PF2IW:
+            case PI2FW:
+            case PFMAX:
+            case PFMIN:
+            case PFRCP:
+            case PFRSQRT:
+            case PFRCPIT1:
+            case PFRSQIT1:
+            case PFRCPIT2:
+            case PFACC:
+            case PFNACC:
+            case PFPNACC:
+            case PMULHRW:
+            case PAVGUSB:
+            case PSWAPD:
+            case BNDCL:
+            case BNDCU:
+            case BNDCN:
+            case BNDLDX:
+            case BOUND:
+            case INVPCID:
+            case INVVPID:
+            case INVEPT:
+            case VMREAD:
+                details = pollute("rr");
+                break;
             case LTR:
             case INC:
             case DEC:
@@ -1443,23 +1530,55 @@ final:
             case PUSH:
             case NOT:
             case NEG:
+            case PTWRITE:
+            case CLWB:
+            case CLFLUSH:
+            case CLFLUSHOPT:
+            case VMPTRST:
+            case XRSTOR:
+            case XRSTORS:
+            case SENDUIPI:
+            case UMWAIT:
+            case UMONITOR:
+            case TPAUSE:
+            case CLDEMOTE:
                 details = pollute("r");
+                break;
             case NOP:
                 if (operands.length == 1)
                     details = pollute("r");
                 break;
             case STR:
             case POP:
+            case RDSEED:
+            case RDRAND:
+            case VMCLEAR:
+            case VMXON:
+            case VMPTRLD:
+            case XSAVE:
+            case XSAVES:
+            case XSAVEOPT:
+            case XSAVEC:
                 details = pollute("w");
+                break;
+            case CMPXCHG16B:
+            case CMPXCHG8B:
+                details = pollute("rabcd");
+                break;
+            case CMPXCHG:
+                details = pollute("rra");
+                break;
             case IDIV:
             case DIV:
             case MUL:
                 details = pollute("rad");
+                break;
             case IMUL:
                 if (operands.length == 1)
                     details = pollute("rad");
                 else
                     details = pollute("rr");
+                break;
             case MOVSX:
             case MOVSXD:
             case MOVZX:
@@ -1476,7 +1595,14 @@ final:
             case TZCNT:
             case BSF:
             case BSR:
+            case BNDSTX:
+            case BNDMK:
+            case BNDMOV:
+            case VMREAD:
+            case POPCNT:
+            case CMOVCC:
                 details = pollute("wr");
+                break;
             case CRIDCET:
             case CRIDDE:
             case CRIDFSGSBASE:
@@ -1543,6 +1669,7 @@ final:
             case LAHF:
             case SAHF:
             case CPUID:
+            case VMFUNC:
                 details = pollute("a");
                 break;
             case IDACPI:
@@ -1676,6 +1803,32 @@ final:
             case SYSEXITC:
             case INTO:
             case RETF:
+            case FEMMS:
+            case ICEBP:
+            case XEND:
+            case XABORT:
+            case XBEGIN:
+            case XTEST:
+            case XACQUIRE:
+            case XRELEASE:
+            case MONITOR:
+            case MWAIT:
+            case VMCALL:
+            case VMLAUNCH:
+            case VMRESUME:
+            case VMXOFF:    
+            case XGETBV:
+            case XSETBV:
+            case REPCC:
+            case TESTUI:
+            case STUI:
+            case CLUI:
+            case UIRET:
+            case XRESLDTRK:
+            case XSUSLDTRK:
+                break;
+            case ANDN:
+                details = pollute("wrr");
                 break;
             default:
                 assert(0, "Unimplemented instruction opcode!");
