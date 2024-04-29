@@ -1148,7 +1148,7 @@ public enum TypeModifiers : ubyte
     INTEGRAL_MASK = 0b00001111
 }
 
-public enum OpDetails
+public enum Details
 {
     // PUSHA, POPA, RET and CALL require special parsing
     READ1 = 1 << 0,
@@ -1178,29 +1178,32 @@ public enum OpDetails
     NZERO = 1 << 21
 }
 
-public enum MarkerFlags : ubyte
+public enum MarkerKind : ubyte
 {
-    LITERAL = 1 << 0,
-    ALLOCATION = 1 << 1,
-    REGISTER = 1 << 2
+    LITERAL,
+    ALLOCATION,
+    REGISTER
 }
 
 public struct Marker
 {
 public:
 final:
-    MarkerFlags flags;
+    MarkerKind kind;
+    ptrdiff_t size;
     union
     {
         struct //asAllocation
         {
-            ushort segment;
-            size_t offset;
+            ubyte segment = ds;
+            uint offset;
+            short baseSize;
+            // Will cause problems? Extended registers, dunno
+            ubyte baseIndex = 255;
         }
 
         struct //asRegister
         {
-            ushort size;
             ubyte index;
             bool extended;
         }
@@ -1216,6 +1219,69 @@ final:
             }
         }
     }
+
+    this(size_t size, uint offset, ubyte segment = ds, short baseSize = 8, ubyte baseIndex = 255)
+    {
+        this.kind = MarkerKind.ALLOCATION;
+        this.size = size;
+        this.segment = segment;
+        this.offset = offset;
+        this.baseSize = baseSize;
+        this.baseIndex = baseIndex;
+    }
+
+    this(size_t size, ubyte index, bool extended)
+    {
+        this.kind = MarkerKind.REGISTER;
+        this.size = size;
+        this.index = index;
+        this.extended = extended;
+    }
+
+    this(T)(T val)
+    {
+        this.kind = MarkerKind.LITERAL;
+        this.size = T.sizeof;
+
+        /* static if (is(T : U*, U))
+        {
+            type = Type(0, Modifiers.MEMORY_LITERAL);
+            ptr = cast(void*)val;
+        }
+        else static if (is(T == string))
+            name = val; */
+        static if (T.sizeof == 1)
+            b = cast(ubyte)val;
+        else static if (T.sizeof == 2)
+            w = cast(ushort)val;
+        else static if (T.sizeof == 4)
+            d = cast(uint)val;
+        else static if (T.sizeof == 8)
+            q = cast(ulong)val;
+    }
+
+    T as(T)()
+    {
+        static if (isInstanceOf!(Reg, T))
+        if (kind == MarkerKind.REGISTER)
+            return T(index, extended);
+
+        static if (isInstanceOf!(Address, T))
+        if (kind == MarkerKind.ALLOCATION)
+        {
+            if (baseIndex != 255)
+            {
+                T ret = T(offset, segment);
+                ret.register = baseIndex;
+                ret.size = cast(short)(baseSize * 8);
+                return ret;
+            }
+            else
+                return T(offset, segment);
+        }
+
+        assert(0, "Attempted to convert a marker not of kind REGISTER or ALLOCATION to a type!");
+    }
 }
 
 public struct Variable
@@ -1225,9 +1291,20 @@ final:
     string name;
     TypeModifiers modifiers;
     size_t size;
-    size_t[] fields;
     Marker[] markers;
     int score;
+
+    ref Marker firstMark()
+    {
+        assert(markers.length > 0, "Attempted to retrieve the first mark of an unmarked variable!");
+        return markers[0];
+    }
+
+    ref Marker lastMark()
+    {
+        assert(markers.length > 0, "Attempted to retrieve the last mark of an unmarked variable!");
+        return markers[$-1];
+    }
 }
 
 public struct Instruction
@@ -1236,8 +1313,52 @@ public:
 final:
     OpCode opcode;
     Variable[] operands;
-    OpDetails details;
+    Details details;
     int score;
+
+    bool markFormat(string fmt)
+    {
+        if (fmt.length > operands.length)
+            return false;
+
+        foreach (i, c; fmt)
+        {
+            switch (c)
+            {
+                case 'l':
+                    if (firstMark(i).kind != MarkerKind.LITERAL)
+                        return false;
+                    break;
+                case 'm':
+                    if (firstMark(i).kind != MarkerKind.ALLOCATION)
+                        return false;
+                    break;
+                case 'r':
+                    if (firstMark(i).kind != MarkerKind.REGISTER)
+                        return false;
+                    break;
+                case 'n':
+                    if (firstMark(i).kind == MarkerKind.LITERAL)
+                        return false;
+                    break;
+                default:
+                    assert(0, "Invalid character in mask format comparison '"~fmt~"'!");
+            }
+        }
+        return true;
+    }
+
+    ref Marker firstMark(size_t index)
+    {
+        assert(operands.length > index, "Attempted to retrieve first mark of an out of bounds operand!");
+        return operands[index].firstMark;
+    }
+
+    ref Marker lastMark(size_t index)
+    {
+        assert(operands.length > index, "Attempted to retrieve last mark of an out of bounds operand!");
+        return operands[index].lastMark;
+    }
 
     this(OpCode opcode, Variable[] operands...)
     {
@@ -1261,13 +1382,13 @@ final:
             case BTR:
             case BTS:
             case TEST:
-                details = OpDetails.READ1 | OpDetails.READ2;
+                details = Details.READ1 | Details.READ2;
                 break;
             case MUL:
             case DIV:
             case IMUL:
             case IDIV:
-                details = OpDetails.READ1 | OpDetails.READ2 | OpDetails.POLLUTE_AX | OpDetails.POLLUTE_DX;
+                details = Details.READ1 | Details.READ2 | Details.POLLUTE_AX | Details.POLLUTE_DX;
                 break;
             case NOT:
             case NEG:
@@ -1276,10 +1397,10 @@ final:
             case BSWAP:
             case DEC:
             case INC:
-                details = OpDetails.READ1;
+                details = Details.READ1;
                 break;
             case POP:
-                details = OpDetails.WRITE1;
+                details = Details.WRITE1;
                 break;
             case MOV:
             case MOVSX:
@@ -1291,7 +1412,7 @@ final:
             case BSF:
             case BSR:
             case LEA:
-                details = OpDetails.WRITE1 | OpDetails.READ2;
+                details = Details.WRITE1 | Details.READ2;
                 break;
             case CRIDCET:
             case CRIDDE:
@@ -1317,7 +1438,7 @@ final:
             case CRIDVME:
             case CRIDVMXE:
                 // Moves CR to RAX to check flag
-                details = OpDetails.POLLUTE_AX;
+                details = Details.POLLUTE_AX;
                 break;
             case IDACPI:
             case IDADX:
@@ -1429,7 +1550,7 @@ final:
             case IDX2APIC:
             case IDXSAVE:
             case IDXTPR:
-                details = OpDetails.POLLUTE_AX | OpDetails.POLLUTE_BX | OpDetails.POLLUTE_CX | OpDetails.POLLUTE_DX;
+                details = Details.POLLUTE_AX | Details.POLLUTE_BX | Details.POLLUTE_CX | Details.POLLUTE_DX;
                 break;
             case RET:
             case INT:
@@ -1622,7 +1743,6 @@ public struct Block(bool X64)
 {
 package:
 final:
-nothrow:
     ptrdiff_t[string] labels;
     Tuple!(ptrdiff_t, string, string, bool)[] branches;
     ubyte[] buffer;
@@ -2085,7 +2205,7 @@ public:
     {
         // Should check to make sure the instruction is valid,
         // conditional instructions need to have an actual condition flag.
-        //assert(!instr.details.hasFlag(OpDetails.ILLEGAL), "Invalid instruction, are you missing a condition?");
+        //assert(!instr.details.hasFlag(Details.ILLEGAL), "Invalid instruction, are you missing a condition?");
 
         with (OpCode) switch (instr.opcode)
         {
@@ -3766,15 +3886,14 @@ public:
                 enum ofn = "dec";
                 break;
             case INT:
-                assert(instr.operands.length == 1 && instr.operands[0].markers.length == 1 && 
-                    (instr.operands[0].markers[0].flags & MarkerFlags.LITERAL) != 0);
+                assert(instr.markFormat("l"));
 
-                if (instr.operands[0].markers[0].b == 3)
+                if (instr.firstMark(0).b == 3)
                     int3();
-                else if (instr.operands[0].markers[0].b == 1)
+                else if (instr.firstMark(0).b == 1)
                     int1();
                 else
-                    _int(instr.operands[0].markers[0].b);
+                    _int(instr.firstMark(0).b);
 
                 break;
             case INTO:
@@ -3782,7 +3901,30 @@ public:
                 mixin(ofn~"();");
                 break;
             case UD:
-                enum ofn = "ud";
+                assert(instr.markFormat("l") || instr.markFormat("lrn"));
+                assert(instr.firstMark(0).d <= 3 && (instr.firstMark(0).d == 2 || instr.operands.length == 3));
+                
+                if (instr.operands.length == 1)
+                    ud2();
+                else if (instr.firstMark(0).d == 0)
+                {
+                    assert(instr.firstMark(1).size == 4 && instr.firstMark(2).size == 4);
+
+                    if (instr.firstMark(2).kind == MarkerKind.REGISTER)
+                        ud0(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Reg!32));
+                    else
+                        ud0(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Address!32));
+                }
+                else if (instr.firstMark(0).d == 1)
+                {
+                    assert(instr.firstMark(1).size == 4 && instr.firstMark(2).size == 4);
+
+                    if (instr.firstMark(2).kind == MarkerKind.REGISTER)
+                        ud1(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Reg!32));
+                    else
+                        ud1(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Address!32));
+                }
+
                 break;
             case IRET:
                 enum ofn = "iret";
@@ -3876,14 +4018,14 @@ public:
                 if (instr.operands.length == 0)
                     ret();
                 else
-                    ret(instr.operands[0].markers[0].w);
+                    ret(instr.firstMark(0).w);
 
                 break;
             case RETF:
                 if (instr.operands.length == 0)
                     retf();
                 else
-                    retf(instr.operands[0].markers[0].w);
+                    retf(instr.firstMark(0).w);
 
                 break;
             case STC:
