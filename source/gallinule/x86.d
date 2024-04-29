@@ -5,6 +5,7 @@ import std.bitmanip;
 import std.traits;
 import std.typecons;
 import tern.algorithm;
+import tern.state;
 
 /* ====== ADDRESSING ====== */
 
@@ -447,7 +448,7 @@ public enum OpCode : ushort
 
     IDSSE3,
     IDPCLMUL,
-    IDDDTES64,
+    IDDTES64,
     IDMON,
     IDDSCPL,
     IDVMX,
@@ -980,8 +981,6 @@ public enum OpCode : ushort
     INTO,
     UD,
     IRET,
-    IRETD,
-    IRETQ,
 
     INC,
 
@@ -1165,19 +1164,18 @@ public enum OpDetails
     POLLUTE_DX = 1 << 9,
 
     // These are not opcode defined
-    GREATER = ushort.max,
-    GREATEREQ = ushort.max - 1,
-    LESSER = ushort.max - 2,
-    LESSEREQ = ushort.max - 3,
-    EQUAL = ushort.max - 4,
-    NEQUAL = ushort.max - 5,
-    CARRY = ushort.max - 6,
-    NCARRY = ushort.max - 7,
-    SIGN = ushort.max - 8,
-    NSIGN = ushort.max - 9,
-    ZERO = ushort.max - 10,
-    NZERO = ushort.max - 11,
-    ILLEGAL = ushort.max - 60
+    GREATER = 1 << 10,
+    GREATEREQ = 1 << 11,
+    LESSER = 1 << 12,
+    LESSEREQ = 1 << 13,
+    EQUAL = 1 << 14,
+    NEQUAL = 1 << 15,
+    CARRY = 1 << 16,
+    NCARRY = 1 << 17,
+    SIGN = 1 << 18,
+    NSIGN = 1 << 19,
+    ZERO = 1 << 20,
+    NZERO = 1 << 21
 }
 
 public enum MarkerFlags : ubyte
@@ -1194,20 +1192,20 @@ final:
     MarkerFlags flags;
     union
     {
-        struct asAllocation
+        struct //asAllocation
         {
             ushort segment;
             size_t offset;
         }
 
-        struct asRegister
+        struct //asRegister
         {
             ushort size;
             ubyte index;
             bool extended;
         }
 
-        struct asLiteral
+        struct //asLiteral
         {
             union
             {
@@ -1353,7 +1351,7 @@ final:
             case IDCX16:
             case IDCX8:
             case IDDCA:
-            case IDDDTES64:
+            case IDDTES64:
             case IDDE:
             case IDDS:
             case IDDSCPL:
@@ -1432,6 +1430,9 @@ final:
             case IDXSAVE:
             case IDXTPR:
                 details = OpDetails.POLLUTE_AX | OpDetails.POLLUTE_BX | OpDetails.POLLUTE_CX | OpDetails.POLLUTE_DX;
+                break;
+            case RET:
+            case INT:
                 break;
             default:
                 assert(0, "Unimplemented instruction opcode!");
@@ -2082,1801 +2083,2127 @@ public:
     
     auto emit(Instruction instr)
     {
-        auto _emit(string opcode)()
-        {
-            import std.stdio;
-            debug writeln(opcode, instr);
-        }
+        // Should check to make sure the instruction is valid,
+        // conditional instructions need to have an actual condition flag.
+        //assert(!instr.details.hasFlag(OpDetails.ILLEGAL), "Invalid instruction, are you missing a condition?");
 
         with (OpCode) switch (instr.opcode)
         {
             case CRIDVME:
-                _emit!"cridvme";
+                enum ofn = "cridvme";
+                mixin(ofn~"();");
                 break;
             case CRIDPVI:
-                _emit!"cridpvi";
+                enum ofn = "cridpvi";
+                mixin(ofn~"();");
                 break;
             case CRIDTSD:
-                _emit!"cridtsd";
+                enum ofn = "cridtsd";
+                mixin(ofn~"();");
                 break;
             case CRIDDE:
-                _emit!"cridde";
+                enum ofn = "cridde";
+                mixin(ofn~"();");
                 break;
             case CRIDPSE:
-                _emit!"cridpse";
+                enum ofn = "cridpse";
+                mixin(ofn~"();");
                 break;
             case CRIDPAE:
-                _emit!"cridpae";
+                enum ofn = "cridpae";
+                mixin(ofn~"();");
                 break;
             case CRIDMCE:
-                _emit!"cridmce";
+                enum ofn = "cridmce";
+                mixin(ofn~"();");
                 break;
             case CRIDPGE:
-                _emit!"cridpge";
+                enum ofn = "cridpge";
+                mixin(ofn~"();");
                 break;
             case CRIDPCE:
-                _emit!"cridpce";
+                enum ofn = "cridpce";
+                mixin(ofn~"();");
                 break;
             case CRIDOSFXSR:
-                _emit!"cridosfxsr";
+                enum ofn = "cridosfxsr";
+                mixin(ofn~"();");
                 break;
             case CRIDOSXMMEXCPT:
-                _emit!"cridosxmmexcpt";
+                enum ofn = "cridosxmmexcpt";
+                mixin(ofn~"();");
                 break;
             case CRIDUMIP:
-                _emit!"cridumip";
+                enum ofn = "cridumip";
+                mixin(ofn~"();");
                 break;
             case CRIDVMXE:
-                _emit!"cridvmxe";
+                enum ofn = "cridvmxe";
+                mixin(ofn~"();");
                 break;
             case CRIDSMXE:
-                _emit!"cridsmxe";
+                enum ofn = "cridsmxe";
+                mixin(ofn~"();");
                 break;
             case CRIDFSGSBASE:
-                _emit!"cridfsgsbase";
+                enum ofn = "cridfsgsbase";
+                mixin(ofn~"();");
                 break;
             case CRIDPCIDE:
-                _emit!"cridpcide";
+                enum ofn = "cridpcide";
+                mixin(ofn~"();");
                 break;
             case CRIDOSXSAVE:
-                _emit!"cridosxsave";
+                enum ofn = "cridosxsave";
+                mixin(ofn~"();");
                 break;
             case CRIDSMEP:
-                _emit!"cridsmep";
+                enum ofn = "cridsmep";
+                mixin(ofn~"();");
                 break;
             case CRIDSMAP:
-                _emit!"cridsmap";
+                enum ofn = "cridsmap";
+                mixin(ofn~"();");
                 break;
             case CRIDPKE:
-                _emit!"cridpke";
+                enum ofn = "cridpke";
+                mixin(ofn~"();");
                 break;
             case CRIDCET:
-                _emit!"cridcet";
+                enum ofn = "cridcet";
+                mixin(ofn~"();");
                 break;
             case CRIDPKS:
-                _emit!"cridpks";
+                enum ofn = "cridpks";
+                mixin(ofn~"();");
                 break;
             case CRIDUINTR:
-                _emit!"criduintr";
+                enum ofn = "criduintr";
+                mixin(ofn~"();");
                 break;
             case IDAVX512VL:
-                _emit!"idavx512vl";
+                enum ofn = "idavx512vl";
+                mixin(ofn~"();");
                 break;
             case IDAVX512BW:
-                _emit!"idavx512bw";
+                enum ofn = "idavx512bw";
+                mixin(ofn~"();");
                 break;
             case IDSHA:
-                _emit!"idsha";
+                enum ofn = "idsha";
+                mixin(ofn~"();");
                 break;
             case IDAVX512CD:
-                _emit!"idavx512cd";
+                enum ofn = "idavx512cd";
+                mixin(ofn~"();");
                 break;
             case IDAVX512ER:
-                _emit!"idavx512er";
+                enum ofn = "idavx512er";
+                mixin(ofn~"();");
                 break;
             case IDAVX512PF:
-                _emit!"idavx512pf";
+                enum ofn = "idavx512pf";
+                mixin(ofn~"();");
                 break;
             case IDPT:
-                _emit!"idpt";
+                enum ofn = "idpt";
+                mixin(ofn~"();");
                 break;
             case IDCLWB:
-                _emit!"idclwb";
+                enum ofn = "idclwb";
+                mixin(ofn~"();");
                 break;
             case IDCLFLUSHOPT:
-                _emit!"idclflushopt";
+                enum ofn = "idclflushopt";
+                mixin(ofn~"();");
                 break;
             case IDPCOMMIT:
-                _emit!"idpcommit";
+                enum ofn = "idpcommit";
+                mixin(ofn~"();");
                 break;
             case IDAVX512IFMA:
-                _emit!"idavx512ifma";
+                enum ofn = "idavx512ifma";
+                mixin(ofn~"();");
                 break;
             case IDSMAP:
-                _emit!"idsmap";
+                enum ofn = "idsmap";
+                mixin(ofn~"();");
                 break;
             case IDADX:
-                _emit!"idadx";
+                enum ofn = "idadx";
+                mixin(ofn~"();");
                 break;
             case IDRDSEED:
-                _emit!"idrdseed";
+                enum ofn = "idrdseed";
+                mixin(ofn~"();");
                 break;
             case IDAVX512DQ:
-                _emit!"idavx512dq";
+                enum ofn = "idavx512dq";
+                mixin(ofn~"();");
                 break;
             case IDAVX512F:
-                _emit!"idavx512f";
+                enum ofn = "idavx512f";
+                mixin(ofn~"();");
                 break;
             case IDPQE:
-                _emit!"idpqe";
+                enum ofn = "idpqe";
+                mixin(ofn~"();");
                 break;
             case IDRTM:
-                _emit!"idrtm";
+                enum ofn = "idrtm";
+                mixin(ofn~"();");
                 break;
             case IDINVPCID:
-                _emit!"idinvpcid";
+                enum ofn = "idinvpcid";
+                mixin(ofn~"();");
                 break;
             case IDERMS:
-                _emit!"iderms";
+                enum ofn = "iderms";
+                mixin(ofn~"();");
                 break;
             case IDBMI2:
-                _emit!"idbmi2";
+                enum ofn = "idbmi2";
+                mixin(ofn~"();");
                 break;
             case IDSMEP:
-                _emit!"idsmep";
+                enum ofn = "idsmep";
+                mixin(ofn~"();");
                 break;
             case IDFPDP:
-                _emit!"idfpdp";
+                enum ofn = "idfpdp";
+                mixin(ofn~"();");
                 break;
             case IDAVX2:
-                _emit!"idavx2";
+                enum ofn = "idavx2";
+                mixin(ofn~"();");
                 break;
             case IDHLE:
-                _emit!"idhle";
+                enum ofn = "idhle";
+                mixin(ofn~"();");
                 break;
             case IDBMI1:
-                _emit!"idbmi1";
+                enum ofn = "idbmi1";
+                mixin(ofn~"();");
                 break;
             case IDSGX:
-                _emit!"idsgx";
+                enum ofn = "idsgx";
+                mixin(ofn~"();");
                 break;
             case IDTSCADJ:
-                _emit!"idtscadj";
+                enum ofn = "idtscadj";
+                mixin(ofn~"();");
                 break;
             case IDFSGSBASE:
-                _emit!"idfsgsbase";
+                enum ofn = "idfsgsbase";
+                mixin(ofn~"();");
                 break;
             case IDPREFETCHWT1:
-                _emit!"idprefetchwt1";
+                enum ofn = "idprefetchwt1";
+                mixin(ofn~"();");
                 break;
             case IDAVX512VBMI:
-                _emit!"idavx512vbmi";
+                enum ofn = "idavx512vbmi";
+                mixin(ofn~"();");
                 break;
             case IDUMIP:
-                _emit!"idumip";
+                enum ofn = "idumip";
+                mixin(ofn~"();");
                 break;
             case IDPKU:
-                _emit!"idpku";
+                enum ofn = "idpku";
+                mixin(ofn~"();");
                 break;
             case IDAVX512VBMI2:
-                _emit!"idavx512vbmi2";
+                enum ofn = "idavx512vbmi2";
+                mixin(ofn~"();");
                 break;
             case IDCET:
-                _emit!"idcet";
+                enum ofn = "idcet";
+                mixin(ofn~"();");
                 break;
             case IDGFNI:
-                _emit!"idgfni";
+                enum ofn = "idgfni";
+                mixin(ofn~"();");
                 break;
             case IDVAES:
-                _emit!"idvaes";
+                enum ofn = "idvaes";
+                mixin(ofn~"();");
                 break;
             case IDVPCL:
-                _emit!"idvpcl";
+                enum ofn = "idvpcl";
+                mixin(ofn~"();");
                 break;
             case IDAVX512VNNI:
-                _emit!"idavx512vnni";
+                enum ofn = "idavx512vnni";
+                mixin(ofn~"();");
                 break;
             case IDAVX512BITALG:
-                _emit!"idavx512bitalg";
+                enum ofn = "idavx512bitalg";
+                mixin(ofn~"();");
                 break;
             case IDTME:
-                _emit!"idtme";
+                enum ofn = "idtme";
+                mixin(ofn~"();");
                 break;
             case IDAVX512VP:
-                _emit!"idavx512vp";
+                enum ofn = "idavx512vp";
+                mixin(ofn~"();");
                 break;
             case IDVA57:
-                _emit!"idva57";
+                enum ofn = "idva57";
+                mixin(ofn~"();");
                 break;
             case IDRDPID:
-                _emit!"idrdpid";
+                enum ofn = "idrdpid";
+                mixin(ofn~"();");
                 break;
             case IDSGXLC:
-                _emit!"idsgxlc";
+                enum ofn = "idsgxlc";
+                mixin(ofn~"();");
                 break;
             case IDAVX512QVNNIW:
-                _emit!"idavx512qvnniw";
+                enum ofn = "idavx512qvnniw";
+                mixin(ofn~"();");
                 break;
             case IDAVX512QFMA:
-                _emit!"idavx512qfma";
+                enum ofn = "idavx512qfma";
+                mixin(ofn~"();");
                 break;
             case IDPCONFIG:
-                _emit!"idpconfig";
+                enum ofn = "idpconfig";
+                mixin(ofn~"();");
                 break;
             case IDIBRSIBPB:
-                _emit!"idibrsibpb";
+                enum ofn = "idibrsibpb";
+                mixin(ofn~"();");
                 break;
             case IDSTIBP:
-                _emit!"idstibp";
+                enum ofn = "idstibp";
+                mixin(ofn~"();");
                 break;
             case IDSSE3:
-                _emit!"idsse3";
+                enum ofn = "idsse3";
+                mixin(ofn~"();");
                 break;
             case IDPCLMUL:
-                _emit!"idpclmul";
+                enum ofn = "idpclmul";
+                mixin(ofn~"();");
                 break;
-            case IDDDTES64:
-                _emit!"idddtes64";
+            case IDDTES64:
+                enum ofn = "iddtes64";
+                mixin(ofn~"();");
                 break;
             case IDMON:
-                _emit!"idmon";
+                enum ofn = "idmon";
+                mixin(ofn~"();");
                 break;
             case IDDSCPL:
-                _emit!"iddscpl";
+                enum ofn = "iddscpl";
+                mixin(ofn~"();");
                 break;
             case IDVMX:
-                _emit!"idvmx";
+                enum ofn = "idvmx";
+                mixin(ofn~"();");
                 break;
             case IDSMX:
-                _emit!"idsmx";
+                enum ofn = "idsmx";
+                mixin(ofn~"();");
                 break;
             case IDEST:
-                _emit!"idest";
+                enum ofn = "idest";
+                mixin(ofn~"();");
                 break;
             case IDTM2:
-                _emit!"idtm2";
+                enum ofn = "idtm2";
+                mixin(ofn~"();");
                 break;
             case IDSSSE3:
-                _emit!"idssse3";
+                enum ofn = "idssse3";
+                mixin(ofn~"();");
                 break;
             case IDCID:
-                _emit!"idcid";
+                enum ofn = "idcid";
+                mixin(ofn~"();");
                 break;
             case IDSDBG:
-                _emit!"idsdbg";
+                enum ofn = "idsdbg";
+                mixin(ofn~"();");
                 break;
             case IDFMA:
-                _emit!"idfma";
+                enum ofn = "idfma";
+                mixin(ofn~"();");
                 break;
             case IDCX16:
-                _emit!"idcx16";
+                enum ofn = "idcx16";
+                mixin(ofn~"();");
                 break;
             case IDXTPR:
-                _emit!"idxtpr";
+                enum ofn = "idxtpr";
+                mixin(ofn~"();");
                 break;
             case IDPDCM:
-                _emit!"idpdcm";
+                enum ofn = "idpdcm";
+                mixin(ofn~"();");
                 break;
             case IDPCID:
-                _emit!"idpcid";
+                enum ofn = "idpcid";
+                mixin(ofn~"();");
                 break;
             case IDDCA:
-                _emit!"iddca";
+                enum ofn = "iddca";
+                mixin(ofn~"();");
                 break;
             case IDSSE41:
-                _emit!"idsse41";
+                enum ofn = "idsse41";
+                mixin(ofn~"();");
                 break;
             case IDSSE42:
-                _emit!"idsse42";
+                enum ofn = "idsse42";
+                mixin(ofn~"();");
                 break;
             case IDX2APIC:
-                _emit!"idx2apic";
+                enum ofn = "idx2apic";
+                mixin(ofn~"();");
                 break;
             case IDMOVBE:
-                _emit!"idmovbe";
+                enum ofn = "idmovbe";
+                mixin(ofn~"();");
                 break;
             case IDPOPCNT:
-                _emit!"idpopcnt";
+                enum ofn = "idpopcnt";
+                mixin(ofn~"();");
                 break;
             case IDTSCD:
-                _emit!"idtscd";
+                enum ofn = "idtscd";
+                mixin(ofn~"();");
                 break;
             case IDAES:
-                _emit!"idaes";
+                enum ofn = "idaes";
+                mixin(ofn~"();");
                 break;
             case IDXSAVE:
-                _emit!"idxsave";
+                enum ofn = "idxsave";
+                mixin(ofn~"();");
                 break;
             case IDOSXSAVE:
-                _emit!"idosxsave";
+                enum ofn = "idosxsave";
+                mixin(ofn~"();");
                 break;
             case IDAVX:
-                _emit!"idavx";
+                enum ofn = "idavx";
+                mixin(ofn~"();");
                 break;
             case IDF16C:
-                _emit!"idf16c";
+                enum ofn = "idf16c";
+                mixin(ofn~"();");
                 break;
             case IDRDRAND:
-                _emit!"idrdrand";
+                enum ofn = "idrdrand";
+                mixin(ofn~"();");
                 break;
             case IDHV:
-                _emit!"idhv";
+                enum ofn = "idhv";
+                mixin(ofn~"();");
                 break;
             case IDFPU:
-                _emit!"idfpu";
+                enum ofn = "idfpu";
+                mixin(ofn~"();");
                 break;
             case IDVME:
-                _emit!"idvme";
+                enum ofn = "idvme";
+                mixin(ofn~"();");
                 break;
             case IDDE:
-                _emit!"idde";
+                enum ofn = "idde";
+                mixin(ofn~"();");
                 break;
             case IDPSE:
-                _emit!"idpse";
+                enum ofn = "idpse";
+                mixin(ofn~"();");
                 break;
             case IDTSC:
-                _emit!"idtsc";
+                enum ofn = "idtsc";
+                mixin(ofn~"();");
                 break;
             case IDMSR:
-                _emit!"idmsr";
+                enum ofn = "idmsr";
+                mixin(ofn~"();");
                 break;
             case IDPAE:
-                _emit!"idpae";
+                enum ofn = "idpae";
+                mixin(ofn~"();");
                 break;
             case IDCX8:
-                _emit!"idcx8";
+                enum ofn = "idcx8";
+                mixin(ofn~"();");
                 break;
             case IDAPIC:
-                _emit!"idapic";
+                enum ofn = "idapic";
+                mixin(ofn~"();");
                 break;
             case IDSEP:
-                _emit!"idsep";
+                enum ofn = "idsep";
+                mixin(ofn~"();");
                 break;
             case IDMTRR:
-                _emit!"idmtrr";
+                enum ofn = "idmtrr";
+                mixin(ofn~"();");
                 break;
             case IDPGE:
-                _emit!"idpge";
+                enum ofn = "idpge";
+                mixin(ofn~"();");
                 break;
             case IDMCA:
-                _emit!"idmca";
+                enum ofn = "idmca";
+                mixin(ofn~"();");
                 break;
             case IDCMOV:
-                _emit!"idcmov";
+                enum ofn = "idcmov";
+                mixin(ofn~"();");
                 break;
             case IDPAT:
-                _emit!"idpat";
+                enum ofn = "idpat";
+                mixin(ofn~"();");
                 break;
             case IDPSE36:
-                _emit!"idpse36";
+                enum ofn = "idpse36";
+                mixin(ofn~"();");
                 break;
             case IDPSN:
-                _emit!"idpsn";
+                enum ofn = "idpsn";
+                mixin(ofn~"();");
                 break;
             case IDCLFL:
-                _emit!"idclfl";
+                enum ofn = "idclfl";
+                mixin(ofn~"();");
                 break;
             case IDDS:
-                _emit!"idds";
+                enum ofn = "idds";
+                mixin(ofn~"();");
                 break;
             case IDACPI:
-                _emit!"idacpi";
+                enum ofn = "idacpi";
+                mixin(ofn~"();");
                 break;
             case IDMMX:
-                _emit!"idmmx";
+                enum ofn = "idmmx";
+                mixin(ofn~"();");
                 break;
             case IDFXSR:
-                _emit!"idfxsr";
+                enum ofn = "idfxsr";
+                mixin(ofn~"();");
                 break;
             case IDSSE:
-                _emit!"idsse";
+                enum ofn = "idsse";
+                mixin(ofn~"();");
                 break;
             case IDSSE2:
-                _emit!"idsse2";
+                enum ofn = "idsse2";
+                mixin(ofn~"();");
                 break;
             case IDSS:
-                _emit!"idss";
+                enum ofn = "idss";
+                mixin(ofn~"();");
                 break;
             case IDHTT:
-                _emit!"idhtt";
+                enum ofn = "idhtt";
+                mixin(ofn~"();");
                 break;
             case IDTM:
-                _emit!"idtm";
+                enum ofn = "idtm";
+                mixin(ofn~"();");
                 break;
             case IDIA64:
-                _emit!"idia64";
+                enum ofn = "idia64";
+                mixin(ofn~"();");
                 break;
             case IDPBE:
-                _emit!"idpbe";
+                enum ofn = "idpbe";
+                mixin(ofn~"();");
                 break;
             case PFADD:
-                _emit!"pfadd";
+                enum ofn = "pfadd";
                 break;
             case PFSUB:
-                _emit!"pfsub";
+                enum ofn = "pfsub";
                 break;
             case PFSUBR:
-                _emit!"pfsubr";
+                enum ofn = "pfsubr";
                 break;
             case PFMUL:
-                _emit!"pfmul";
+                enum ofn = "pfmul";
                 break;
             case PFCMPEQ:
-                _emit!"pfcmpeq";
+                enum ofn = "pfcmpeq";
                 break;
             case PFCMPGE:
-                _emit!"pfcmpge";
+                enum ofn = "pfcmpge";
                 break;
             case PFCMPGT:
-                _emit!"pfcmpgt";
+                enum ofn = "pfcmpgt";
                 break;
             case PF2ID:
-                _emit!"pf2id";
+                enum ofn = "pf2id";
                 break;
             case PI2FD:
-                _emit!"pi2fd";
+                enum ofn = "pi2fd";
                 break;
             case PF2IW:
-                _emit!"pf2iw";
+                enum ofn = "pf2iw";
                 break;
             case PI2FW:
-                _emit!"pi2fw";
+                enum ofn = "pi2fw";
                 break;
             case PFMAX:
-                _emit!"pfmax";
+                enum ofn = "pfmax";
                 break;
             case PFMIN:
-                _emit!"pfmin";
+                enum ofn = "pfmin";
                 break;
             case PFRCP:
-                _emit!"pfrcp";
+                enum ofn = "pfrcp";
                 break;
             case PFRSQRT:
-                _emit!"pfrsqrt";
+                enum ofn = "pfrsqrt";
                 break;
             case PFRCPIT1:
-                _emit!"pfrcpit1";
+                enum ofn = "pfrcpit1";
                 break;
             case PFRSQIT1:
-                _emit!"pfrsqit1";
+                enum ofn = "pfrsqit1";
                 break;
             case PFRCPIT2:
-                _emit!"pfrcpit2";
+                enum ofn = "pfrcpit2";
                 break;
             case PFACC:
-                _emit!"pfacc";
+                enum ofn = "pfacc";
                 break;
             case PFNACC:
-                _emit!"pfnacc";
+                enum ofn = "pfnacc";
                 break;
             case PFPNACC:
-                _emit!"pfpnacc";
+                enum ofn = "pfpnacc";
                 break;
             case PMULHRW:
-                _emit!"pmulhrw";
+                enum ofn = "pmulhrw";
                 break;
             case PAVGUSB:
-                _emit!"pavgusb";
+                enum ofn = "pavgusb";
                 break;
             case PSWAPD:
-                _emit!"pswapd";
+                enum ofn = "pswapd";
                 break;
             case FEMMS:
-                _emit!"femms";
+                enum ofn = "femms";
+                mixin(ofn~"();");
                 break;
             case ICEBP:
-                _emit!"icebp";
+                enum ofn = "icebp";
+                mixin(ofn~"();");
                 break;
             case PTWRITE:
-                _emit!"ptwrite";
+                enum ofn = "ptwrite";
                 break;
             case CLWB:
-                _emit!"clwb";
+                enum ofn = "clwb";
                 break;
             case CLFLUSHOPT:
-                _emit!"clflushopt";
+                enum ofn = "clflushopt";
                 break;
             case STAC:
-                _emit!"stac";
+                enum ofn = "stac";
+                mixin(ofn~"();");
                 break;
             case CLAC:
-                _emit!"clac";
+                enum ofn = "clac";
+                mixin(ofn~"();");
                 break;
             case ADC:
-                _emit!"adc";
+                enum ofn = "adc";
                 break;
             case ADCX:
-                _emit!"adcx";
+                enum ofn = "adcx";
                 break;
             case ADOX:
-                _emit!"adox";
+                enum ofn = "adox";
                 break;
             case RDSEED:
-                _emit!"rdseed";
+                enum ofn = "rdseed";
                 break;
             case BNDCL:
-                _emit!"bndcl";
+                enum ofn = "bndcl";
                 break;
             case BNDCU:
-                _emit!"bndcu";
+                enum ofn = "bndcu";
                 break;
             case BNDLDX:
-                _emit!"bndldx";
+                enum ofn = "bndldx";
                 break;
             case BNDSTX:
-                _emit!"bndstx";
+                enum ofn = "bndstx";
                 break;
             case BNDMK:
-                _emit!"bndmk";
+                enum ofn = "bndmk";
                 break;
             case BNDMOV:
-                _emit!"bndmov";
+                enum ofn = "bndmov";
                 break;
             case BOUND:
-                _emit!"bound";
+                enum ofn = "bound";
                 break;
             case XEND:
-                _emit!"xend";
+                enum ofn = "xend";
+                mixin(ofn~"();");
                 break;
             case XABORT:
-                _emit!"xabort";
+                enum ofn = "xabort";
                 break;
             case XBEGIN:
-                _emit!"xbegin";
+                enum ofn = "xbegin";
                 break;
             case XTEST:
-                _emit!"xtest";
+                enum ofn = "xtest";
+                mixin(ofn~"();");
                 break;
             case INVPCID:
-                _emit!"invpcid";
+                enum ofn = "invpcid";
                 break;
             case XACQUIRE:
-                _emit!"xacquire";
+                enum ofn = "xacquire";
+                mixin(ofn~"(0);");
                 break;
             case XRELEASE:
-                _emit!"xrelease";
+                enum ofn = "xrelease";
+                mixin(ofn~"(0);");
                 break;
             case TZCNT:
-                _emit!"tzcnt";
+                enum ofn = "tzcnt";
                 break;
             case LZCNT:
-                _emit!"lzcnt";
+                enum ofn = "lzcnt";
                 break;
             case ANDN:
-                _emit!"andn";
+                enum ofn = "andn";
                 break;
             case ECREATE:
-                _emit!"ecreate";
+            // TODO: All SMX are POLLUTE_AX
+                enum ofn = "encls_ecreate";
+                mixin(ofn~"();");
                 break;
             case EINIT:
-                _emit!"einit";
+                enum ofn = "encls_einit";
+                mixin(ofn~"();");
                 break;
             case EREMOVE:
-                _emit!"eremove";
+                enum ofn = "encls_eremove";
+                mixin(ofn~"();");
                 break;
             case EDBGRD:
-                _emit!"edbgrd";
+                enum ofn = "encls_edbgrd";
+                mixin(ofn~"();");
                 break;
             case EDBGWR:
-                _emit!"edbgwr";
+                enum ofn = "encls_edbgwr";
+                mixin(ofn~"();");
                 break;
             case EEXTEND:
-                _emit!"eextend";
+                enum ofn = "encls_eextend";
+                mixin(ofn~"();");
                 break;
             case ELDB:
-                _emit!"eldb";
+                enum ofn = "encls_eldb";
+                mixin(ofn~"();");
                 break;
             case ELDU:
-                _emit!"eldu";
+                enum ofn = "encls_eldu";
+                mixin(ofn~"();");
                 break;
             case EBLOCK:
-                _emit!"eblock";
+                enum ofn = "encls_eblock";
+                mixin(ofn~"();");
                 break;
             case EPA:
-                _emit!"epa";
+                enum ofn = "encls_epa";
+                mixin(ofn~"();");
                 break;
             case EWB:
-                _emit!"ewb";
+                enum ofn = "encls_ewb";
+                mixin(ofn~"();");
                 break;
             case ETRACK:
-                _emit!"etrack";
+                enum ofn = "encls_etrack";
+                mixin(ofn~"();");
                 break;
             case EAUG:
-                _emit!"eaug";
+                enum ofn = "encls_eaug";
+                mixin(ofn~"();");
                 break;
             case EMODPR:
-                _emit!"emodpr";
+                enum ofn = "encls_emodpr";
+                mixin(ofn~"();");
                 break;
             case EMODT:
-                _emit!"emodt";
+                enum ofn = "encls_emodt";
+                mixin(ofn~"();");
                 break;
             case ERDINFO:
-                _emit!"erdinfo";
+                enum ofn = "encls_erdinfo";
+                mixin(ofn~"();");
                 break;
             case ETRACKC:
-                _emit!"etrackc";
+                enum ofn = "encls_etrackc";
+                mixin(ofn~"();");
                 break;
             case ELDBC:
-                _emit!"eldbc";
+                enum ofn = "encls_eldbc";
+                mixin(ofn~"();");
                 break;
             case ELDUC:
-                _emit!"elduc";
+                enum ofn = "encls_elduc";
+                mixin(ofn~"();");
                 break;
             case EREPORT:
-                _emit!"ereport";
+                enum ofn = "enclu_ereport";
+                mixin(ofn~"();");
                 break;
             case EGETKEY:
-                _emit!"egetkey";
+                enum ofn = "enclu_egetkey";
+                mixin(ofn~"();");
                 break;
             case EENTER:
-                _emit!"eenter";
+                enum ofn = "enclu_eenter";
+                mixin(ofn~"();");
                 break;
             case EEXIT:
-                _emit!"eexit";
+                enum ofn = "enclu_eexit";
+                mixin(ofn~"();");
                 break;
             case EACCEPT:
-                _emit!"eaccept";
+                enum ofn = "enclu_eaccept";
+                mixin(ofn~"();");
                 break;
             case EMODPE:
-                _emit!"emodpe";
+                enum ofn = "enclu_emodpe";
+                mixin(ofn~"();");
                 break;
             case EACCEPTCOPY:
-                _emit!"eacceptcopy";
+                enum ofn = "enclu_eacceptcopy";
+                mixin(ofn~"();");
                 break;
             case EDECCSSA:
-                _emit!"edeccssa";
+                enum ofn = "enclu_edeccssa";
+                mixin(ofn~"();");
                 break;
             case EDECVIRTCHILD:
-                _emit!"edecvirtchild";
+                enum ofn = "enclv_edecvirtchild";
+                mixin(ofn~"();");
                 break;
             case EINCVIRTCHILD:
-                _emit!"eincvirtchild";
+                enum ofn = "enclv_eincvirtchild";
+                mixin(ofn~"();");
                 break;
             case ESETCONTEXT:
-                _emit!"esetcontext";
+                enum ofn = "enclv_esetcontext";
+                mixin(ofn~"();");
                 break;
             case MONITOR:
-                _emit!"monitor";
+                enum ofn = "monitor";
+                mixin(ofn~"();");
                 break;
             case MWAIT:
-                _emit!"mwait";
+                enum ofn = "mwait";
+                mixin(ofn~"();");
                 break;
             case INVVPID:
-                _emit!"invvpid";
+                enum ofn = "invvpid";
                 break;
             case INVEPT:
-                _emit!"invept";
+                enum ofn = "invept";
                 break;
             case VMCALL:
-                _emit!"vmcall";
+                enum ofn = "vmcall";
+                mixin(ofn~"();");
                 break;
             case VMFUNC:
-                _emit!"vmfunc";
+                enum ofn = "vmfunc";
+                mixin(ofn~"();");
                 break;
             case VMCLEAR:
-                _emit!"vmclear";
+                enum ofn = "vmclear";
                 break;
             case VMLAUNCH:
-                _emit!"vmlaunch";
+                enum ofn = "vmlaunch";
+                mixin(ofn~"();");
                 break;
             case VMRESUME:
-                _emit!"vmresume";
+                enum ofn = "vmresume";
+                mixin(ofn~"();");
                 break;
             case VMXOFF:
-                _emit!"vmxoff";
+                enum ofn = "vmxoff";
+                mixin(ofn~"();");
                 break;
             case VMXON:
-                _emit!"vmxon";
+                enum ofn = "vmxon";
                 break;
             case VMWRITE:
-                _emit!"vmwrite";
+                enum ofn = "vmwrite";
                 break;
             case VMREAD:
-                _emit!"vmread";
+                enum ofn = "vmread";
                 break;
             case VMPTRST:
-                _emit!"vmptrst";
+                enum ofn = "vmptrst";
                 break;
             case VMPTRLD:
-                _emit!"vmptrld";
+                enum ofn = "vmptrld";
                 break;
             case CAPABILITIES:
-                _emit!"capabilities";
+                enum ofn = "getsec_capabilities";
+                mixin(ofn~"();");
                 break;
             case ENTERACCS:
-                _emit!"enteraccs";
+                enum ofn = "getsec_enteraccs";
+                mixin(ofn~"();");
                 break;
             case EXITAC:
-                _emit!"exitac";
+                enum ofn = "getsec_exitac";
+                mixin(ofn~"();");
                 break;
             case SENTER:
-                _emit!"senter";
+                enum ofn = "getsec_senter";
+                mixin(ofn~"();");
                 break;
             case SEXIT:
-                _emit!"sexit";
+                enum ofn = "getsec_sexit";
+                mixin(ofn~"();");
                 break;
             case PARAMETERS:
-                _emit!"parameters";
+                enum ofn = "getsec_parameters";
+                mixin(ofn~"();");
                 break;
             case SMCTRL:
-                _emit!"smctrl";
+                enum ofn = "getsec_smctrl";
+                mixin(ofn~"();");
                 break;
             case WAKEUP:
-                _emit!"wakeup";
+                enum ofn = "getsec_wakeup";
+                mixin(ofn~"();");
                 break;
             case CMPXCHG16B:
-                _emit!"cmpxchg16b";
+                enum ofn = "cmpxchg16b";
                 break;
             case POPCNT:
-                _emit!"popcnt";
+                enum ofn = "popcnt";
                 break;
             case XGETBV:
-                _emit!"xgetbv";
+                enum ofn = "xgetbv";
+                mixin(ofn~"();");
                 break;
             case XSETBV:
-                _emit!"xsetbv";
+                enum ofn = "xsetbv";
+                mixin(ofn~"();");
                 break;
             case XRSTOR:
-                _emit!"xrstor";
+                enum ofn = "xrstor";
                 break;
             case XSAVE:
-                _emit!"xsave";
+                enum ofn = "xsave";
                 break;
             case XRSTORS:
-                _emit!"xrstors";
+                enum ofn = "xrstors";
                 break;
             case XSAVES:
-                _emit!"xsaves";
+                enum ofn = "xsaves";
                 break;
             case XSAVEOPT:
-                _emit!"xsaveopt";
+                enum ofn = "xsaveopt";
                 break;
             case XSAVEC:
-                _emit!"xsavec";
+                enum ofn = "xsavec";
                 break;
             case RDRAND:
-                _emit!"rdrand";
+                enum ofn = "rdrand";
                 break;
             case FABS:
-                _emit!"fabs";
+                enum ofn = "fabs";
+                mixin(ofn~"();");
                 break;
             case FCHS:
-                _emit!"fchs";
+                enum ofn = "fchs";
+                mixin(ofn~"();");
                 break;
             case FCLEX:
-                _emit!"fclex";
+                enum ofn = "fclex";
+                mixin(ofn~"();");
                 break;
             case FNCLEX:
-                _emit!"fnclex";
+                enum ofn = "fnclex";
+                mixin(ofn~"();");
                 break;
             case FADD:
-                _emit!"fadd";
+                enum ofn = "fadd";
                 break;
             case FADDP:
-                _emit!"faddp";
+                enum ofn = "faddp";
                 break;
             case FIADD:
-                _emit!"fiadd";
+                enum ofn = "fiadd";
                 break;
             case FBLD:
-                _emit!"fbld";
+                enum ofn = "fbld";
                 break;
             case FBSTP:
-                _emit!"fbstp";
+                enum ofn = "fbstp";
                 break;
             case FCOM:
-                _emit!"fcom";
+                enum ofn = "fcom";
                 break;
             case FCOMP:
-                _emit!"fcomp";
+                enum ofn = "fcomp";
                 break;
             case FCOMPP:
-                _emit!"fcompp";
+                enum ofn = "fcompp";
                 break;
             case FCOMI:
-                _emit!"fcomi";
+                enum ofn = "fcomi";
                 break;
             case FCOMIP:
-                _emit!"fcomip";
+                enum ofn = "fcomip";
                 break;
             case FUCOMI:
-                _emit!"fucomi";
+                enum ofn = "fucomi";
                 break;
             case FUCOMIP:
-                _emit!"fucomip";
+                enum ofn = "fucomip";
                 break;
             case FICOM:
-                _emit!"ficom";
+                enum ofn = "ficom";
                 break;
             case FICOMP:
-                _emit!"ficomp";
+                enum ofn = "ficomp";
                 break;
             case FUCOM:
-                _emit!"fucom";
+                enum ofn = "fucom";
                 break;
             case FUCOMP:
-                _emit!"fucomp";
+                enum ofn = "fucomp";
                 break;
             case FUCOMPP:
-                _emit!"fucompp";
+                enum ofn = "fucompp";
                 break;
             case FTST:
-                _emit!"ftst";
+                enum ofn = "ftst";
+                mixin(ofn~"();");
                 break;
             case F2XM1:
-                _emit!"f2xm1";
+                enum ofn = "f2xm1";
+                mixin(ofn~"();");
                 break;
             case FYL2X:
-                _emit!"fyl2x";
+                enum ofn = "fyl2x";
+                mixin(ofn~"();");
                 break;
             case FYL2XP1:
-                _emit!"fyl2xp1";
+                enum ofn = "fyl2xp1";
+                mixin(ofn~"();");
                 break;
             case FCOS:
-                _emit!"fcos";
+                enum ofn = "fcos";
+                mixin(ofn~"();");
                 break;
             case FSIN:
-                _emit!"fsin";
+                enum ofn = "fsin";
+                mixin(ofn~"();");
                 break;
             case FSINCOS:
-                _emit!"fsincos";
+                enum ofn = "fsincos";
+                mixin(ofn~"();");
                 break;
             case FSQRT:
-                _emit!"fsqrt";
+                enum ofn = "fsqrt";
+                mixin(ofn~"();");
                 break;
             case FPTAN:
-                _emit!"fptan";
+                enum ofn = "fptan";
+                mixin(ofn~"();");
                 break;
             case FPATAN:
-                _emit!"fpatan";
+                enum ofn = "fpatan";
+                mixin(ofn~"();");
                 break;
             case FPREM:
-                _emit!"fprem";
+                enum ofn = "fprem";
+                mixin(ofn~"();");
                 break;
             case FPREM1:
-                _emit!"fprem1";
+                enum ofn = "fprem1";
+                mixin(ofn~"();");
                 break;
             case FDECSTP:
-                _emit!"fdecstp";
+                enum ofn = "fdecstp";
+                mixin(ofn~"();");
                 break;
             case FINCSTP:
-                _emit!"fincstp";
+                enum ofn = "fincstp";
+                mixin(ofn~"();");
                 break;
             case FILD:
-                _emit!"fild";
+                enum ofn = "fild";
                 break;
             case FIST:
-                _emit!"fist";
+                enum ofn = "fist";
                 break;
             case FISTP:
-                _emit!"fistp";
+                enum ofn = "fistp";
                 break;
             case FISTTP:
-                _emit!"fisttp";
+                enum ofn = "fisttp";
                 break;
             case FLDCW:
-                _emit!"fldcw";
+                enum ofn = "fldcw";
                 break;
             case FSTCW:
-                _emit!"fstcw";
+                enum ofn = "fstcw";
                 break;
             case FNSTCW:
-                _emit!"fnstcw";
+                enum ofn = "fnstcw";
                 break;
             case FLDENV:
-                _emit!"fldenv";
+                enum ofn = "fldenv";
                 break;
             case FSTENV:
-                _emit!"fstenv";
+                enum ofn = "fstenv";
                 break;
             case FNSTENV:
-                _emit!"fnstenv";
+                enum ofn = "fnstenv";
                 break;
             case FSTSW:
-                _emit!"fstsw";
+                enum ofn = "fstsw";
                 break;
             case FNSTSW:
-                _emit!"fnstsw";
+                enum ofn = "fnstsw";
                 break;
             case FLD:
-                _emit!"fld";
+                enum ofn = "fld";
                 break;
             case FLD1:
-                _emit!"fld1";
+                enum ofn = "fld1";
+                mixin(ofn~"();");
                 break;
             case FLDL2T:
-                _emit!"fldl2t";
+                enum ofn = "fldl2t";
+                mixin(ofn~"();");
                 break;
             case FLDL2E:
-                _emit!"fldl2e";
+                enum ofn = "fldl2e";
+                mixin(ofn~"();");
                 break;
             case FLDPI:
-                _emit!"fldpi";
+                enum ofn = "fldpi";
+                mixin(ofn~"();");
                 break;
             case FLDLG2:
-                _emit!"fldlg2";
+                enum ofn = "fldlg2";
+                mixin(ofn~"();");
                 break;
             case FLDLN2:
-                _emit!"fldln2";
+                enum ofn = "fldln2";
+                mixin(ofn~"();");
                 break;
             case FLDZ:
-                _emit!"fldz";
+                enum ofn = "fldz";
+                mixin(ofn~"();");
                 break;
             case FST:
-                _emit!"fst";
+                enum ofn = "fst";
                 break;
             case FSTP:
-                _emit!"fstp";
+                enum ofn = "fstp";
                 break;
             case FDIV:
-                _emit!"fdiv";
+                enum ofn = "fdiv";
                 break;
             case FDIVP:
-                _emit!"fdivp";
+                enum ofn = "fdivp";
                 break;
             case FIDIV:
-                _emit!"fidiv";
+                enum ofn = "fidiv";
                 break;
             case FDIVR:
-                _emit!"fdivr";
+                enum ofn = "fdivr";
                 break;
             case FDIVRP:
-                _emit!"fdivrp";
+                enum ofn = "fdivrp";
                 break;
             case FIDIVR:
-                _emit!"fidivr";
+                enum ofn = "fidivr";
                 break;
             case FSCALE:
-                _emit!"fscale";
+                enum ofn = "fscale";
                 break;
             case FRNDINT:
-                _emit!"frndint";
+                enum ofn = "frndint";
                 break;
             case FEXAM:
-                _emit!"fexam";
+                enum ofn = "fexam";
                 break;
             case FFREE:
-                _emit!"ffree";
+                enum ofn = "ffree";
                 break;
             case FXCH:
-                _emit!"fxch";
+                enum ofn = "fxch";
                 break;
             case FXTRACT:
-                _emit!"fxtract";
+                enum ofn = "fxtract";
                 break;
             case FNOP:
-                _emit!"fnop";
+                enum ofn = "fnop";
                 break;
             case FNINIT:
-                _emit!"fninit";
+                enum ofn = "fninit";
                 break;
             case FINIT:
-                _emit!"finit";
+                enum ofn = "finit";
                 break;
             case FSAVE:
-                _emit!"fsave";
+                enum ofn = "fsave";
                 break;
             case FNSAVE:
-                _emit!"fnsave";
+                enum ofn = "fnsave";
                 break;
             case FRSTOR:
-                _emit!"frstor";
+                enum ofn = "frstor";
                 break;
             case FXSAVE:
-                _emit!"fxsave";
+                enum ofn = "fxsave";
                 break;
             case FXRSTOR:
-                _emit!"fxrstor";
+                enum ofn = "fxrstor";
                 break;
             case FMUL:
-                _emit!"fmul";
+                enum ofn = "fmul";
                 break;
             case FMULP:
-                _emit!"fmulp";
+                enum ofn = "fmulp";
                 break;
             case FIMUL:
-                _emit!"fimul";
+                enum ofn = "fimul";
                 break;
             case FSUB:
-                _emit!"fsub";
+                enum ofn = "fsub";
                 break;
             case FSUBP:
-                _emit!"fsubp";
+                enum ofn = "fsubp";
                 break;
             case FISUB:
-                _emit!"fisub";
+                enum ofn = "fisub";
                 break;
             case FSUBR:
-                _emit!"fsubr";
+                enum ofn = "fsubr";
                 break;
             case FSUBRP:
-                _emit!"fsubrp";
+                enum ofn = "fsubrp";
                 break;
             case FISUBR:
-                _emit!"fisubr";
+                enum ofn = "fisubr";
                 break;
             case FCMOVCC:
-                _emit!"fcmovcc";
+                enum ofn = "fcmovcc";
                 break;
             case RDMSR:
-                _emit!"rdmsr";
+                enum ofn = "rdmsr";
+                mixin(ofn~"();");
                 break;
             case WRMSR:
-                _emit!"wrmsr";
+                enum ofn = "wrmsr";
+                mixin(ofn~"();");
                 break;
             case CMPXCHG8B:
-                _emit!"cmpxchg8b";
+                enum ofn = "cmpxchg8b";
                 break;
             case SYSENTER:
-                _emit!"sysenter";
+                enum ofn = "sysenter";
+                mixin(ofn~"();");
                 break;
             case SYSEXITC:
-                _emit!"sysexitc";
+                enum ofn = "sysexitc";
+                mixin(ofn~"();");
                 break;
             case SYSEXIT:
-                _emit!"sysexit";
+                enum ofn = "sysexit";
+                mixin(ofn~"();");
                 break;
             case CMOVCC:
-                _emit!"cmovcc";
+                enum ofn = "cmovcc";
                 break;
             case CLFLUSH:
-                _emit!"clflush";
+                enum ofn = "clflush";
                 break;
             case HRESET:
-                _emit!"hreset";
+                enum ofn = "hreset";
                 break;
             case INCSSPD:
-                _emit!"incsspd";
+                enum ofn = "incsspd";
                 break;
             case INCSSPQ:
-                _emit!"incsspq";
+                enum ofn = "incsspq";
                 break;
             case CLRSSBSY:
-                _emit!"clrssbsy";
+                enum ofn = "clrssbsy";
                 break;
             case SETSSBSY:
-                _emit!"setssbsy";
+                enum ofn = "setssbsy";
+                mixin(ofn~"();");
                 break;
             case RDSSPD:
-                _emit!"rdsspd";
+                enum ofn = "rdsspd";
                 break;
             case RDSSPQ:
-                _emit!"rdsspq";
+                enum ofn = "rdsspq";
                 break;
             case WRSSD:
-                _emit!"wrssd";
+                enum ofn = "wrssd";
                 break;
             case WRSSQ:
-                _emit!"wrssq";
+                enum ofn = "wrssq";
                 break;
             case WRUSSD:
-                _emit!"wrussd";
+                enum ofn = "wrussd";
                 break;
             case WRUSSQ:
-                _emit!"wrussq";
+                enum ofn = "wrussq";
                 break;
             case RSTORSSP:
-                _emit!"rstorssp";
+                enum ofn = "rstorssp";
                 break;
             case SAVEPREVSSP:
-                _emit!"saveprevssp";
+                enum ofn = "saveprevssp";
+                mixin(ofn~"();");
                 break;
             case ENDBR32:
-                _emit!"endbr32";
+                enum ofn = "endbr32";
+                mixin(ofn~"();");
                 break;
             case ENDBR64:
-                _emit!"endbr64";
+                enum ofn = "endbr64";
+                mixin(ofn~"();");
                 break;
             case RDFSBASE:
-                _emit!"rdfsbase";
+                enum ofn = "rdfsbase";
                 break;
             case RDGSBASE:
-                _emit!"rdgsbase";
+                enum ofn = "rdgsbase";
                 break;
             case WRFSBASE:
-                _emit!"wrfsbase";
+                enum ofn = "wrfsbase";
                 break;
             case WRGSBASE:
-                _emit!"wrgsbase";
+                enum ofn = "wrgsbase";
                 break;
             case RDPID:
-                _emit!"rdpid";
+                enum ofn = "rdpid";
                 break;
             case WRPKRU:
-                _emit!"wrpkru";
+            // TODO: Pollution for this and MSR?
+                enum ofn = "wrpkru";
+                mixin(ofn~"();");
                 break;
             case RDPKRU:
-                _emit!"rdpkru";
+                enum ofn = "rdpkru";
+                mixin(ofn~"();");
                 break;
             case TESTUI:
-                _emit!"testui";
+                enum ofn = "testui";
+                mixin(ofn~"();");
                 break;
             case STUI:
-                _emit!"stui";
+                enum ofn = "stui";
+                mixin(ofn~"();");
                 break;
             case CLUI:
-                _emit!"clui";
+                enum ofn = "clui";
+                mixin(ofn~"();");
                 break;
             case UIRET:
-                _emit!"uiret";
+                enum ofn = "uiret";
+                mixin(ofn~"();");
                 break;
             case SENDUIPI:
-                _emit!"senduipi";
+                enum ofn = "senduipi";
                 break;
             case UMWAIT:
-                _emit!"umwait";
+                enum ofn = "umwait";
                 break;
             case UMONITOR:
-                _emit!"umonitor";
+                enum ofn = "umonitor";
                 break;
             case TPAUSE:
-                _emit!"tpause";
+                enum ofn = "tpause";
                 break;
             case CLDEMOTE:
-                _emit!"cldemote";
+                enum ofn = "cldemote";
                 break;
             case XRESLDTRK:
-                _emit!"xresldtrk";
+                enum ofn = "xresldtrk";
+                mixin(ofn~"();");
                 break;
             case XSUSLDTRK:
-                _emit!"xsusldtrk";
+                enum ofn = "xsusldtrk";
+                mixin(ofn~"();");
                 break;
             case SERIALIZE:
-                _emit!"serialize";
+                enum ofn = "serialize";
+                mixin(ofn~"();");
                 break;
             case PCONFIG:
-                _emit!"pconfig";
+                enum ofn = "pconfig";
+                mixin(ofn~"();");
                 break;
             case RDPMC:
-                _emit!"rdpmc";
+                enum ofn = "rdpmc";
+                mixin(ofn~"();");
                 break;
             case WBINVD:
-                _emit!"wbinvd";
+                enum ofn = "wbinvd";
+                mixin(ofn~"();");
                 break;
             case WBNOINVD:
-                _emit!"wbnoinvd";
+                enum ofn = "wbnoinvd";
+                mixin(ofn~"();");
                 break;
             case INVD:
-                _emit!"invd";
+                enum ofn = "invd";
+                mixin(ofn~"();");
                 break;
             case LGDT:
-                _emit!"lgdt";
+                enum ofn = "lgdt";
                 break;
             case SGDT:
-                _emit!"sgdt";
+                enum ofn = "sgdt";
                 break;
             case LLDT:
-                _emit!"lldt";
+                enum ofn = "lldt";
                 break;
             case SLDT:
-                _emit!"sldt";
+                enum ofn = "sldt";
                 break;
             case LIDT:
-                _emit!"lidt";
+                enum ofn = "lidt";
                 break;
             case SIDT:
-                _emit!"sidt";
+                enum ofn = "sidt";
                 break;
             case LMSW:
-                _emit!"lmsw";
+                enum ofn = "lmsw";
                 break;
             case SMSW:
-                _emit!"smsw";
+                enum ofn = "smsw";
                 break;
             case INVLPG:
-                _emit!"invlpg";
+                enum ofn = "invlpg";
                 break;
             case SAHF:
-                _emit!"sahf";
+                enum ofn = "sahf";
+                mixin(ofn~"();");
                 break;
             case LAHF:
-                _emit!"lahf";
+                enum ofn = "lahf";
+                mixin(ofn~"();");
                 break;
             case SARX:
-                _emit!"sarx";
+                enum ofn = "sarx";
                 break;
             case SHLX:
-                _emit!"shlx";
+                enum ofn = "shlx";
                 break;
             case SHRX:
-                _emit!"shrx";
+                enum ofn = "shrx";
                 break;
             case MOVQ:
-                _emit!"movq";
+                enum ofn = "movq";
                 break;
             case MOVD:
-                _emit!"movd";
+                enum ofn = "movd";
                 break;
             case ADDPD:
-                _emit!"addpd";
+                enum ofn = "addpd";
                 break;
             case ADDPS:
-                _emit!"addps";
+                enum ofn = "addps";
                 break;
             case ADDSS:
-                _emit!"addss";
+                enum ofn = "addss";
                 break;
             case ADDSD:
-                _emit!"addsd";
+                enum ofn = "addsd";
                 break;
             case LFENCE:
-                _emit!"lfence";
+                enum ofn = "lfence";
+                mixin(ofn~"();");
                 break;
             case SFENCE:
-                _emit!"sfence";
+                enum ofn = "sfence";
+                mixin(ofn~"();");
                 break;
             case MFENCE:
-                _emit!"mfence";
+                enum ofn = "mfence";
+                mixin(ofn~"();");
                 break;
             case ADDSUBPS:
-                _emit!"addsubps";
+                enum ofn = "addsubps";
                 break;
             case ADDSUBPD:
-                _emit!"addsubpd";
+                enum ofn = "addsubpd";
                 break;
             case VADDPD:
-                _emit!"vaddpd";
+                enum ofn = "vaddpd";
                 break;
             case VADDPS:
-                _emit!"vaddps";
+                enum ofn = "vaddps";
                 break;
             case VADDSD:
-                _emit!"vaddsd";
+                enum ofn = "vaddsd";
                 break;
             case VADDSS:
-                _emit!"vaddss";
+                enum ofn = "vaddss";
                 break;
             case VADDSUBPD:
-                _emit!"vaddsubpd";
+                enum ofn = "vaddsubpd";
                 break;
             case VADDSUBPS:
-                _emit!"vaddsubps";
+                enum ofn = "vaddsubps";
                 break;
             case VMOVQ:
-                _emit!"vmovq";
+                enum ofn = "vmovq";
                 break;
             case VMOVD:
-                _emit!"vmovd";
+                enum ofn = "vmovd";
                 break;
             case AESDEC:
-                _emit!"aesdec";
+                enum ofn = "aesdec";
                 break;
             case VAESDEC:
-                _emit!"vaesdec";
+                enum ofn = "vaesdec";
                 break;
             case AESDEC128KL:
-                _emit!"aesdec128kl";
+                enum ofn = "aesdec128kl";
                 break;
             case AESDEC256KL:
-                _emit!"aesdec256kl";
+                enum ofn = "aesdec256kl";
                 break;
             case AESDECLAST:
-                _emit!"aesdeclast";
+                enum ofn = "aesdeclast";
                 break;
             case VAESDECLAST:
-                _emit!"vaesdeclast";
+                enum ofn = "vaesdeclast";
                 break;
             case AESDECWIDE128KL:
-                _emit!"aesdecwide128kl";
+                enum ofn = "aesdecwide128kl";
                 break;
             case AESDECWIDE256KL:
-                _emit!"aesdecwide256kl";
+                enum ofn = "aesdecwide256kl";
                 break;
             case AESENC:
-                _emit!"aesenc";
+                enum ofn = "aesenc";
                 break;
             case VAESENC:
-                _emit!"vaesenc";
+                enum ofn = "vaesenc";
                 break;
             case AESENC128KL:
-                _emit!"aesenc128kl";
+                enum ofn = "aesenc128kl";
                 break;
             case AESENC256KL:
-                _emit!"aesenc256kl";
+                enum ofn = "aesenc256kl";
                 break;
             case AESENCLAST:
-                _emit!"aesenclast";
+                enum ofn = "aesenclast";
                 break;
             case VAESENCLAST:
-                _emit!"vaesenclast";
+                enum ofn = "vaesenclast";
                 break;
             case AESENCWIDE128KL:
-                _emit!"aesencwide128kl";
+                enum ofn = "aesencwide128kl";
                 break;
             case AESENCWIDE256KL:
-                _emit!"aesencwide256kl";
+                enum ofn = "aesencwide256kl";
                 break;
             case AESIMC:
-                _emit!"aesimc";
+                enum ofn = "aesimc";
                 break;
             case VAESIMC:
-                _emit!"vaesimc";
+                enum ofn = "vaesimc";
                 break;
             case AESKEYGENASSIST:
-                _emit!"aeskeygenassist";
+                enum ofn = "aeskeygenassist";
                 break;
             case VAESKEYGENASSIST:
-                _emit!"vaeskeygenassist";
+                enum ofn = "vaeskeygenassist";
                 break;
             case SHA1MSG1:
-                _emit!"sha1msg1";
+                enum ofn = "sha1msg1";
                 break;
             case SHA1MSG2:
-                _emit!"sha1msg2";
+                enum ofn = "sha1msg2";
                 break;
             case SHA1NEXTE:
-                _emit!"sha1nexte";
+                enum ofn = "sha1nexte";
                 break;
             case SHA256MSG1:
-                _emit!"sha256msg1";
+                enum ofn = "sha256msg1";
                 break; 
             case SHA1RNDS4:
-                _emit!"sha1rnds4";
+                enum ofn = "sha1rnds4";
                 break;
             case SHA256RNDS2:
-                _emit!"sha256rnds2";
+                enum ofn = "sha256rnds2";
                 break;
+            // TODO: Branch not taken and taken?
             case CRC32:
-                _emit!"crc32";
+                enum ofn = "crc32";
                 break;
             case ENDQCMD:
-                _emit!"endqcmd";
+                enum ofn = "endqcmd";
                 break;
             case CMPXCHG:
-                _emit!"cmpxchg";
+                enum ofn = "cmpxchg";
                 break;
             case AAA:
-                _emit!"aaa";
+                enum ofn = "aaa";
+                mixin(ofn~"();");
                 break;
             case AAD:
-                _emit!"aad";
+                enum ofn = "aad";
                 break;
             case AAM:
-                _emit!"aam";
+                enum ofn = "aam";
                 break;
             case AAS:
-                _emit!"aas";
+                enum ofn = "aas";
+                mixin(ofn~"();");
                 break;
             case ADD:
-                _emit!"add";
+                enum ofn = "add";
                 break;
             case AND:
-                _emit!"and";
+                enum ofn = "and";
                 break;
             case ARPL:
-                _emit!"arpl";
+                enum ofn = "arpl";
                 break;
             case BSF:
-                _emit!"bsf";
+                enum ofn = "bsf";
                 break;
             case BSR:
-                _emit!"bsr";
+                enum ofn = "bsr";
                 break;
             case BSWAP:
-                _emit!"bswap";
+                enum ofn = "bswap";
                 break;
             case BT:
-                _emit!"bt";
+                enum ofn = "bt";
                 break;
             case BTC:
-                _emit!"btc";
+                enum ofn = "btc";
                 break;
             case BTR:
-                _emit!"btr";
+                enum ofn = "btr";
                 break;
             case BTS:
-                _emit!"bts";
+                enum ofn = "bts";
                 break;
             case CMP:
-                _emit!"cmp";
+                enum ofn = "cmp";
                 break;
             case CWD:
-                _emit!"cwd";
+                enum ofn = "cwd";
+                mixin(ofn~"();");
                 break;
             case CDQ:
-                _emit!"cdq";
+                enum ofn = "cdq";
+                mixin(ofn~"();");
                 break;
             case CQO:
-                _emit!"cqo";
+                enum ofn = "cqo";
+                mixin(ofn~"();");
                 break;
             case CBW:
-                _emit!"cbw";
+                enum ofn = "cbw";
+                mixin(ofn~"();");
                 break;
             case CWDE:
-                _emit!"cwde";
+                enum ofn = "cwde";
+                mixin(ofn~"();");
                 break;
             case CDQE:
-                _emit!"cdqe";
+                enum ofn = "cdqe";
+                mixin(ofn~"();");
                 break;
             case CPUID:
-                _emit!"cpuid";
+                enum ofn = "cpuid";
                 break;
             case CLC:
-                _emit!"clc";
+                enum ofn = "clc";
+                mixin(ofn~"();");
                 break;
             case CLD:
-                _emit!"cld";
+                enum ofn = "cld";
+                mixin(ofn~"();");
                 break;
             case CLI:
-                _emit!"cli";
+                enum ofn = "cli";
+                mixin(ofn~"();");
                 break;
             case CLTS:
-                _emit!"clts";
+                enum ofn = "clts";
+                mixin(ofn~"();");
                 break;
             case CMC:
-                _emit!"cmc";
+                enum ofn = "cmc";
+                mixin(ofn~"();");
                 break;
             case DEC:
-                _emit!"dec";
+                enum ofn = "dec";
                 break;
             case INT:
-                _emit!"int";
+                assert(instr.operands.length == 1 && instr.operands[0].markers.length == 1 && 
+                    (instr.operands[0].markers[0].flags & MarkerFlags.LITERAL) != 0);
+
+                if (instr.operands[0].markers[0].b == 3)
+                    int3();
+                else if (instr.operands[0].markers[0].b == 1)
+                    int1();
+                else
+                    _int(instr.operands[0].markers[0].b);
+
                 break;
             case INTO:
-                _emit!"into";
+                enum ofn = "into";
+                mixin(ofn~"();");
                 break;
             case UD:
-                _emit!"ud";
+                enum ofn = "ud";
                 break;
             case IRET:
-                _emit!"iret";
-                break;
-            case IRETD:
-                _emit!"iretd";
-                break;
-            case IRETQ:
-                _emit!"iretq";
+                enum ofn = "iret";
+                mixin(ofn~"();");
                 break;
             case INC:
-                _emit!"inc";
+                enum ofn = "inc";
                 break;
             case HLT:
-                _emit!"hlt";
+                enum ofn = "hlt";
                 break;
             case PAUSE:
-                _emit!"pause";
+                enum ofn = "pause";
                 break;
             case SWAPGS:
-                _emit!"swapgs";
+                enum ofn = "swapgs";
                 break;
             case LOCK:
-                _emit!"lock";
+                enum ofn = "lock";
+                mixin(ofn~"(0);");
                 break;
             case WAIT:
-                _emit!"wait";
+                enum ofn = "wait";
+                mixin(ofn~"();");
                 break;
             case FWAIT:
-                _emit!"fwait";
+                enum ofn = "fwait";
+                mixin(ofn~"();");
                 break;
             case SYSRETC:
-                _emit!"sysretc";
+                enum ofn = "sysretc";
+                mixin(ofn~"();");
                 break;
             case SYSRET:
-                _emit!"sysret";
+                enum ofn = "sysret";
+                mixin(ofn~"();");
                 break;
             case SYSCALL:
-                _emit!"syscall";
+                enum ofn = "syscall";
+                mixin(ofn~"();");
                 break;
             case RSM:
-                _emit!"rsm";
+                enum ofn = "rsm";
+                mixin(ofn~"();");
                 break;
             case LEAVE:
-                _emit!"leave";
+                enum ofn = "leave";
+                mixin(ofn~"();");
                 break;
             case ENTER:
-                _emit!"enter";
+                enum ofn = "enter";
                 break;
             case LEA:
-                _emit!"lea";
+                enum ofn = "lea";
                 break;
             case LDS:
-                _emit!"lds";
+                enum ofn = "lds";
                 break;
             case LSS:
-                _emit!"lss";
+                enum ofn = "lss";
                 break;
             case LES:
-                _emit!"les";
+                enum ofn = "les";
                 break;
             case LFS:
-                _emit!"lfs";
+                enum ofn = "lfs";
                 break;
             case LGS:
-                _emit!"lgs";
+                enum ofn = "lgs";
                 break;
             case LSL:
-                _emit!"lsl";
+                enum ofn = "lsl";
                 break;
             case LTR:
-                _emit!"ltr";
+                enum ofn = "ltr";
                 break;
             case STR:
-                _emit!"str";
+                enum ofn = "str";
                 break;
             case NEG:
-                _emit!"neg";
+                enum ofn = "neg";
                 break;
             case NOP:
-                _emit!"nop";
+                enum ofn = "nop";
+                mixin(ofn~"();");
                 break;
             case NOT:
-                _emit!"not";
+                enum ofn = "not";
                 break;
             case RET:
-                _emit!"ret";
+                if (instr.operands.length == 0)
+                    ret();
+                else
+                    ret(instr.operands[0].markers[0].w);
+
                 break;
             case RETF:
-                _emit!"retf";
+                if (instr.operands.length == 0)
+                    retf();
+                else
+                    retf(instr.operands[0].markers[0].w);
+
                 break;
             case STC:
-                _emit!"stc";
+                enum ofn = "stc";
+                mixin(ofn~"();");
                 break;
             case STD:
-                _emit!"std";
+                enum ofn = "std";
+                mixin(ofn~"();");
                 break;
             case STI:
-                _emit!"sti";
+                enum ofn = "sti";
+                mixin(ofn~"();");
                 break;
             case SUB:
-                _emit!"sub";
+                enum ofn = "sub";
                 break;
             case SBB:
-                _emit!"sbb";
+                enum ofn = "sbb";
                 break;
             case XOR:
-                _emit!"xor";
+                enum ofn = "xor";
                 break;
             case OR:
-                _emit!"or";
+                enum ofn = "or";
                 break;
             case SAL:
-                _emit!"sal";
+                enum ofn = "sal";
                 break;
             case SAR:
-                _emit!"sar";
+                enum ofn = "sar";
                 break;
             case SHL:
-                _emit!"shl";
+                enum ofn = "shl";
                 break;
             case SHR:
-                _emit!"shr";
+                enum ofn = "shr";
                 break;
             case RCL:
-                _emit!"rcl";
+                enum ofn = "rcl";
                 break;
             case RCR:
-                _emit!"rcr";
+                enum ofn = "rcr";
                 break;
             case ROL:
-                _emit!"rol";
+                enum ofn = "rol";
                 break;
             case ROR:
-                _emit!"ror";
+                enum ofn = "ror";
                 break;
             case VERR:
-                _emit!"verr";
+                enum ofn = "verr";
                 break;
             case VERW:
-                _emit!"verw";
+                enum ofn = "verw";
                 break;
             case TEST:
-                _emit!"test";
+                enum ofn = "test";
                 break;
             case POP:
-                _emit!"pop";
+                enum ofn = "pop";
                 break;
             case POPDS:
-                _emit!"popds";
+                enum ofn = "popds";
+                mixin(ofn~"();");
                 break;
             case POPES:
-                _emit!"popes";
+                enum ofn = "popes";
+                mixin(ofn~"();");
                 break;
             case POPSS:
-                _emit!"popss";
+                enum ofn = "popss";
+                mixin(ofn~"();");
                 break;
             case POPFS:
-                _emit!"popfs";
+                enum ofn = "popfs";
+                mixin(ofn~"();");
                 break;
             case POPGS:
-                _emit!"popgs";
+                enum ofn = "popgs";
+                mixin(ofn~"();");
                 break;
             case POPA:
-                _emit!"popa";
+                enum ofn = "popa";
+                mixin(ofn~"();");
                 break;
             case POPF:
-                _emit!"popf";
+                enum ofn = "popf";
+                mixin(ofn~"();");
                 break;
             case PUSH:
-                _emit!"push";
+                enum ofn = "push";
                 break;
             case PUSHCS:
-                _emit!"pushcs";
+                enum ofn = "pushcs";
+                mixin(ofn~"();");
                 break;
             case PUSHSS:
-                _emit!"pushss";
+                enum ofn = "pushss";
+                mixin(ofn~"();");
                 break;
             case PUSHDS:
-                _emit!"pushds";
+                enum ofn = "pushds";
+                mixin(ofn~"();");
                 break;
             case PUSHES:
-                _emit!"pushes";
+                enum ofn = "pushes";
+                mixin(ofn~"();");
                 break;
             case PUSHFS:
-                _emit!"pushfs";
+                enum ofn = "pushfs";
+                mixin(ofn~"();");
                 break;
             case PUSHGS:
-                _emit!"pushgs";
+                enum ofn = "pushgs";
+                mixin(ofn~"();");
                 break;  
             case PUSHA:
-                _emit!"pusha";
+                enum ofn = "pusha";
+                mixin(ofn~"();");
                 break;
             case PUSHF:
-                _emit!"pushf";
+                enum ofn = "pushf";
+                mixin(ofn~"();");
                 break;
             case XADD:
-                _emit!"xadd";
+                enum ofn = "xadd";
                 break;
             case XCHG:
-                _emit!"xchg";
+                enum ofn = "xchg";
                 break;
             case XLAT:
-                _emit!"xlat";
+                enum ofn = "xlat";
+                mixin(ofn~"();");
                 break;
             case XLATB:
-                _emit!"xlatb";
+                enum ofn = "xlatb";
+                mixin(ofn~"();");
                 break;
             case LAR:
-                _emit!"lar";
+                enum ofn = "lar";
                 break;
             case DAA:
-                _emit!"daa";
+                enum ofn = "daa";
+                mixin(ofn~"();");
                 break;
             case DAS:
-                _emit!"das";
+                enum ofn = "das";
+                mixin(ofn~"();");
                 break;
             case MUL:
-                _emit!"mul";
+                enum ofn = "mul";
                 break;
             case IMUL:
-                _emit!"imul";
+                enum ofn = "imul";
                 break;
             case DIV:
-                _emit!"div";
+                enum ofn = "div";
                 break;
             case IDIV:
-                _emit!"idiv";
+                enum ofn = "idiv";
                 break;
             case MOV:
-                _emit!"mov";
+                enum ofn = "mov";
                 break;
             case MOVSX:
-                _emit!"movsx";
+                enum ofn = "movsx";
                 break;
             case MOVSXD:
-                _emit!"movsxd";
+                enum ofn = "movsxd";
                 break;
             case MOVZX:
-                _emit!"movzx";
+                enum ofn = "movzx";
                 break;
             case MOVS:
-                _emit!"movs";
+                enum ofn = "movs";
                 break;
             case MOVSB:
-                _emit!"movsb";
+                enum ofn = "movsb";
+                mixin(ofn~"();");
                 break;
             case MOVSW:
-                _emit!"movsw";
+                enum ofn = "movsw";
+                mixin(ofn~"();");
                 break;
             case MOVSD:
-                _emit!"movsd";
+                enum ofn = "movsd";
+                mixin(ofn~"();");
                 break;
             case MOVSQ:
-                _emit!"movsq";
+                enum ofn = "movsq";
+                mixin(ofn~"();");
                 break;
             case CALL:
-                _emit!"call";
+                enum ofn = "call";
                 break;
             case LOOPCC:
-                _emit!"loop";
+                enum ofn = "loop";
                 break;
             case JMP:
-                _emit!"jmp";
+                enum ofn = "jmp";
                 break;
             case JCC:
-                _emit!"jcc";
+                enum ofn = "jcc";
                 break;
             case REPCC:
-                _emit!"repcc";
+                enum ofn = "repcc";
                 break;
+            // TODO: CMPS missing?
             case CMPSB:
-                _emit!"cmpsb";
+                enum ofn = "cmpsb";
+                mixin(ofn~"();");
                 break;
             case CMPSW:
-                _emit!"cmpsw";
+                enum ofn = "cmpsw";
+                mixin(ofn~"();");
                 break;
             case CMPSD:
-                _emit!"cmpsd";
+                enum ofn = "cmpsd";
+                mixin(ofn~"();");
                 break;
             case CMPSQ:
-                _emit!"cmpsq";
+                enum ofn = "cmpsq";
+                mixin(ofn~"();");
                 break;
             case SCAS:
-                _emit!"scas";
+                enum ofn = "scas";
                 break;
             case SCASB:
-                _emit!"scasb";
+                enum ofn = "scasb";
+                mixin(ofn~"();");
                 break;
             case SCASW:
-                _emit!"scasw";
+                enum ofn = "scasw";
+                mixin(ofn~"();");
                 break;
             case SCASD:
-                _emit!"scasd";
+                enum ofn = "scasd";
+                mixin(ofn~"();");
                 break;
             case SCASQ:
-                _emit!"scasq";
+                enum ofn = "scasq";
+                mixin(ofn~"();");
                 break;
             case LODS:
-                _emit!"lods";
+                enum ofn = "lods";
                 break;
             case LODSB:
-                _emit!"lodsb";
+                enum ofn = "lodsb";
+                mixin(ofn~"();");
                 break;
             case LODSW:
-                _emit!"lodsw";
+                enum ofn = "lodsw";
+                mixin(ofn~"();");
                 break;
             case LODSD:
-                _emit!"lodsd";  
+                enum ofn = "lodsd";  
+                mixin(ofn~"();");
                 break;
             case LODSQ:
-                _emit!"lodsq";
+                enum ofn = "lodsq";
+                mixin(ofn~"();");
                 break;
             case STOS:
-                _emit!"stos";
+                enum ofn = "stos";
                 break;
             case STOSB:
-                _emit!"stosb";
+                enum ofn = "stosb";
+                mixin(ofn~"();");
                 break;
             case STOSW:
-                _emit!"stosw";
+                enum ofn = "stosw";
+                mixin(ofn~"();");
                 break;
             case STOSD:
-                _emit!"stosd";
+                enum ofn = "stosd";
+                mixin(ofn~"();");
                 break;
             case STOSQ:
-                _emit!"stosq";
+                enum ofn = "stosq";
+                mixin(ofn~"();");
                 break;
             case IN:
-                _emit!"in";
+                enum ofn = "_in";
                 break;
             case INS:
-                _emit!"ins";
+                enum ofn = "ins";
                 break;
             case INSB:
-                _emit!"insb";
+                enum ofn = "insb";
+                mixin(ofn~"();");
                 break;
             case INSW:
-                _emit!"insw";
+                enum ofn = "insw";
+                mixin(ofn~"();");
                 break;
             case INSD:
-                _emit!"insd";
+                enum ofn = "insd";
+                mixin(ofn~"();");
                 break;
             case OUT:
-                _emit!"out";
+                enum ofn = "_out";
                 break; 
             case OUTS:
-                _emit!"outs";
+                enum ofn = "outs";
                 break;
             case OUTSB:
-                _emit!"outsb";
+                enum ofn = "outsb";
+                mixin(ofn~"();");
                 break;
             case OUTSW:
-                _emit!"outsw";
+                enum ofn = "outsw";
+                mixin(ofn~"();");
                 break;
             case OUTSD:
-                _emit!"outsd";
+                enum ofn = "outsd";
+                mixin(ofn~"();");
                 break;
             case SETCC:
-                _emit!"setcc";
+                enum ofn = "setcc";
                 break;
             default:
                 assert(0, "Unsupported instruction opcode!");
@@ -4548,6 +4875,7 @@ public:
 
     /* ====== TSC ====== */
 
+    // TODO: Not in the new enum?
     auto rdtsc() => emit!0(0x0f, 0x31);
     auto rdtscp() => emit!0(0x0f, 0x01, 0xf9);
 
