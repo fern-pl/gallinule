@@ -338,7 +338,7 @@ public enum CPUID1_EDX
     MSR,
     PAE,
     // CMPXCHG8B
-    CR8,
+    CX8,
     APIC,
     // SYSENTER/SYSEXIT
     SEP,
@@ -364,6 +364,1080 @@ public enum CPUID1_EDX
     TM,
     IA64,
     PBE
+}
+
+public enum OpCode : ushort
+{
+    CRIDVME,
+    CRIDPVI,
+    CRIDTSD,
+    CRIDDE,
+    CRIDPSE,
+    CRIDPAE,
+    CRIDMCE,
+    CRIDPGE,
+    CRIDPCE,
+    CRIDOSFXSR,
+    CRIDOSXMMEXCPT,
+    CRIDUMIP,
+    CRIDVMXE,
+    CRIDSMXE,
+    CRIDFSGSBASE,
+    CRIDPCIDE,
+    CRIDOSXSAVE,
+    CRIDSMEP,
+    CRIDSMAP,
+    CRIDPKE,
+    CRIDCET,
+    CRIDPKS,
+    CRIDUINTR,
+
+    IDAVX512VL,
+    IDAVX512BW,
+    IDSHA,
+    IDAVX512CD,
+    IDAVX512ER,
+    IDAVX512PF,
+    IDPT,
+    IDCLWB,
+    IDCLFLUSHOPT,
+    IDPCOMMIT,
+    IDAVX512IFMA,
+    IDSMAP,
+    IDADX,
+    IDRDSEED,
+    IDAVX512DQ,
+    IDAVX512F,
+    IDPQE,
+    IDRTM,
+    IDINVPCID,
+    IDERMS,
+    IDBMI2,
+    IDSMEP,
+    IDFPDP,
+    IDAVX2,
+    IDHLE,
+    IDBMI1,
+    IDSGX,
+    IDTSCADJ,
+    IDFSGSBASE,
+    
+    IDPREFETCHWT1,
+    IDAVX512VBMI,
+    IDUMIP,
+    IDPKU,
+    IDAVX512VBMI2,
+    IDCET,
+    IDGFNI,
+    IDVAES,
+    IDVPCL,
+    IDAVX512VNNI,
+    IDAVX512BITALG,
+    IDTME,
+    IDAVX512VP,
+    IDVA57,
+    IDRDPID,
+    IDSGXLC,
+    
+    IDAVX512QVNNIW,
+    IDAVX512QFMA,
+    IDPCONFIG,
+    IDIBRSIBPB,
+    IDSTIBP,
+
+    IDSSE3,
+    IDPCLMUL,
+    IDDDTES64,
+    IDMON,
+    IDDSCPL,
+    IDVMX,
+    IDSMX,
+    IDEST,
+    IDTM2,
+    IDSSSE3,
+    IDCID,
+    IDSDBG,
+    IDFMA,
+    IDCX16,
+    IDXTPR,
+    IDPDCM,
+    IDPCID,
+    IDDCA,
+    IDSSE41,
+    IDSSE42,
+    IDX2APIC,
+    IDMOVBE,
+    IDPOPCNT,
+    IDTSCD,
+    IDAES,
+    IDXSAVE,
+    IDOSXSAVE,
+    IDAVX,
+    IDF16C,
+    IDRDRAND,
+    IDHV,
+
+    IDFPU,
+    IDVME,
+    IDDE,
+    IDPSE,
+    IDTSC,
+    IDMSR,
+    IDPAE,
+    IDCX8,
+    IDAPIC,
+    IDSEP,
+    IDMTRR,
+    IDPGE,
+    IDMCA,
+    IDCMOV,
+    IDPAT,
+    IDPSE36,
+    IDPSN,
+    IDCLFL,
+    IDDS,
+    IDACPI,
+    IDMMX,
+    IDFXSR,
+    IDSSE,
+    IDSSE2,
+    IDSS,
+    IDHTT,
+    IDTM,
+    IDIA64,
+    IDPBE,
+    //
+    PFADD,
+    PFSUB,
+    PFSUBR,
+    PFMUL,
+
+    PFCMPEQ,
+    PFCMPGE,
+    PFCMPGT,
+
+    PF2ID,
+    PI2FD,
+    PF2IW,
+    PI2FW,
+
+    PFMAX,
+    PFMIN,
+
+    PFRCP,
+    PFRSQRT,
+    PFRCPIT1,
+    PFRSQIT1,
+    PFRCPIT2,
+
+    PFACC,
+    PFNACC,
+    PFPNACC,
+    PMULHRW,
+
+    PAVGUSB,
+    PSWAPD,
+
+    FEMMS,
+    //
+    ICEBP,
+    //
+    PTWRITE,
+    //
+    CLWB,
+    //
+    CLFLUSHOPT,
+    //
+    STAC,
+    CLAC,
+    //
+    ADC,
+    ADCX,
+    ADOX,
+    //
+    RDSEED,
+    //
+    BNDCL,
+    BNDCU,
+    BNDLDX,
+    BNDSTX,
+    BNDMK,
+    BNDMOV,
+    BOUND,
+    //
+    XEND,
+    XABORT,
+    XBEGIN,
+    XTEST,
+    //
+    INVPCID,
+    //
+    XACQUIRE,
+    XRELEASE,
+    //
+    TZCNT,
+    LZCNT,
+    ANDN,
+    //
+    ECREATE,
+    EINIT,
+    EREMOVE,
+    EDBGRD,
+    EDBGWR,
+    EEXTEND,
+    ELDB,
+    ELDU,
+    EBLOCK,
+    EPA,
+    EWB,
+    ETRACK,
+    EAUG,
+    EMODPR,
+    EMODT,
+    ERDINFO,
+    ETRACKC,
+    ELDBC,
+    ELDUC,
+    
+    EREPORT,
+    EGETKEY,
+    EENTER,
+    EEXIT,
+    EACCEPT,
+    EMODPE,
+    EACCEPTCOPY,
+    EDECCSSA,
+
+    EDECVIRTCHILD,
+    EINCVIRTCHILD,
+    ESETCONTEXT,
+    //
+    MONITOR,
+    MWAIT,
+    //
+    INVVPID,
+    INVEPT,
+
+    VMCALL,
+    VMFUNC,
+    VMCLEAR,
+    VMLAUNCH,
+    VMRESUME,
+    VMXOFF,
+    VMXON,
+
+    VMWRITE,
+    VMREAD,
+
+    VMPTRST,
+    VMPTRLD,
+    //
+    CAPABILITIES,
+    ENTERACCS,
+    EXITAC,
+    SENTER,
+    SEXIT,
+    PARAMETERS,
+    SMCTRL,
+    WAKEUP,
+    //
+    CMPXCHG16B,
+    //
+    POPCNT,
+    //
+    XGETBV,
+    XSETBV,
+
+    XRSTOR,
+    XSAVE,
+
+    XRSTORS,
+    XSAVES,
+
+    XSAVEOPT,
+    XSAVEC,
+    //
+    RDRAND,
+    //
+    FABS,
+    FCHS,
+
+    FCLEX,
+    FNCLEX,
+
+    FADD,
+    FADDP,
+    FIADD,
+
+    FBLD,
+    FBSTP,
+
+    FCOM,
+    FCOMP,
+    FCOMPP,
+
+    FCOMI,
+    FCOMIP,
+    FUCOMI,
+    FUCOMIP,
+    
+    FICOM,
+    FICOMP,
+
+    FUCOM,
+    FUCOMP,
+    FUCOMPP,
+
+    FTST,
+
+    F2XM1,
+    FYL2X,
+    FYL2XP1,
+
+    FCOS,
+    FSIN,
+    FSINCOS,
+    FSQRT,
+
+    FPTAN,
+    FPATAN,
+    FPREM,
+    FPREM1,
+
+    FDECSTP,
+    FINCSTP,
+
+    FILD,
+    FIST,
+    FISTP,
+    FISTTP,
+
+    FLDCW,
+    FSTCW,
+    FNSTCW,
+
+    FLDENV,
+    FSTENV,
+    FNSTENV,
+
+    FSTSW,
+    FNSTSW,
+
+    FLD,
+    FLD1,
+    FLDL2T,
+    FLDL2E,
+    FLDPI,
+    FLDLG2,
+    FLDLN2,
+    FLDZ,
+
+    FST,
+    FSTP,
+
+    FDIV,
+    FDIVP,
+    FIDIV,
+
+    FDIVR,
+    FDIVRP,
+    FIDIVR,
+
+    FSCALE,
+    FRNDINT,
+    FEXAM,
+    FFREE,
+    FXCH,
+    FXTRACT,
+
+    FNOP,
+    FNINIT,
+    FINIT,
+
+    FSAVE,
+    FNSAVE,
+
+    FRSTOR,
+    FXSAVE,
+
+    FXRSTOR,
+
+    FMUL,
+    FMULP,
+    FIMUL,
+
+    FSUB,
+    FSUBP,
+    FISUB,
+
+    FSUBR,
+    FSUBRP,
+    FISUBR,
+
+    FCMOVCC = 10000,
+    //
+    RDMSR,
+    WRMSR,
+    //
+    CMPXCHG8B,
+    //
+    SYSENTER,
+    SYSEXITC,
+    SYSEXIT,
+    //
+    CMOVCC = 10001,
+    //
+    CLFLUSH,
+    //
+    HRESET,
+    //
+    INCSSPD,
+    INCSSPQ,
+    CLRSSBSY,
+    SETSSBSY,
+
+    RDSSPD,
+    RDSSPQ,
+    WRSSD,
+    WRSSQ,
+    WRUSSD,
+    WRUSSQ,
+
+    RSTORSSP,
+    SAVEPREVSSP,
+
+    ENDBR32,
+    ENDBR64,
+
+    RDFSBASE,
+    RDGSBASE,
+
+    WRFSBASE,
+    WRGSBASE,
+    //
+    RDPID,
+    //
+    WRPKRU,
+    RDPKRU,
+    //
+    TESTUI,
+    STUI,
+    CLUI,
+    UIRET,
+    SENDUIPI,
+    //
+    UMWAIT,
+    UMONITOR,
+    TPAUSE,
+    //
+    CLDEMOTE,
+    //
+    XRESLDTRK,
+    XSUSLDTRK,
+    //
+    SERIALIZE,
+    //
+    PCONFIG,
+    //
+    RDPMC,
+    //
+    WBINVD,
+    WBNOINVD,
+
+    INVD,
+
+    LGDT,
+    SGDT,
+
+    LLDT,
+    SLDT,
+
+    LIDT,
+    SIDT,
+
+    LMSW,
+    SMSW,
+    //
+    INVLPG,
+    //
+    SAHF,
+    LAHF,
+    //
+    SARX,
+    SHLX,
+    SHRX,
+    //
+    MOVQ,
+    MOVD,
+    //
+    ADDPD,
+    ADDPS,
+    ADDSS,
+    ADDSD,
+    //
+    LFENCE,
+    SFENCE,
+    MFENCE,
+    //
+    ADDSUBPS,
+    ADDSUBPD,
+    //
+    VADDPD,
+    VADDPS,
+    VADDSD,
+    VADDSS,
+
+    VADDSUBPD,
+    VADDSUBPS,
+
+    VMOVQ,
+    VMOVD,
+    //
+    AESDEC,
+    VAESDEC,
+
+    AESDEC128KL,
+    AESDEC256KL,
+
+    AESDECLAST,
+    VAESDECLAST,
+
+    AESDECWIDE128KL,
+    AESDECWIDE256KL,
+
+    AESENC,
+    VAESENC,
+
+    AESENC128KL,
+    AESENC256KL,
+
+    AESENCLAST,
+    VAESENCLAST,
+
+    AESENCWIDE128KL,
+    AESENCWIDE256KL,
+
+    AESIMC,
+    VAESIMC,
+
+    AESKEYGENASSIST,
+    VAESKEYGENASSIST,
+    //
+    SHA1MSG1,
+    SHA1MSG2,
+    SHA1NEXTE,
+
+    SHA256MSG1,
+    SHA1RNDS4,
+    SHA256RNDS2,
+    //
+    //NOT_TAKEN,
+    //TAKEN,
+    CRC32,
+
+    ENDQCMD,
+
+    CMPXCHG,
+
+    AAA,
+    AAD,
+    AAM,
+    AAS,
+    ADD,
+    AND,
+
+    ARPL,
+
+    BSF,
+    BSR,
+    BSWAP,
+    BT,
+    BTC,
+    BTR,
+    BTS,
+    
+    CMP,
+
+    CWD,
+    CDQ,
+    CQO,
+
+    CBW,
+    CWDE,
+    CDQE,
+
+    CPUID,
+
+    CLC,
+    CLD,
+    CLI,
+    CLTS,
+    CMC,
+
+    DEC,
+
+    INT,
+    INTO,
+    UD,
+    IRET,
+    IRETD,
+    IRETQ,
+
+    INC,
+
+    HLT,
+    PAUSE,
+    SWAPGS,
+
+    LOCK,
+
+    WAIT,
+    FWAIT,
+
+    SYSRETC,
+    SYSRET,
+    SYSCALL,
+    RSM,
+
+    LEAVE,
+    ENTER,
+
+    LEA,
+    LDS,
+    LSS,
+    LES,
+    LFS,
+    LGS,
+    LSL,
+    
+    LTR,
+    STR,
+
+    NEG,
+    NOP,
+    NOT,
+
+    RET,
+    RETF,
+
+    STC,
+    STD,
+    STI,
+
+    SUB,
+    SBB,
+
+    XOR,
+    OR,
+
+    SAL,
+    SAR,
+    SHL,
+    SHR,
+
+    RCL,
+    RCR,
+    ROL,
+    ROR,
+
+    VERR,
+    VERW,
+
+    TEST,
+
+    POP,
+    POPDS,
+    POPES,
+    POPSS,
+    POPFS,
+    POPGS,
+    POPA,
+    POPF,
+
+    PUSH,
+    PUSHCS,
+    PUSHSS,
+    PUSHDS,
+    PUSHES,
+    PUSHFS,
+    PUSHGS,
+    PUSHA,
+    PUSHF,
+
+    XADD,
+    XCHG,
+    XLAT,
+    XLATB,
+
+    LAR,
+
+    DAA,
+    DAS,
+
+    MUL,
+    IMUL,
+    DIV,
+    IDIV,
+
+    MOV,
+    MOVSX,
+    MOVSXD,
+    MOVZX,
+    MOVS,
+    MOVSB,
+    MOVSW,
+    MOVSD,
+    MOVSQ,
+
+    CALL,
+    LOOPCC = 10002,
+    JMP,
+    JCC = 10003,
+    REPCC = 10004,
+
+    CMPSB,
+    CMPSW,
+    CMPSD,
+    CMPSQ,
+
+    SCAS,
+    SCASB,
+    SCASW,
+    SCASD,
+    SCASQ,
+
+    LODS,
+    LODSB,
+    LODSW,
+    LODSD,
+    LODSQ,
+
+    STOS,
+    STOSB,
+    STOSW,
+    STOSD,
+    STOSQ,
+
+    IN,
+    INS,
+    INSB,
+    INSW,
+    INSD,
+
+    OUT,
+    OUTS,
+    OUTSB,
+    OUTSW,
+    OUTSD,
+
+    SETCC = 10005
+}
+
+public enum TypeModifiers : ubyte
+{
+    FLOAT = 1 << 0,
+    POINTER = 1 << 1,
+    ARRAY = 1 << 2,
+    // Specially defined because vectors and strings get register priority regardless of usage :-)
+    VECTOR = 1 << 3,
+    BYTE = 1 << 4,
+    WORD = 1 << 5,
+    DWORD = 1 << 6,
+    QWORD = 1 << 7,
+
+    STRING = VECTOR | ARRAY,
+    INTEGRAL_MASK = 0b00001111
+}
+
+public enum OpDetails
+{
+    // PUSHA, POPA, RET and CALL require special parsing
+    READ1 = 1 << 0,
+    READ2 = 1 << 1,
+    READ3 = 1 << 2,
+    WRITE1 = 1 << 3,
+    WRITE2 = 1 << 4,
+    WRITE3 = 1 << 5,
+
+    POLLUTE_AX = 1 << 6,
+    POLLUTE_BX = 1 << 7,
+    POLLUTE_CX = 1 << 8,
+    POLLUTE_DX = 1 << 9,
+
+    // These are not opcode defined
+    GREATER = ushort.max,
+    GREATEREQ = ushort.max - 1,
+    LESSER = ushort.max - 2,
+    LESSEREQ = ushort.max - 3,
+    EQUAL = ushort.max - 4,
+    NEQUAL = ushort.max - 5,
+    CARRY = ushort.max - 6,
+    NCARRY = ushort.max - 7,
+    SIGN = ushort.max - 8,
+    NSIGN = ushort.max - 9,
+    ZERO = ushort.max - 10,
+    NZERO = ushort.max - 11,
+    ILLEGAL = ushort.max - 60
+}
+
+public enum MarkerFlags : ubyte
+{
+    LITERAL = 1 << 0,
+    ALLOCATION = 1 << 1,
+    REGISTER = 1 << 2
+}
+
+public struct Marker
+{
+public:
+final:
+    MarkerFlags flags;
+    union
+    {
+        struct asAllocation
+        {
+            ushort segment;
+            size_t offset;
+        }
+
+        struct asRegister
+        {
+            ushort size;
+            ubyte index;
+            bool extended;
+        }
+
+        struct asLiteral
+        {
+            union
+            {
+                ubyte b;
+                ushort w;
+                uint d;
+                ulong q;
+            }
+        }
+    }
+}
+
+public struct Variable
+{
+public:
+final:
+    string name;
+    TypeModifiers modifiers;
+    size_t size;
+    size_t[] fields;
+    Marker[] markers;
+    int score;
+}
+
+public struct Instruction
+{
+public:
+final:
+    OpCode opcode;
+    Variable[] operands;
+    OpDetails details;
+    int score;
+
+    this(OpCode opcode, Variable[] operands...)
+    {
+        this.opcode = opcode;
+        this.operands = operands;
+
+        with (OpCode) switch (opcode)
+        {
+            case ADD:
+            case SUB:
+            case ROL:
+            case ROR:
+            case SHL:
+            case SHR:
+            case XOR:
+            case AND:
+            case OR:
+            case ANDN:
+            case BT:
+            case BTC:
+            case BTR:
+            case BTS:
+            case TEST:
+                details = OpDetails.READ1 | OpDetails.READ2;
+                break;
+            case MUL:
+            case DIV:
+            case IMUL:
+            case IDIV:
+                details = OpDetails.READ1 | OpDetails.READ2 | OpDetails.POLLUTE_AX | OpDetails.POLLUTE_DX;
+                break;
+            case NOT:
+            case NEG:
+            case PUSH:
+            case SETCC:
+            case BSWAP:
+            case DEC:
+            case INC:
+                details = OpDetails.READ1;
+                break;
+            case POP:
+                details = OpDetails.WRITE1;
+                break;
+            case MOV:
+            case MOVSX:
+            case MOVSXD:
+            case MOVZX:
+            case CMOVCC:
+            case LZCNT:
+            case TZCNT:
+            case BSF:
+            case BSR:
+            case LEA:
+                details = OpDetails.WRITE1 | OpDetails.READ2;
+                break;
+            case CRIDCET:
+            case CRIDDE:
+            case CRIDFSGSBASE:
+            case CRIDMCE:
+            case CRIDOSFXSR:
+            case CRIDOSXMMEXCPT:
+            case CRIDOSXSAVE:
+            case CRIDPAE:
+            case CRIDPCE:
+            case CRIDPCIDE:
+            case CRIDPGE:
+            case CRIDPKE:
+            case CRIDPKS:
+            case CRIDPSE:
+            case CRIDPVI:
+            case CRIDSMAP:
+            case CRIDSMEP:
+            case CRIDSMXE:
+            case CRIDTSD:
+            case CRIDUMIP:
+            case CRIDUINTR:
+            case CRIDVME:
+            case CRIDVMXE:
+                // Moves CR to RAX to check flag
+                details = OpDetails.POLLUTE_AX;
+                break;
+            case IDACPI:
+            case IDADX:
+            case IDAES:
+            case IDAPIC:
+            case IDAVX:
+            case IDAVX2:
+            case IDAVX512BITALG:
+            case IDAVX512BW:
+            case IDAVX512CD:
+            case IDAVX512DQ:
+            case IDAVX512ER:
+            case IDAVX512F:
+            case IDAVX512IFMA:
+            case IDAVX512PF:
+            case IDAVX512QFMA:
+            case IDAVX512QVNNIW:
+            case IDAVX512VBMI:
+            case IDAVX512VBMI2:
+            case IDAVX512VL:
+            case IDAVX512VNNI:
+            case IDAVX512VP:
+            case IDBMI1:
+            case IDBMI2:
+            case IDCET:
+            case IDCID:
+            case IDCLFL:
+            case IDCLFLUSHOPT:
+            case IDCLWB:
+            case IDCMOV:
+            case IDCX16:
+            case IDCX8:
+            case IDDCA:
+            case IDDDTES64:
+            case IDDE:
+            case IDDS:
+            case IDDSCPL:
+            case IDERMS:
+            case IDEST:
+            case IDF16C:
+            case IDFMA:
+            case IDFPDP:
+            case IDFPU:
+            case IDFSGSBASE:
+            case IDFXSR:
+            case IDGFNI:
+            case IDHLE:
+            case IDHTT:
+            case IDHV:
+            case IDIA64:
+            case IDIBRSIBPB:
+            case IDINVPCID:
+            case IDMCA:
+            case IDMMX:
+            case IDMON:
+            case IDMOVBE:
+            case IDMSR:
+            case IDMTRR:
+            case IDOSXSAVE:
+            case IDPAE:
+            case IDPAT:
+            case IDPBE:
+            case IDPCID:
+            case IDPCLMUL:
+            case IDPCOMMIT:
+            case IDPCONFIG:
+            case IDPDCM:
+            case IDPGE:
+            case IDPKU:
+            case IDPOPCNT:
+            case IDPQE:
+            case IDPREFETCHWT1:
+            case IDPSE:
+            case IDPSE36:
+            case IDPSN:
+            case IDPT:
+            case IDRDPID:
+            case IDRDRAND:
+            case IDRDSEED:
+            case IDRTM:
+            case IDSDBG:
+            case IDSEP:
+            case IDSGX:
+            case IDSGXLC:
+            case IDSHA:
+            case IDSMAP:
+            case IDSMEP:
+            case IDSMX:
+            case IDSS:
+            case IDSSE:
+            case IDSSE2:
+            case IDSSE3:
+            case IDSSE41:
+            case IDSSE42:
+            case IDSSSE3:
+            case IDSTIBP:
+            case IDTM:
+            case IDTM2:
+            case IDTME:
+            case IDTSC:
+            case IDTSCADJ:
+            case IDTSCD:
+            case IDUMIP:
+            case IDVA57:
+            case IDVAES:
+            case IDVME:
+            case IDVMX:
+            case IDVPCL:
+            case IDX2APIC:
+            case IDXSAVE:
+            case IDXTPR:
+                details = OpDetails.POLLUTE_AX | OpDetails.POLLUTE_BX | OpDetails.POLLUTE_CX | OpDetails.POLLUTE_DX;
+                break;
+            default:
+                assert(0, "Unimplemented instruction opcode!");
+                break;
+        }
+    }
 }
 
 public:
@@ -1130,7 +2204,7 @@ public:
     auto idtsc() => cpuid(1) + shr(edx, CPUID1_EDX.TSC) + and(edx, 1);
     auto idmsr() => cpuid(1) + shr(edx, CPUID1_EDX.MSR) + and(edx, 1);
     auto idpae() => cpuid(1) + shr(edx, CPUID1_EDX.PAE) + and(edx, 1);
-    auto idcx8() => cpuid(1) + shr(edx, CPUID1_EDX.CR8) + and(edx, 1);
+    auto idcx8() => cpuid(1) + shr(edx, CPUID1_EDX.CX8) + and(edx, 1);
     auto idapic() => cpuid(1) + shr(edx, CPUID1_EDX.APIC) + and(edx, 1);
     auto idsep() => cpuid(1) + shr(edx, CPUID1_EDX.SEP) + and(edx, 1);
     auto idmtrr() => cpuid(1) + shr(edx, CPUID1_EDX.MTRR) + and(edx, 1);
@@ -1435,7 +2509,7 @@ public:
     auto rdrand(R32 dst) => emit!6(0x0f, 0xc7, dst);
     auto rdrand(R64 dst) => emit!6(0x0f, 0xc7, dst);
 
-        /* ====== FPU ====== */
+    /* ====== FPU ====== */
 
     auto fabs() => emit!0(0xd9, 0xe1);
     auto fchs() => emit!0(0xd9, 0xe0);

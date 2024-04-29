@@ -15,3 +15,5 @@ gallinule-test-*
 *.obj
 *.lst
 main.d
+*.a
+*.so
