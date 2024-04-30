@@ -369,6 +369,19 @@ public enum CPUID1_EDX
 
 public enum OpCode : ushort
 {
+    // Abstracted instructions:
+    //  MOV
+    //  CALL
+    //  ADD
+    //  SUB
+    //  MUL
+    //  DIV
+    //  XOR
+    //  AND
+    //  OR
+    //  NEG
+    //  NOT
+    //  SYSCALL
     CRIDVME,
     CRIDPVI,
     CRIDTSD,
@@ -1137,7 +1150,7 @@ public enum OpCode : ushort
     SETCC
 }
 
-public enum TypeModifiers : ubyte
+public enum TypeModifiers
 {
     FLOAT = 1 << 0,
     POINTER = 1 << 1,
@@ -1148,6 +1161,10 @@ public enum TypeModifiers : ubyte
     WORD = 1 << 5,
     DWORD = 1 << 6,
     QWORD = 1 << 7,
+    SIGNED = 1 << 8,
+    ATOMIC = 1 << 9,
+    TRANSIENT = 1 << 10,
+    REF = 1 << 11,
 
     STRING = VECTOR | ARRAY,
     INTEGRAL_MASK = 0b00001111
@@ -1183,22 +1200,33 @@ public enum Details
     NZERO = 1 << 21,
     TAKEN = 1 << 22,
     NOT_TAKEN = 1 << 23
-    // TODO: Lock and stuff here
 }
 
-public enum MarkerKind : ubyte
+public enum Kind : ubyte
 {
+    NONE,
     LITERAL,
     ALLOCATION,
     REGISTER
 }
 
-public struct Marker
+public struct Type
+{
+    TypeModifiers modifiers;
+    size_t size;
+    Type[] fields;
+    Variable[] disjoints;
+}
+
+public struct Variable
 {
 public:
 final:
-    MarkerKind kind;
-    ptrdiff_t size;
+    string name;
+    Type[] type;
+    Kind kind;
+    size_t size;
+    int score;
     union
     {
         struct //asAllocation
@@ -1230,7 +1258,7 @@ final:
 
     this(size_t size, uint offset, ubyte segment = ds, short baseSize = 8, ubyte baseIndex = 255)
     {
-        this.kind = MarkerKind.ALLOCATION;
+        this.kind = Kind.ALLOCATION;
         this.size = size;
         this.segment = segment;
         this.offset = offset;
@@ -1240,7 +1268,7 @@ final:
 
     this(size_t size, ubyte index, bool extended)
     {
-        this.kind = MarkerKind.REGISTER;
+        this.kind = Kind.REGISTER;
         this.size = size;
         this.index = index;
         this.extended = extended;
@@ -1248,7 +1276,7 @@ final:
 
     this(T)(T val)
     {
-        this.kind = MarkerKind.LITERAL;
+        this.kind = Kind.LITERAL;
         this.size = T.sizeof;
 
         /* static if (is(T : U*, U))
@@ -1271,11 +1299,11 @@ final:
     T as(T)()
     {
         static if (isInstanceOf!(Reg, T))
-        if (kind == MarkerKind.REGISTER)
+        if (kind == Kind.REGISTER)
             return T(index, extended);
 
         static if (isInstanceOf!(Address, T))
-        if (kind == MarkerKind.ALLOCATION)
+        if (kind == Kind.ALLOCATION)
         {
             if (baseIndex != 255)
             {
@@ -1289,64 +1317,6 @@ final:
         }
 
         assert(0, "Attempted to convert a marker not of kind REGISTER or ALLOCATION to a type!");
-    }
-}
-
-/*public struct Function
-{
-public:
-final:
-    Variable[string] variables;
-    Instruction[] instructions;
-
-    void contaminate()
-    {
-        foreach (i, ref instr; instructions)
-        {
-            foreach (j, ref operand; instr.operands)
-            {
-                if (operand.name == null || variables[operand.name].score != 0)
-                    continue;
-                
-                if (instr.details.hasFlag(Details.READ1) != 0 && j == 0)
-                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
-                else if (instr.details.hasFlag(Details.READ2) != 0 && j == 1)
-                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
-                else if (instr.details.hasFlag(Details.READ3) && j == 2)
-                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
-
-                if (variables[operand.name].modifiers.hasFlag(TypeModifiers.STRING))
-                    variables[operand.name].score = int.max - 1;
-                else if (variables[operand.name].modifiers.hasFlag(TypeModifiers.VECTOR))
-                    variables[operand.name].score = int.max;
-                else
-                    variables[operand.name].score++;
-            }
-        }
-    }
-} 
-*/
-
-public struct Variable
-{
-public:
-final:
-    string name;
-    TypeModifiers modifiers;
-    size_t size;
-    Marker[] markers;
-    int score;
-
-    ref Marker firstMark()
-    {
-        assert(markers.length > 0, "Attempted to retrieve the first mark of an unmarked variable!");
-        return markers[0];
-    }
-
-    ref Marker lastMark()
-    {
-        assert(markers.length > 0, "Attempted to retrieve the last mark of an unmarked variable!");
-        return markers[$-1];
     }
 
     this(T)(T val)
@@ -1374,19 +1344,19 @@ final:
             switch (c)
             {
                 case 'l':
-                    if (firstMark(i).kind != MarkerKind.LITERAL)
+                    if (operands[i].kind != Kind.LITERAL)
                         return false;
                     break;
                 case 'm':
-                    if (firstMark(i).kind != MarkerKind.ALLOCATION)
+                    if (operands[i].kind != Kind.ALLOCATION)
                         return false;
                     break;
                 case 'r':
-                    if (firstMark(i).kind != MarkerKind.REGISTER)
+                    if (operands[i].kind != Kind.REGISTER)
                         return false;
                     break;
                 case 'n':
-                    if (firstMark(i).kind == MarkerKind.LITERAL)
+                    if (operands[i].kind == Kind.LITERAL)
                         return false;
                     break;
                 case '.':
@@ -1398,18 +1368,6 @@ final:
             }
         }
         return true;
-    }
-
-    ref Marker firstMark(size_t index)
-    {
-        assert(operands.length > index, "Attempted to retrieve first mark of an out of bounds operand!");
-        return operands[index].firstMark;
-    }
-
-    ref Marker lastMark(size_t index)
-    {
-        assert(operands.length > index, "Attempted to retrieve last mark of an out of bounds operand!");
-        return operands[index].lastMark;
     }
 
     this(OpCode opcode, Variable[] operands...)
@@ -1470,6 +1428,13 @@ final:
         with (OpCode) switch (opcode)
         {
             // TODO: Floats, add more flags??
+            case AAD:
+            case AAM:
+                if (markFormat("l"))
+                    details = detail("ra");
+                else
+                    details = detail("a");
+                break;
             case JMP:
             case JCC:
             case LOOPCC:
@@ -1536,12 +1501,12 @@ final:
             case INVPCID:
             case INVVPID:
             case INVEPT:
+            case ARPL:
                 details = detail("rr");
                 break;
             case LTR:
             case INC:
             case DEC:
-            case BSWAP:
             case SETCC:
             case PUSH:
             case NOT:
@@ -1568,6 +1533,9 @@ final:
             case NOP:
                 if (operands.length == 1)
                     details = detail("r");
+                break;
+            case BSWAP:
+                details = detail("x");
                 break;
             case STR:
             case POP:
@@ -1696,6 +1664,8 @@ final:
             case VMFUNC:
             case RDTSC:
             case RDTSCP:
+            case AAA:
+            case AAS:
                 details = detail("a");
                 break;
             case IDACPI:
@@ -1875,7 +1845,7 @@ final:
                 details = detail("wrr");
                 break;
             case UD:
-                if (firstMark(0).d != 2)
+                if (operands[0].d != 2)
                     details = detail("rr");
                 break;
             default:
@@ -1884,6 +1854,40 @@ final:
         }
     }
 }
+
+/* public struct Function
+{
+public:
+final:
+    Variable[string] variables;
+    Instruction[] instructions;
+
+    void init()
+    {
+        foreach (i, ref instr; instructions)
+        {
+            foreach (j, ref operand; instr.operands)
+            {
+                if (operand.name == null || variables[operand.name].score != 0)
+                    continue;
+                
+                if (instr.details.hasFlag(Details.READ1) != 0 && j == 0)
+                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
+                else if (instr.details.hasFlag(Details.READ2) != 0 && j == 1)
+                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
+                else if (instr.details.hasFlag(Details.READ3) && j == 2)
+                    instructions = Instruction(OpCode.XOR, operand, operand)~instructions;
+
+                if (variables[operand.name].modifiers.hasFlag(TypeModifiers.STRING))
+                    variables[operand.name].score = int.max - 1;
+                else if (variables[operand.name].modifiers.hasFlag(TypeModifiers.VECTOR))
+                    variables[operand.name].score = int.max;
+                else
+                    variables[operand.name].score++;
+            }
+        }
+    }
+} */
 
 public:
 alias CR = Reg!(-1);
@@ -4209,12 +4213,12 @@ public:
             case INT:
                 assert(instr.markFormat("l"));
 
-                if (instr.firstMark(0).b == 3)
+                if (instr.operands[0].b == 3)
                     int3();
-                else if (instr.firstMark(0).b == 1)
+                else if (instr.operands[0].b == 1)
                     int1();
                 else
-                    _int(instr.firstMark(0).b);
+                    _int(instr.operands[0].b);
 
                 break;
             case INTO:
@@ -4223,27 +4227,27 @@ public:
                 break;
             case UD:
                 assert(instr.markFormat("l") || instr.markFormat("lrn"));
-                assert(instr.firstMark(0).d <= 3 && (instr.firstMark(0).d == 2 || instr.operands.length == 3));
+                assert(instr.operands[0].d <= 3 && (instr.operands[0].d == 2 || instr.operands.length == 3));
                 
                 if (instr.operands.length == 1)
                     ud2();
-                else if (instr.firstMark(0).d == 0)
+                else if (instr.operands[0].d == 0)
                 {
-                    assert(instr.firstMark(1).size == 4 && instr.firstMark(2).size == 4);
+                    assert(instr.operands[1].size == 4 && instr.operands[2].size == 4);
 
-                    if (instr.firstMark(2).kind == MarkerKind.REGISTER)
-                        ud0(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Reg!32));
+                    if (instr.operands[2].kind == Kind.REGISTER)
+                        ud0(instr.operands[1].as!(Reg!32), instr.operands[2].as!(Reg!32));
                     else
-                        ud0(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Address!32));
+                        ud0(instr.operands[1].as!(Reg!32), instr.operands[2].as!(Address!32));
                 }
-                else if (instr.firstMark(0).d == 1)
+                else if (instr.operands[0].d == 1)
                 {
-                    assert(instr.firstMark(1).size == 4 && instr.firstMark(2).size == 4);
+                    assert(instr.operands[1].size == 4 && instr.operands[2].size == 4);
 
-                    if (instr.firstMark(2).kind == MarkerKind.REGISTER)
-                        ud1(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Reg!32));
+                    if (instr.operands[2].kind == Kind.REGISTER)
+                        ud1(instr.operands[1].as!(Reg!32), instr.operands[2].as!(Reg!32));
                     else
-                        ud1(instr.firstMark(1).as!(Reg!32), instr.firstMark(2).as!(Address!32));
+                        ud1(instr.operands[1].as!(Reg!32), instr.operands[2].as!(Address!32));
                 }
 
                 break;
@@ -4339,14 +4343,14 @@ public:
                 if (instr.operands.length == 0)
                     ret();
                 else
-                    ret(instr.firstMark(0).w);
+                    ret(instr.operands[0].w);
 
                 break;
             case RETF:
                 if (instr.operands.length == 0)
                     retf();
                 else
-                    retf(instr.firstMark(0).w);
+                    retf(instr.operands[0].w);
 
                 break;
             case STC:
@@ -4510,7 +4514,10 @@ public:
                 enum ofn = "idiv";
                 break;
             case MOV:
-                enum ofn = "mov";
+                if (instr.markFormat("rr"))
+                {
+                    //
+                }
                 break;
             case MOVSX:
                 enum ofn = "movsx";
@@ -6361,11 +6368,11 @@ public:
     auto test(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x85, dst, src);
     auto test(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x85, dst, src);
 
-    auto pop(RM)(RM dst) if (valid!(RM, 16)) => emit!0(0x8f, dst);
+    auto pop(Address!16 dst) => emit!0(0x8f, dst);
     static if (!X64)
-    auto pop(RM)(RM dst) if (valid!(RM, 32)) => emit!0(0x8f, dst);
+    auto pop(Address!32 dst) => emit!(0, NP)(0x8f, dst);
     static if (X64)
-    auto pop(RM)(RM dst) if (valid!(RM, 64)) => emit!0(0x8f, dst);
+    auto pop(Address!64 dst) => emit!(0, NP)(0x8f, dst);
 
     auto pop(R16 dst) => emit!(0, NRM)(0x58, dst);
     static if (!X64)
@@ -6386,11 +6393,11 @@ public:
     auto popfd() => emit!0(0x9d);
     auto popfq() => emit!0(0x9d);
 
-    auto push(RM)(RM dst) if (valid!(RM, 16)) => emit!6(0xff, dst);
+    auto push(Address!16 dst) => emit!6(0xff, dst);
     static if (!X64)
-    auto push(RM)(RM dst) if (valid!(RM, 32)) => emit!6(0xff, dst);
+    auto push(Address!32 dst) => emit!(6, NP)(0xff, dst);
     static if (X64)
-    auto push(RM)(RM dst) if (valid!(RM, 64)) => emit!6(0xff, dst);
+    auto push(Address!64 dst) => emit!(6, NP)(0xff, dst);
 
     auto push(R16 dst) => emit!(0, NRM)(0x50, dst);
     static if (!X64)
@@ -6755,4 +6762,71 @@ public:
     {
         return Address!512(args);
     }
+}
+
+unittest
+{
+    Block!true block;
+    with (block)
+    {
+        mov(eax, ecx);
+        movsxd(rcx, eax);
+        mov(ebx, 1);
+        // TODO: pop and push are emitting REX but shouldn't
+        pop(rbx);
+        push(rcx);
+        jl("a");
+    label("a");
+        popf();
+        // Not supported in 64-bit
+        //pusha();
+        ret();
+        retf(3);
+        jmp("a");
+        jb("a");
+        setz(al);
+        //aad(17);
+        insb();
+        outal();
+        call(2);
+        lock(add(eax, ebx));
+        xacquire_lock(sub(si, di));
+        movsb();
+        // TODO: Make emittable instructions condiitonal?
+        //daa();
+        //das();
+        //aaa();
+        //pushcs();
+        mov(eax, dwordPtr(ebx));
+        // TODO: This is outputting 0x67 when it should output REX
+        mov(eax, dwordPtr(rbx));
+        //verr(si);
+        stc();
+        std();
+        clc();
+        wait();
+        fwait();
+        monitor();
+        lfence();
+        sfence();
+        retf();
+        test(al, bl);
+        hlt();
+        swapgs();
+        inc(eax);
+        dec(rax);
+        dec(rdi);
+        sub(rdi, 10);
+        mul(esi);
+        scasb();
+        cmpsb();
+        pause();
+        iret();
+        mov(esp, dwordPtr(rdx));
+        pop(rsp);
+        mov(rbp, rsp);
+    }
+    import tern.digest;
+    import std.stdio;
+    debug writeln(block.finalize().toHexString);
 }
