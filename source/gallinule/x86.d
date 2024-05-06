@@ -1223,7 +1223,7 @@ public struct Variable
 public:
 final:
     string name;
-    Type[] type;
+    Type type;
     Kind kind;
     size_t size;
     int score;
@@ -1361,6 +1361,22 @@ final:
                     break;
                 case '.':
                     if (fmt.length != operands.length)
+                        return false;
+                    break;
+                case '1':
+                    if (operands[i].size != 1)
+                        return false;
+                    break;
+                case '2':
+                    if (operands[i].size != 2)
+                        return false;
+                    break;
+                case '4':
+                    if (operands[i].size != 4)
+                        return false;
+                    break;
+                case '8':
+                    if (operands[i].size != 8)
                         return false;
                     break;
                 default:
@@ -3069,76 +3085,172 @@ public:
                 mixin(ofn~"();");
                 break;
             case PFADD:
-                enum ofn = "pfadd";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfadd(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfadd(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFSUB:
-                enum ofn = "pfsub";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfsub(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfsub(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFSUBR:
-                enum ofn = "pfsubr";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfsubr(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfsubr(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFMUL:
-                enum ofn = "pfmul";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfmul(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfmul(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFCMPEQ:
-                enum ofn = "pfcmpeq";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfcmpeq(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfcmpeq(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFCMPGE:
-                enum ofn = "pfcmpge";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfcmpge(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfcmpge(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFCMPGT:
-                enum ofn = "pfcmpgt";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfcmpgt(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfcmpgt(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PF2ID:
-                enum ofn = "pf2id";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pf2id(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pf2id(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PI2FD:
-                enum ofn = "pi2fd";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pi2fd(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pi2fd(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PF2IW:
-                enum ofn = "pf2iw";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pf2iw(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pf2iw(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PI2FW:
-                enum ofn = "pi2fw";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pi2fw(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pi2fw(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFMAX:
-                enum ofn = "pfmax";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfmax(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfmax(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFMIN:
-                enum ofn = "pfmin";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfmin(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfmin(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFRCP:
-                enum ofn = "pfrcp";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfrcp(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfrcp(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFRSQRT:
-                enum ofn = "pfrsqrt";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfrsqrt(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfrsqrt(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFRCPIT1:
-                enum ofn = "pfrcpit1";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfrcpit1(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfrcpit1(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFRSQIT1:
-                enum ofn = "pfrsqit1";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfrsqit1(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfrsqit1(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFRCPIT2:
-                enum ofn = "pfrcpit2";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfrcpit2(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfrcpit2(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFACC:
-                enum ofn = "pfacc";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfacc(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfacc(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFNACC:
-                enum ofn = "pfnacc";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfnacc(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfnacc(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PFPNACC:
-                enum ofn = "pfpnacc";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pfpnacc(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pfpnacc(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PMULHRW:
-                enum ofn = "pmulhrw";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pmulhrw(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pmulhrw(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PAVGUSB:
-                enum ofn = "pavgusb";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pavgusb(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pavgusb(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case PSWAPD:
-                enum ofn = "pswapd";
+                assert (instr.markFormat("rn"));
+                if (instr.operands[1].kind == Kind.ALLOCATION)
+                    pswapd(instr.operands[0].as!MMX, instr.operands[1].as!(Address!64));
+                else
+                    pswapd(instr.operands[0].as!MMX, instr.operands[1].as!MMX);
                 break;
             case FEMMS:
                 enum ofn = "femms";
@@ -3149,13 +3261,35 @@ public:
                 mixin(ofn~"();");
                 break;
             case PTWRITE:
-                enum ofn = "ptwrite";
+                assert (instr.markFormat("n"));
+                if (instr.operands[0].size == 4)
+                {
+                    if (instr.operands[0].kind == Kind.ALLOCATION)
+                        ptwrite(instr.operands[0].as!(Address!32));
+                    else
+                        ptwrite(instr.operands[0].as!R32);
+                }
+                else
+                {
+                    if (instr.operands[0].kind == Kind.ALLOCATION)
+                        ptwrite(instr.operands[0].as!(Address!64));
+                    else
+                        ptwrite(instr.operands[0].as!R64);
+                }
                 break;
             case CLWB:
-                enum ofn = "clwb";
+                assert (instr.markFormat("n"));
+                if (instr.operands[0].kind == Kind.ALLOCATION)
+                    clwb(instr.operands[0].as!(Address!8));
+                else
+                    clwb(instr.operands[0].as!R8);
                 break;
             case CLFLUSHOPT:
-                enum ofn = "clflushopt";
+                assert (instr.markFormat("n"));
+                if (instr.operands[0].kind == Kind.ALLOCATION)
+                    clflushopt(instr.operands[0].as!(Address!8));
+                else
+                    clflushopt(instr.operands[0].as!R8);
                 break;
             case STAC:
                 enum ofn = "stac";
@@ -3166,7 +3300,59 @@ public:
                 mixin(ofn~"();");
                 break;
             case ADC:
-                enum ofn = "adc";
+                if (instr.markFormat("l"))
+                {
+                    if (instr.markFormat("1"))
+                        adc(instr.operands[0].b);
+                    else if (instr.markFormat("2"))
+                        adc(instr.operands[0].w);
+                    else if (instr.markFormat("4"))
+                        adc(instr.operands[0].d);
+                    else if (instr.markFormat("8"))
+                        adc(instr.operands[0].q);
+                }
+                else if (instr.markFormat("rl"))
+                {
+                    if (instr.markFormat("11"))
+                        adc(instr.operands[0].as!R8, instr.operands[1].b);
+                    else if (instr.markFormat("21"))
+                        adc(instr.operands[0].as!R16, instr.operands[1].b);
+                    else if (instr.markFormat("22"))
+                        adc(instr.operands[0].as!R16, instr.operands[1].w);
+                    else if (instr.markFormat("41"))
+                        adc(instr.operands[0].as!R32, instr.operands[1].b);
+                    else if (instr.markFormat("44"))
+                        adc(instr.operands[0].as!R32, instr.operands[1].d);
+                    else if (instr.markFormat("81"))
+                        adc(instr.operands[0].as!R64, instr.operands[1].b);
+                    else if (instr.markFormat("84"))
+                        adc(instr.operands[0].as!R64, instr.operands[1].d);
+                }
+                else if (instr.markFormat("ml"))
+                {
+                    if (instr.markFormat("11"))
+                        adc(instr.operands[0].as!(Address!8), instr.operands[1].b);
+                    else if (instr.markFormat("21"))
+                        adc(instr.operands[0].as!(Address!16), instr.operands[1].b);
+                    else if (instr.markFormat("22"))
+                        adc(instr.operands[0].as!(Address!16), instr.operands[1].w);
+                    else if (instr.markFormat("41"))
+                        adc(instr.operands[0].as!(Address!32), instr.operands[1].b);
+                    else if (instr.markFormat("44"))
+                        adc(instr.operands[0].as!(Address!32), instr.operands[1].d);
+                    else if (instr.markFormat("81"))
+                        adc(instr.operands[0].as!(Address!64), instr.operands[1].b);
+                    else if (instr.markFormat("84"))
+                        adc(instr.operands[0].as!(Address!64), instr.operands[1].d);
+                }
+                else if (instr.markFormat("nr"))
+                {
+                    // TODO:
+                }
+                else if (instr.markFormat("nm"))
+                {
+                    
+                }
                 break;
             case ADCX:
                 enum ofn = "adcx";
