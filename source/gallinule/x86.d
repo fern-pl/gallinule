@@ -100,9 +100,9 @@ enum F3A = 3;
 enum MSR = 7;
 
 /**
-    alias CR = Reg!(-1);
-    alias DR = Reg!(-2);
-    alias ST = Reg!(-3);
+    alias CR = CR;
+    alias DR = DR;
+    alias ST = ST;
     alias R8 = Reg!8;
     alias R16 = Reg!16;
     alias R32 = Reg!32;
@@ -1224,23 +1224,32 @@ public:
 final:
     string name;
     Type type;
+    /// This is for internal marking/variable allocation, not variable metadata!
     Kind kind;
+    /// ditto
     size_t size;
+    /// ditto
     int score;
     union
     {
         struct //asAllocation
         {
+            /// ditto
             ubyte segment = ds;
+            /// ditto
             uint offset;
+            /// ditto
             short baseSize;
             // Will cause problems? Extended registers, dunno
+            /// ditto
             ubyte baseIndex = 255;
         }
 
         struct //asRegister
         {
+            /// ditto
             ubyte index;
+            /// ditto
             bool extended;
         }
 
@@ -1248,9 +1257,13 @@ final:
         {
             union
             {
+                /// ditto
                 ubyte b;
+                /// ditto
                 ushort w;
+                /// ditto
                 uint d;
+                /// ditto
                 ulong q;
             }
         }
@@ -1906,9 +1919,9 @@ final:
 } */
 
 public:
-alias CR = Reg!(-1);
-alias DR = Reg!(-2);
-alias ST = Reg!(-3);
+alias CR = CR;
+alias DR = DR;
+alias ST = ST;
 alias R8 = Reg!8;
 alias R16 = Reg!16;
 alias R32 = Reg!32;
@@ -1918,27 +1931,27 @@ alias XMM = Reg!128;
 alias YMM = Reg!256;
 alias ZMM = Reg!512;
 
-enum cr0 = Reg!(-1)(0);
-enum cr2 = Reg!(-1)(2);
-enum cr3 = Reg!(-1)(3);
-enum cr4 = Reg!(-1)(4);
+enum cr0 = CR(0);
+enum cr2 = CR(2);
+enum cr3 = CR(3);
+enum cr4 = CR(4);
 
-enum dr0 = Reg!(-2)(0);
-enum dr1 = Reg!(-2)(1);
-enum dr2 = Reg!(-2)(2);
-enum dr3 = Reg!(-2)(3);
-enum dr6 = Reg!(-2)(6);
-enum dr7 = Reg!(-2)(7);
+enum dr0 = DR(0);
+enum dr1 = DR(1);
+enum dr2 = DR(2);
+enum dr3 = DR(3);
+enum dr6 = DR(6);
+enum dr7 = DR(7);
 
 // ST registers aren't real registers, the FPU uses a stack
-enum st0 = Reg!(-3)(0);
-enum st1 = Reg!(-3)(1);
-enum st2 = Reg!(-3)(2);
-enum st3 = Reg!(-3)(3);
-enum st4 = Reg!(-3)(4);
-enum st5 = Reg!(-3)(5);
-enum st6 = Reg!(-3)(6);
-enum st7 = Reg!(-3)(7);
+enum st0 = ST(0);
+enum st1 = ST(1);
+enum st2 = ST(2);
+enum st3 = ST(3);
+enum st4 = ST(4);
+enum st5 = ST(5);
+enum st6 = ST(6);
+enum st7 = ST(7);
 
 enum al = Reg!8(0);
 enum cl = Reg!8(1);
@@ -3674,40 +3687,76 @@ public:
                 mixin(ofn~"();");
                 break;
             case FADD:
-                enum ofn = "fadd";
+                if (instr.markFormat("m"))
+                {
+                    if (instr.operands[0].size == 4)
+                        fadd(instr.operands[0].as!(Address!32));
+                    else if (instr.operands[0].size == 8)
+                        fadd(instr.operands[0].as!(Address!64));
+                }
+                else if (instr.operands[0].size == -3)
+                    fadd(instr.operands[0].as!ST, instr.operands[1].as!ST);
                 break;
             case FADDP:
-                enum ofn = "faddp";
+                assert(instr.markFormat("r"));
+                faddp(instr.operands[0].as!ST);
                 break;
             case FIADD:
-                enum ofn = "fiadd";
+                assert(instr.markFormat("m"));
+                if (instr.operands[0].size == 4)
+                    fiadd(instr.operands[0].as!(Address!32));
+                else if (instr.operands[0].size == 8)
+                    fiadd(instr.operands[0].as!(Address!64));
                 break;
             case FBLD:
-                enum ofn = "fbld";
+                assert(instr.markFormat("m"));
+                fbld(instr.operands[0].as!(Address!80));
                 break;
             case FBSTP:
-                enum ofn = "fbstp";
+                assert(instr.markFormat("m"));
+                fbstp(instr.operands[0].as!(Address!80));
                 break;
             case FCOM:
-                enum ofn = "fcom";
+                if (instr.markFormat("m"))
+                {
+                    if (instr.operands[0].size == 4)
+                        fcom(instr.operands[0].as!(Address!32));
+                    else if (instr.operands[0].size == 8)
+                        fcom(instr.operands[0].as!(Address!64));
+                }
+                else if (instr.operands[0].size == -3)
+                    fcom(instr.operands[0].as!ST);
                 break;
             case FCOMP:
-                enum ofn = "fcomp";
+                if (instr.markFormat("m"))
+                {
+                    if (instr.operands[0].size == 4)
+                        fcomp(instr.operands[0].as!(Address!32));
+                    else if (instr.operands[0].size == 8)
+                        fcomp(instr.operands[0].as!(Address!64));
+                }
+                else if (instr.operands[0].size == -3)
+                    fcomp(instr.operands[0].as!ST);
                 break;
             case FCOMPP:
                 enum ofn = "fcompp";
+                mixin(ofn~"();");
                 break;
             case FCOMI:
-                enum ofn = "fcomi";
+                assert(instr.markFormat("r"));
+                fcomi(instr.operands[0].as!ST);
                 break;
             case FCOMIP:
-                enum ofn = "fcomip";
+                assert(instr.markFormat("r"));
+                fcomip(instr.operands[0].as!ST);
                 break;
             case FUCOMI:
-                enum ofn = "fucomi";
+                assert(instr.markFormat("r"));
+                fcuomi(instr.operands[0].as!ST);
                 break;
             case FUCOMIP:
-                enum ofn = "fucomip";
+                assert(instr.markFormat("r"));
+                fucomip(instr.operands[0].as!ST);
                 break;
             case FICOM:
                 enum ofn = "ficom";
@@ -5307,7 +5356,7 @@ public:
 
     auto fadd(Address!32 dst) => emit!(0, NP)(0xd8, dst);
     auto fadd(Address!64 dst) => emit!(0, NP)(0xdc, dst);
-    auto fadd(Reg!(-3) dst, Reg!(-3) src)
+    auto fadd(ST dst, ST src)
     {
         if (dst.index == 0)
             emit!(0, NRM)(0xd8, 0xc0, src);
@@ -5316,7 +5365,7 @@ public:
         else
             assert(0, "Cannot encode 'fadd' with no 'st0' operand!");
     }
-    auto faddp(Reg!(-3) dst) => emit!(0, NRM)(0xde, 0xc0, dst);
+    auto faddp(ST dst) => emit!(0, NRM)(0xde, 0xc0, dst);
     auto fiadd(Address!32 dst) => emit!(0, NP)(0xda, dst);
     auto fiadd(Address!16 dst) => emit!(0, NP)(0xde, dst);
 
@@ -5325,25 +5374,25 @@ public:
 
     auto fcom(Address!32 dst) => emit!(2, NP)(0xd8, dst);
     auto fcom(Address!64 dst) => emit!(2, NP)(0xdc, dst);
-    auto fcom(Reg!(-3) dst) => emit!(2, NRM)(0xd8, 0xd0, dst);
+    auto fcom(ST dst) => emit!(2, NRM)(0xd8, 0xd0, dst);
 
     auto fcomp(Address!32 dst) => emit!(3, NP)(0xd8, dst);
     auto fcomp(Address!64 dst) => emit!(3, NP)(0xdc, dst);
-    auto fcomp(Reg!(-3) dst) => emit!(2, NRM)(0xd8, 0xd8, dst);
+    auto fcomp(ST dst) => emit!(2, NRM)(0xd8, 0xd8, dst);
     auto fcompp() => emit!0(0xde, 0xd9);
 
-    auto fcomi(Reg!(-3) dst) => emit!(0, NRM)(0xdb, 0xf0, dst);
-    auto fcomip(Reg!(-3) dst) => emit!(0, NRM)(0xdf, 0xf0, dst);
-    auto fucomi(Reg!(-3) dst) => emit!(0, NRM)(0xdb, 0xe8, dst);
-    auto fucomip(Reg!(-3) dst) => emit!(0, NRM)(0xdf, 0xe8, dst);
+    auto fcomi(ST dst) => emit!(0, NRM)(0xdb, 0xf0, dst);
+    auto fcomip(ST dst) => emit!(0, NRM)(0xdf, 0xf0, dst);
+    auto fucomi(ST dst) => emit!(0, NRM)(0xdb, 0xe8, dst);
+    auto fucomip(ST dst) => emit!(0, NRM)(0xdf, 0xe8, dst);
 
     auto ficom(Address!16 dst) => emit!(2, NP)(0xde, dst);
     auto ficom(Address!32 dst) => emit!(2, NP)(0xda, dst);
     auto ficomp(Address!16 dst) => emit!(2, NP)(0xde, dst);
     auto ficomp(Address!32 dst) => emit!(2, NP)(0xda, dst);
     
-    auto fucom(Reg!(-3) dst) => emit!(2, NRM)(0xdd, 0xe0, dst);
-    auto fucomp(Reg!(-3) dst) => emit!(2, NRM)(0xdd, 0xe8, dst);
+    auto fucom(ST dst) => emit!(2, NRM)(0xdd, 0xe0, dst);
+    auto fucomp(ST dst) => emit!(2, NRM)(0xdd, 0xe8, dst);
     auto fucompp() => emit!0(0xda, 0xe9);
 
     auto ftst() => emit!0(0xd9, 0xe4);
@@ -5399,7 +5448,7 @@ public:
     auto fld(Address!32 dst) => emit!(0, NP)(0xd9, dst);
     auto fld(Address!64 dst) => emit!(0, NP)(0xdd, dst);
     auto fld(Address!80 dst) => emit!(5, NP)(0xdb, dst);
-    auto fld(Reg!(-3) dst) => emit!(0, NRM)(0xd9, 0xc0, dst);
+    auto fld(ST dst) => emit!(0, NRM)(0xd9, 0xc0, dst);
 
     auto fld1() => emit!0(0xd9, 0xe8);
     auto fldl2t() => emit!0(0xd9, 0xe9);
@@ -5411,16 +5460,16 @@ public:
 
     auto fst(Address!32 dst) => emit!(2, NP)(0xd9, dst);
     auto fst(Address!64 dst) => emit!(2, NP)(0xdd, dst);
-    auto fst(Reg!(-3) dst) => emit!(0, NRM)(0xdd, 0xd0, dst);
+    auto fst(ST dst) => emit!(0, NRM)(0xdd, 0xd0, dst);
     
     auto fstp(Address!32 dst) => emit!(3, NP)(0xd9, dst);
     auto fstp(Address!64 dst) => emit!(3, NP)(0xdd, dst);
     auto fstp(Address!80 dst) => emit!(7, NP)(0xdb, dst);
-    auto fstp(Reg!(-3) dst) => emit!(0, NRM)(0xdd, 0xd8, dst);
+    auto fstp(ST dst) => emit!(0, NRM)(0xdd, 0xd8, dst);
 
     auto fdiv(Address!32 dst) => emit!(6, NP)(0xd8, dst);
     auto fdiv(Address!64 dst) => emit!(6, NP)(0xdc, dst);
-    auto fdiv(Reg!(-3) dst, Reg!(-3) src)
+    auto fdiv(ST dst, ST src)
     {
         if (dst.index == 0)
             emit!(0, NRM)(0xd8, 0xf0, src);
@@ -5429,13 +5478,13 @@ public:
         else
             assert(0, "Cannot encode 'fadd' with no 'st0' operand!");
     }
-    auto fdivp(Reg!(-3) dst) => emit!(0, NRM)(0xde, 0xf8, dst);
+    auto fdivp(ST dst) => emit!(0, NRM)(0xde, 0xf8, dst);
     auto fidiv(Address!32 dst) => emit!(6, NP)(0xda, dst);
     auto fidiv(Address!16 dst) => emit!(6, NP)(0xde, dst);
 
     auto fdivr(Address!32 dst) => emit!(7, NP)(0xd8, dst);
     auto fdivr(Address!64 dst) => emit!(7, NP)(0xdc, dst);
-    auto fdivr(Reg!(-3) dst, Reg!(-3) src)
+    auto fdivr(ST dst, ST src)
     {
         if (dst.index == 0)
             emit!(0, NRM)(0xd8, 0xf8, src);
@@ -5444,15 +5493,15 @@ public:
         else
             assert(0, "Cannot encode 'fadd' with no 'st0' operand!");
     }
-    auto fdivrp(Reg!(-3) dst) => emit!(0, NRM)(0xde, 0xf0, dst);
+    auto fdivrp(ST dst) => emit!(0, NRM)(0xde, 0xf0, dst);
     auto fidivr(Address!32 dst) => emit!(7, NP)(0xda, dst);
     auto fidivr(Address!16 dst) => emit!(7, NP)(0xde, dst);
 
     auto fscale() => emit!0(0xd9, 0xfd);
     auto frndint() => emit!0(0xd9, 0xfc);
     auto fexam() => emit!0(0xd9, 0xe5);
-    auto ffree(Reg!(-3) dst) => emit!(0, NRM)(0xdd, 0xc0, dst);
-    auto fxch(Reg!(-3) dst) => emit!(0, NRM)(0xd9, 0xc8, dst);
+    auto ffree(ST dst) => emit!(0, NRM)(0xdd, 0xc0, dst);
+    auto fxch(ST dst) => emit!(0, NRM)(0xd9, 0xc8, dst);
     auto fxtract() => emit!0(0xd9, 0xf4);
 
     auto fnop() => emit!0(0xd9, 0xd0);
@@ -5479,7 +5528,7 @@ public:
 
     auto fmul(Address!32 dst) => emit!(1, NP)(0xd8, dst);
     auto fmul(Address!64 dst) => emit!(1, NP)(0xdc, dst);
-    auto fmul(Reg!(-3) dst, Reg!(-3) src)
+    auto fmul(ST dst, ST src)
     {
         if (dst.index == 0)
             emit!(0, NRM)(0xd8, 0xc8, src);
@@ -5488,13 +5537,13 @@ public:
         else
             assert(0, "Cannot encode 'fadd' with no 'st0' operand!");
     }
-    auto fmulp(Reg!(-3) dst) => emit!(0, NRM)(0xde, 0xc8, dst);
+    auto fmulp(ST dst) => emit!(0, NRM)(0xde, 0xc8, dst);
     auto fimul(Address!32 dst) => emit!(1, NP)(0xda, dst);
     auto fimul(Address!16 dst) => emit!(1, NP)(0xde, dst);
 
     auto fsub(Address!32 dst) => emit!(4, NP)(0xd8, dst);
     auto fsub(Address!64 dst) => emit!(4, NP)(0xdc, dst);
-    auto fsub(Reg!(-3) dst, Reg!(-3) src)
+    auto fsub(ST dst, ST src)
     {
         if (dst.index == 0)
             emit!(0, NRM)(0xd8, 0xe0, src);
@@ -5503,13 +5552,13 @@ public:
         else
             assert(0, "Cannot encode 'fadd' with no 'st0' operand!");
     }
-    auto fsubp(Reg!(-3) dst) => emit!(0, NRM)(0xde, 0xe8, dst);
+    auto fsubp(ST dst) => emit!(0, NRM)(0xde, 0xe8, dst);
     auto fisub(Address!32 dst) => emit!(4, NP)(0xda, dst);
     auto fisub(Address!16 dst) => emit!(4, NP)(0xde, dst);
 
     auto fsubr(Address!32 dst) => emit!(5, NP)(0xd8, dst);
     auto fsubr(Address!64 dst) => emit!(5, NP)(0xdc, dst);
-    auto fsubr(Reg!(-3) dst, Reg!(-3) src)
+    auto fsubr(ST dst, ST src)
     {
         if (dst.index == 0)
             emit!(0, NRM)(0xd8, 0xe8, src);
@@ -5518,18 +5567,18 @@ public:
         else
             assert(0, "Cannot encode 'fadd' with no 'st0' operand!");
     }
-    auto fsubrp(Reg!(-3) dst) => emit!(0, NRM)(0xde, 0xe0, dst);
+    auto fsubrp(ST dst) => emit!(0, NRM)(0xde, 0xe0, dst);
     auto fisubr(Address!32 dst) => emit!(5, NP)(0xda, dst);
     auto fisubr(Address!16 dst) => emit!(5, NP)(0xde, dst);
 
-    auto fcmovb(Reg!(-3) dst) => emit!(0, NRM)(0xda, 0xc0, dst);
-    auto fcmove(Reg!(-3) dst) => emit!(0, NRM)(0xda, 0xc8, dst);
-    auto fcmovbe(Reg!(-3) dst) => emit!(0, NRM)(0xda, 0xd0, dst);
-    auto fcmovu(Reg!(-3) dst) => emit!(0, NRM)(0xda, 0xd8, dst);
-    auto fcmovnb(Reg!(-3) dst) => emit!(0, NRM)(0xdb, 0xc0, dst);
-    auto fcmovne(Reg!(-3) dst) => emit!(0, NRM)(0xdb, 0xc8, dst);
-    auto fcmovnbe(Reg!(-3) dst) => emit!(0, NRM)(0xdb, 0xd0, dst);
-    auto fcmovnu(Reg!(-3) dst) => emit!(0, NRM)(0xdb, 0xd8, dst);
+    auto fcmovb(ST dst) => emit!(0, NRM)(0xda, 0xc0, dst);
+    auto fcmove(ST dst) => emit!(0, NRM)(0xda, 0xc8, dst);
+    auto fcmovbe(ST dst) => emit!(0, NRM)(0xda, 0xd0, dst);
+    auto fcmovu(ST dst) => emit!(0, NRM)(0xda, 0xd8, dst);
+    auto fcmovnb(ST dst) => emit!(0, NRM)(0xdb, 0xc0, dst);
+    auto fcmovne(ST dst) => emit!(0, NRM)(0xdb, 0xc8, dst);
+    auto fcmovnbe(ST dst) => emit!(0, NRM)(0xdb, 0xd0, dst);
+    auto fcmovnu(ST dst) => emit!(0, NRM)(0xdb, 0xd8, dst);
 
     /* ====== TSC ====== */
 
@@ -6688,15 +6737,15 @@ public:
     auto mov(Address!32 dst, uint imm32) => emit!0(0xc7, dst, imm32);
     auto mov(Address!64 dst, uint imm32) => emit!0(0xc7, dst, imm32);
 
-    auto mov(R32 dst, Reg!(-1) src) => emit!0(0x0f, 0x20, dst, src);
-    auto mov(R64 dst, Reg!(-1) src) => emit!0(0x0f, 0x20, dst, src);
-    auto mov(Reg!(-1) dst, R32 src) => emit!0(0x0f, 0x22, dst, src);
-    auto mov(Reg!(-1) dst, R64 src) => emit!0(0x0f, 0x22, dst, src);
+    auto mov(R32 dst, CR src) => emit!0(0x0f, 0x20, dst, src);
+    auto mov(R64 dst, CR src) => emit!0(0x0f, 0x20, dst, src);
+    auto mov(CR dst, R32 src) => emit!0(0x0f, 0x22, dst, src);
+    auto mov(CR dst, R64 src) => emit!0(0x0f, 0x22, dst, src);
 
-    auto mov(R32 dst, Reg!(-2) src) => emit!0(0x0f, 0x21, dst, src);
-    auto mov(R64 dst, Reg!(-2) src) => emit!0(0x0f, 0x21, dst, src);
-    auto mov(Reg!(-2) dst, R32 src) => emit!0(0x0f, 0x23, dst, src);
-    auto mov(Reg!(-2) dst, R64 src) => emit!0(0x0f, 0x23, dst, src);
+    auto mov(R32 dst, DR src) => emit!0(0x0f, 0x21, dst, src);
+    auto mov(R64 dst, DR src) => emit!0(0x0f, 0x21, dst, src);
+    auto mov(DR dst, R32 src) => emit!0(0x0f, 0x23, dst, src);
+    auto mov(DR dst, R64 src) => emit!0(0x0f, 0x23, dst, src);
 
     auto movsx(RM)(R16 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xbe, dst, src);
     auto movsx(RM)(R32 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xbe, dst, src);
