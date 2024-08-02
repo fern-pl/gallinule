@@ -1158,59 +1158,59 @@ public:
     // This is an AMD exclusive vector instruction set that uses MM registers.
     // It has been deprecated and sucks, do not use this for any kind of compiler generation.
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfadd(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x9e);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfsub(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x9a);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfsubr(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xaa);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfmul(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xb4);
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfcmpeq(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xb0);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfcmpge(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x90);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfcmpgt(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xa0);
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pf2id(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x1d);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pi2fd(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x0d);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pf2iw(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x1c);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pi2fw(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x0c);
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfmax(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xa4);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfmin(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x94);
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfrcp(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x96);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfrsqrt(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x97);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfrcpit1(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xa6);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfrsqit1(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xa7);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfrcpit2(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xb6);
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfacc(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xae);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfnacc(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x8a);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pfpnacc(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0x8e);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pmulhrw(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xb7);
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pavgusb(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xbf);
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto pswapd(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x0f, dst, src, 0xbb);
 
     auto femms() => emit!0(0x0f, 0x0e);
@@ -1222,19 +1222,19 @@ public:
 
     /* ====== PT ====== */
 
-    @(["rm32"])
-    @(["rm64"])
+    @("rm32")
+    @("rm64")
     auto ptwrite(RM)(RM dst) if (valid!(RM, 32)) => emit!4(0xf3, 0x0f, 0xae, dst);
     auto ptwrite(RM)(RM dst) if (valid!(RM, 64)) => emit!4(0xf3, 0x0f, 0xae, dst);
 
     /* ====== CLWB ====== */
     
-    @(["rm8"])
+    @("rm8")
     auto clwb(RM)(RM dst) if (valid!(RM, 8)) => emit!6(0x66, 0x0f, 0xae, dst);
 
     /* ====== CLFLUSHOPT ====== */
     
-    @(["rm8"])
+    @("rm8")
     auto clflushopt(RM)(RM dst) if (valid!(RM, 8)) => emit!7(0x66, 0x0f, 0xae, dst);
 
     /* ====== SMAP ====== */
@@ -1244,24 +1244,24 @@ public:
 
     /* ====== ADX ====== */
 
-    @(["imm8"])
-    @(["imm16"])
-    @(["imm32"])
-    @(["rm8, imm8"])
-    @(["rm16, imm16"])
-    @(["rm32, imm32"])
-    @(["rm64, imm32"])
-    @(["rm16, imm8"])
-    @(["rm32, imm8"])
-    @(["rm64, imm8"])
-    @(["rm8, r8"])
-    @(["rm16, r16"])
-    @(["rm32, r32"])
-    @(["rm64, r64"])
-    @(["r8, m8"])
-    @(["r16, m16"])
-    @(["r32, m32"])
-    @(["r64, m64"])
+    @("imm8")
+    @("imm16")
+    @("imm32")
+    @("rm8, imm8")
+    @("rm16, imm16")
+    @("rm32, imm32")
+    @("rm64, imm32")
+    @("rm16, imm8")
+    @("rm32, imm8")
+    @("rm64, imm8")
+    @("rm8, r8")
+    @("rm16, r16")
+    @("rm32, r32")
+    @("rm64, r64")
+    @("r8, m8")
+    @("r16, m16")
+    @("r32, m32")
+    @("r64, m64")
     auto adc(ubyte imm8) => emit!0(0x14, imm8);
     auto adc(ushort imm16) => emit!0(0x15, imm16);
     auto adc(uint imm32) => emit!0(0x15, imm32);
@@ -1285,81 +1285,81 @@ public:
     auto adc(R32 dst, Address!32 src) => emit!0(0x13, dst, src);
     auto adc(R64 dst, Address!64 src) => emit!0(0x13, dst, src);
 
-    @(["r32, rm32"])
-    @(["r64, rm64"])
+    @("r32, rm32")
+    @("r64, rm64")
     auto adcx(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0F, 0x38, 0xF6, dst, src);
     auto adcx(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0F, 0x38, 0xF6, dst, src);
 
-    @(["r32, rm32"])
-    @(["r64, rm64"])
+    @("r32, rm32")
+    @("r64, rm64")
     auto adox(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xF3, 0x0F, 0x38, 0xF6, dst, src);
     auto adox(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xF3, 0x0F, 0x38, 0xF6, dst, src);
 
     /* ====== RDSEED ====== */
     
-    @(["r16"])
-    @(["r32"])
-    @(["r64"])
+    @("r16")
+    @("r32")
+    @("r64")
     auto rdseed(R16 dst) => emit!7(0x0f, 0xc7, dst);
     auto rdseed(R32 dst) => emit!7(0x0f, 0xc7, dst);
     auto rdseed(R64 dst) => emit!7(0x0f, 0xc7, dst);
 
     /* ====== MPX ====== */
 
-    @(["r32, rm32"])
-    @(["r64, rm64"])
+    @("r32, rm32")
+    @("r64, rm64")
     auto bndcl(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xf3, 0x0f, 0x1a, dst, src);
     auto bndcl(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xf3, 0x0f, 0x1a, dst, src);
 
-    @(["r32, rm32"])
-    @(["r64, rm64"])
+    @("r32, rm32")
+    @("r64, rm64")
     auto bndcu(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xf2, 0x0f, 0x1a, dst, src);
     auto bndcu(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xf2, 0x0f, 0x1a, dst, src);
 
-    @(["r32, rm32"])
-    @(["r64, rm64"])
+    @("r32, rm32")
+    @("r64, rm64")
     auto bndcn(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xf2, 0x0f, 0x1b, dst, src);
     auto bndcn(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xf2, 0x0f, 0x1b, dst, src);
 
-    @(["r64, rm64"])
+    @("r64, rm64")
     auto bndldx(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!(0, NP)(0x0f, 0x1a, dst, src);
-    @(["rm64, r64"])
+    @("rm64, r64")
     auto bndstx(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!(0, NP)(0x0f, 0x1b, dst, src);
 
-    @(["r32, rm32"])
-    @(["r64, rm32"])
+    @("r32, rm32")
+    @("r64, rm32")
     auto bndmk(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xf3, 0x0f, 0x1b, dst, src);
     auto bndmk(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xf3, 0x0f, 0x1b, dst, src);
 
-    @(["r32, rm32"])
-    @(["r64, rm64"])
-    @(["m32, r32"])
-    @(["m64, r32"])
+    @("r32, rm32")
+    @("r64, rm64")
+    @("m32, r32")
+    @("m64, r32")
     auto bndmov(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x1a, dst, src);
     auto bndmov(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x1a, dst, src);
     auto bndmov(Address!32 dst, R32 src) => emit!0(0x0f, 0x1b, dst, src);
     auto bndmov(Address!64 dst, R32 src) => emit!0(0x0f, 0x1b, dst, src);
 
-    @(["r16, rm16"])
-    @(["r32, rm32"])
+    @("r16, rm16")
+    @("r32, rm32")
     auto bound(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x62, dst, src);
     auto bound(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x62, dst, src);
 
     /* ====== RTM ====== */
     
     auto xend() => emit!0(0x0f, 0x01, 0xd5);
-    @(["imm8"])
+    @("imm8")
     auto xabort(ubyte imm8) => emit!0(0xc6, 0xf8, imm8);
-    @(["imm16"])
+    @("imm16")
     auto xbegin(ushort rel16) => emit!0(0xc7, 0xf8, rel16);
-    @(["imm32"])
+    @("imm32")
     auto xbegin(uint rel32) => emit!0(0xc7, 0xf8, rel32);
     auto xtest() => emit!0(0x0f, 0x01, 0xd6);
     
     /* ====== INVPCID ====== */
 
-    @(["r32", "m128"])
-    @(["r64", "m128"])
+    @("r32", "m128")
+    @("r64", "m128")
     auto invpcid(R32 dst, Address!128 src) => emit!0(0x0f, 0x38, 0x82, dst, src);
     auto invpcid(R64 dst, Address!128 src) => emit!0(0x0f, 0x38, 0x82, dst, src);
 
@@ -1385,22 +1385,22 @@ public:
 
     /* ====== BMI1 ====== */
 
-    @(["r16", "rm16"])
-    @(["r32", "rm32"])
-    @(["r64", "rm64"])
+    @("r16", "rm16")
+    @("r32", "rm32")
+    @("r64", "rm64")
     auto tzcnt(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0xf3, 0x0f, 0xbc, dst, src);
     auto tzcnt(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xf3, 0x0f, 0xbc, dst, src);
     auto tzcnt(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xf3, 0x0f, 0xbc, dst, src);
 
-    @(["r16", "rm16"])
-    @(["r32", "rm32"])
-    @(["r64", "rm64"])
+    @("r16", "rm16")
+    @("r32", "rm32")
+    @("r64", "rm64")
     auto lzcnt(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0xf3, 0x0f, 0xbd, dst, src);
     auto lzcnt(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xf3, 0x0f, 0xbd, dst, src);
     auto lzcnt(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xf3, 0x0f, 0xbd, dst, src);
 
-    @(["r32", "r32", "rm32"])
-    @(["r64", "r64", "rm64"])
+    @("r32", "r32", "rm32")
+    @("r64", "r64", "rm64")
     auto andn(RM)(R32 dst, R32 src, RM stor) if (valid!(RM, 32)) => emit!(0, VEXI, 128, F38, 0)(0xf2, dst, src, stor);
     auto andn(RM)(R64 dst, R64 src, RM stor) if (valid!(RM, 64)) => emit!(0, VEXI, 128, F38, 0)(0xf2, dst, src, stor);
 
@@ -2471,99 +2471,93 @@ public:
     auto sbb(R32 dst, Address!32 src) => emit!0(0x1b, dst, src);
     auto sbb(R64 dst, Address!64 src) => emit!0(0x1b, dst, src);
 
-    @(["imm8"])
-    @(["imm16"])
-    @(["imm32"])
-    @(["imm32"])
-    @(["r8, imm8"])
-    @(["r16, imm16"])
-    @(["r32, imm32"])
-    @(["r64, imm32"])
-    @(["r16, imm8"])
-    @(["r32, imm8"])
-    @(["r64, imm8"])
-    @(["rm8, r8"])
-    @(["rm16, r16"])
-    @(["rm32, r32"])
-    @(["rm64, r64"])
-    @(["r8, m8"])
-    @(["r16, m16"])
-    @(["r32, m32"])
-    @(["r64, m64"])
+    @("imm8")
     auto xor(ubyte imm8) => emit!0(0x34, imm8);
+    @("imm16")
     auto xor(ushort imm16) => emit!0(0x35, imm16);
+    @("imm32")
     auto xor(uint imm32) => emit!0(0x35, imm32);
+    @("imm64")
     auto xor(ulong imm32) => emit!0(0x35, cast(long)imm32);
 
+    @("r8", "imm8")
     auto xor(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => emit!6(0x80, dst, imm8);
+    @("r16", "imm16")
     auto xor(RM)(RM dst, ushort imm16) if (valid!(RM, 16)) => emit!6(0x81, dst, imm16);
+    @("r32", "imm32")
     auto xor(RM)(RM dst, uint imm32) if (valid!(RM, 32)) => emit!6(0x81, dst, imm32);
+    @("r64", "imm32")
     auto xor(RM)(RM dst, uint imm32) if (valid!(RM, 64)) => emit!6(0x81, dst, imm32);
+    @("r16", "imm8")
     auto xor(RM)(RM dst, ubyte imm8) if (valid!(RM, 16)) => emit!6(0x83, dst, imm8);
+    @("r32", "imm8")
     auto xor(RM)(RM dst, ubyte imm8) if (valid!(RM, 32)) => emit!6(0x83, dst, imm8);
+    @("r64", "imm8")
     auto xor(RM)(RM dst, ubyte imm8) if (valid!(RM, 64)) => emit!6(0x83, dst, imm8);
 
+    @("rm8", "r8")
     auto xor(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x30, dst, src);
+    @("rm16", "r16")
     auto xor(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x31, dst, src);
+    @("rm32", "r32")
     auto xor(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x31, dst, src);
+    @("rm64", "r64")
     auto xor(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x31, dst, src);
 
+    @("r8", "m8")
     auto xor(R8 dst, Address!8 src) => emit!0(0x32, dst, src);
+    @("r16", "m16")
     auto xor(R16 dst, Address!16 src) => emit!0(0x33, dst, src);
+    @("r32", "m32")
     auto xor(R32 dst, Address!32 src) => emit!0(0x33, dst, src);
+    @("r64", "m64")
     auto xor(R64 dst, Address!64 src) => emit!0(0x33, dst, src);
 
-    @(["imm8"])
-    @(["imm16"])
-    @(["imm32"])
-    @(["imm32"])
-    @(["r8, imm8"])
-    @(["r16, imm16"])
-    @(["r32, imm32"])
-    @(["r64, imm32"])
-    @(["r16, imm8"])
-    @(["r32, imm8"])
-    @(["r64, imm8"])
-    @(["rm8, r8"])
-    @(["rm16, r16"])
-    @(["rm32, r32"])
-    @(["rm64, r64"])
-    @(["r8, m8"])
-    @(["r16, m16"])
-    @(["r32, m32"])
-    @(["r64, m64"])
+    @("imm8")
     auto or(ubyte imm8) => emit!0(0x0c, imm8);
+    @("imm16")
     auto or(ushort imm16) => emit!0(0x0d, imm16);
+    @("imm32")
     auto or(uint imm32) => emit!0(0x0d, imm32);
+    @("imm64")
     auto or(ulong imm32) => emit!0(0x0d, cast(long)imm32);
 
+    @("r8", "imm8")
     auto or(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => emit!1(0x80, dst, imm8);
+    @("r16", "imm16")
     auto or(RM)(RM dst, ushort imm16) if (valid!(RM, 16)) => emit!1(0x81, dst, imm16);
+    @("r32", "imm32")
     auto or(RM)(RM dst, uint imm32) if (valid!(RM, 32)) => emit!1(0x81, dst, imm32);
+    @("r64", "imm32")
     auto or(RM)(RM dst, uint imm32) if (valid!(RM, 64)) => emit!1(0x81, dst, imm32);
+    @("r16", "imm8")
     auto or(RM)(RM dst, ubyte imm8) if (valid!(RM, 16)) => emit!1(0x83, dst, imm8);
+    @("r32", "imm8")
     auto or(RM)(RM dst, ubyte imm8) if (valid!(RM, 32)) => emit!1(0x83, dst, imm8);
+    @("r64", "imm8")
     auto or(RM)(RM dst, ubyte imm8) if (valid!(RM, 64)) => emit!1(0x83, dst, imm8);
 
+    @("rm8", "r8")
     auto or(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x8, dst, src);
+    @("rm16", "r16")
     auto or(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x9, dst, src);
+    @("rm32", "r32")
     auto or(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x9, dst, src);
+    @("rm64", "r64")
     auto or(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x9, dst, src);
 
+    @("r8", "m8")
     auto or(R8 dst, Address!8 src) => emit!0(0xa, dst, src);
+    @("r16", "m16")
     auto or(R16 dst, Address!16 src) => emit!0(0xb, dst, src);
+    @("r32", "m32")
     auto or(R32 dst, Address!32 src) => emit!0(0xb, dst, src);
+    @("r64", "m64")
     auto or(R64 dst, Address!64 src) => emit!0(0xb, dst, src);
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto sal(RM)(RM dst) if (valid!(RM, 8)) => emit!4(0xd2, dst, cl);
+    @("rm8", "imm8")
     auto sal(RM)(RM dst, ubyte imm8) if (valid!(RM, 8))
     {
         if (imm8 == 1)
@@ -2571,7 +2565,9 @@ public:
         else
             return emit!4(0xc0, dst, imm8);
     }
+    @("rm16")
     auto sal(RM)(RM dst) if (valid!(RM, 16)) => emit!4(0xd3, dst, cl);
+    @("rm16", "imm8")
     auto sal(RM)(RM dst, ubyte imm8) if (valid!(RM, 16))
     {
         if (imm8 == 1)
@@ -2579,7 +2575,9 @@ public:
         else
             return emit!4(0xc1, dst, imm8);
     }
+    @("rm32")
     auto sal(RM)(RM dst) if (valid!(RM, 32)) => emit!4(0xd3, dst, cl);
+    @("rm32", "imm8")
     auto sal(RM)(RM dst, ubyte imm8) if (valid!(RM, 32))
     {
         if (imm8 == 1)
@@ -2587,7 +2585,9 @@ public:
         else
             return emit!4(0xc1, dst, imm8);
     }
+    @("rm64")
     auto sal(RM)(RM dst) if (valid!(RM, 64)) => emit!4(0xd3, dst, cl);
+    @("rm64", "imm8")
     auto sal(RM)(RM dst, ubyte imm8) if (valid!(RM, 64))
     {
         if (imm8 == 1)
@@ -2596,15 +2596,9 @@ public:
             return emit!4(0xc1, dst, imm8);
     }
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto sar(RM)(RM dst) if (valid!(RM, 8)) => emit!7(0xd2, dst, cl);
+    @("rm8", "imm8")
     auto sar(RM)(RM dst, ubyte imm8) if (valid!(RM, 8))
     {
         if (imm8 == 1)
@@ -2612,7 +2606,9 @@ public:
         else
             return emit!7(0xc0, dst, imm8);
     }
+    @("rm16")
     auto sar(RM)(RM dst) if (valid!(RM, 16)) => emit!7(0xd3, dst, cl);
+    @("rm16", "imm8")
     auto sar(RM)(RM dst, ubyte imm8) if (valid!(RM, 16))
     {
         if (imm8 == 1)
@@ -2620,7 +2616,9 @@ public:
         else
             return emit!7(0xc1, dst, imm8);
     }
+    @("rm32")
     auto sar(RM)(RM dst) if (valid!(RM, 32)) => emit!7(0xd3, dst, cl);
+    @("rm32", "imm8")
     auto sar(RM)(RM dst, ubyte imm8) if (valid!(RM, 32))
     {
         if (imm8 == 1)
@@ -2628,7 +2626,9 @@ public:
         else
             return emit!7(0xc1, dst, imm8);
     }
+    @("rm64")
     auto sar(RM)(RM dst) if (valid!(RM, 64)) => emit!7(0xd3, dst, cl);
+    @("rm64", "imm8")
     auto sar(RM)(RM dst, ubyte imm8) if (valid!(RM, 64))
     {
         if (imm8 == 1)
@@ -2637,32 +2637,26 @@ public:
             return emit!7(0xc1, dst, imm8);
     }
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto shl(RM)(RM dst) if (valid!(RM, 8)) => sal(dst);
+    @("rm8", "imm8")
     auto shl(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => sal(dst, imm8);
+    @("rm16")
     auto shl(RM)(RM dst) if (valid!(RM, 16)) => sal(dst);
+    @("rm16", "imm8")
     auto shl(RM)(RM dst, ubyte imm8) if (valid!(RM, 16)) => sal(dst, imm8);
+    @("rm32")
     auto shl(RM)(RM dst) if (valid!(RM, 32)) => sal(dst);
+    @("rm32", "imm8")
     auto shl(RM)(RM dst, ubyte imm8) if (valid!(RM, 32)) => sal(dst, imm8);
+    @("rm64")
     auto shl(RM)(RM dst) if (valid!(RM, 64)) => sal(dst);
+    @("rm64", "imm8")
     auto shl(RM)(RM dst, ubyte imm8) if (valid!(RM, 64)) => sal(dst, imm8);
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto shr(RM)(RM dst) if (valid!(RM, 8)) => emit!5(0xd2, dst, cl);
+    @("rm8", "imm8")
     auto shr(RM)(RM dst, ubyte imm8) if (valid!(RM, 8))
     {
         if (imm8 == 1)
@@ -2670,7 +2664,9 @@ public:
         else
             return emit!5(0xc0, dst, imm8);
     }
+    @("rm16")
     auto shr(RM)(RM dst) if (valid!(RM, 16)) => emit!5(0xd3, dst, cl);
+    @("rm16", "imm8")
     auto shr(RM)(RM dst, ubyte imm8) if (valid!(RM, 16))
     {
         if (imm8 == 1)
@@ -2678,7 +2674,9 @@ public:
         else
             return emit!5(0xc1, dst, imm8);
     }
+    @("rm32")
     auto shr(RM)(RM dst) if (valid!(RM, 32)) => emit!5(0xd3, dst, cl);
+    @("rm32", "imm8")
     auto shr(RM)(RM dst, ubyte imm8) if (valid!(RM, 32))
     {
         if (imm8 == 1)
@@ -2686,7 +2684,9 @@ public:
         else
             return emit!5(0xc1, dst, imm8);
     }
+    @("rm64")
     auto shr(RM)(RM dst) if (valid!(RM, 64)) => emit!5(0xd3, dst, cl);
+    @("rm64", "imm8")
     auto shr(RM)(RM dst, ubyte imm8) if (valid!(RM, 64))
     {
         if (imm8 == 1)
@@ -2695,15 +2695,9 @@ public:
             return emit!5(0xc1, dst, imm8);
     }
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto rcl(RM)(RM dst) if (valid!(RM, 8)) => emit!2(0xd2, dst, cl);
+    @("rm8", "imm8")
     auto rcl(RM)(RM dst, ubyte imm8) if (valid!(RM, 8))
     {
         if (imm8 == 1)
@@ -2711,7 +2705,9 @@ public:
         else
             return emit!2(0xc0, dst, imm8);
     }
+    @("rm16")
     auto rcl(RM)(RM dst) if (valid!(RM, 16)) => emit!2(0xd3, dst, cl);
+    @("rm16", "imm8")
     auto rcl(RM)(RM dst, ubyte imm8) if (valid!(RM, 16))
     {
         if (imm8 == 1)
@@ -2719,7 +2715,9 @@ public:
         else
             return emit!2(0xc1, dst, imm8);
     }
+    @("rm32")
     auto rcl(RM)(RM dst) if (valid!(RM, 32)) => emit!2(0xd3, dst, cl);
+    @("rm32", "imm8")
     auto rcl(RM)(RM dst, ubyte imm8) if (valid!(RM, 32))
     {
         if (imm8 == 1)
@@ -2727,7 +2725,9 @@ public:
         else
             return emit!2(0xc1, dst, imm8);
     }
+    @("rm64")
     auto rcl(RM)(RM dst) if (valid!(RM, 64)) => emit!2(0xd3, dst, cl);
+    @("rm64", "imm8")
     auto rcl(RM)(RM dst, ubyte imm8) if (valid!(RM, 64))
     {
         if (imm8 == 1)
@@ -2736,15 +2736,9 @@ public:
             return emit!2(0xc1, dst, imm8);
     }
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto rcr(RM)(RM dst) if (valid!(RM, 8)) => emit!3(0xd2, dst, cl);
+    @("rm8", "imm8")
     auto rcr(RM)(RM dst, ubyte imm8) if (valid!(RM, 8))
     {
         if (imm8 == 1)
@@ -2752,7 +2746,9 @@ public:
         else
             return emit!3(0xc0, dst, imm8);
     }
+    @("rm16")
     auto rcr(RM)(RM dst) if (valid!(RM, 16)) => emit!3(0xd3, dst, cl);
+    @("rm16", "imm8")
     auto rcr(RM)(RM dst, ubyte imm8) if (valid!(RM, 16))
     {
         if (imm8 == 1)
@@ -2760,7 +2756,9 @@ public:
         else
             return emit!3(0xc1, dst, imm8);
     }
+    @("rm32")
     auto rcr(RM)(RM dst) if (valid!(RM, 32)) => emit!3(0xd3, dst, cl);
+    @("rm32", "imm8")
     auto rcr(RM)(RM dst, ubyte imm8) if (valid!(RM, 32))
     {
         if (imm8 == 1)
@@ -2768,7 +2766,9 @@ public:
         else
             return emit!3(0xc1, dst, imm8);
     }
+    @("rm64")
     auto rcr(RM)(RM dst) if (valid!(RM, 64)) => emit!3(0xd3, dst, cl);
+    @("rm64", "imm8")
     auto rcr(RM)(RM dst, ubyte imm8) if (valid!(RM, 64))
     {
         if (imm8 == 1)
@@ -2777,15 +2777,9 @@ public:
             return emit!3(0xc1, dst, imm8);
     }
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto rol(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0xd2, dst, cl);
+    @("rm8", "imm8")
     auto rol(RM)(RM dst, ubyte imm8) if (valid!(RM, 8))
     {
         if (imm8 == 1)
@@ -2793,7 +2787,9 @@ public:
         else
             return emit!0(0xc0, dst, imm8);
     }
+    @("rm16")
     auto rol(RM)(RM dst) if (valid!(RM, 16)) => emit!0(0xd3, dst, cl);
+    @("rm16", "imm8")
     auto rol(RM)(RM dst, ubyte imm8) if (valid!(RM, 16))
     {
         if (imm8 == 1)
@@ -2801,7 +2797,9 @@ public:
         else
             return emit!0(0xc1, dst, imm8);
     }
+    @("rm32")
     auto rol(RM)(RM dst) if (valid!(RM, 32)) => emit!0(0xd3, dst, cl);
+    @("rm32", "imm8")
     auto rol(RM)(RM dst, ubyte imm8) if (valid!(RM, 32))
     {
         if (imm8 == 1)
@@ -2809,7 +2807,9 @@ public:
         else
             return emit!0(0xc1, dst, imm8);
     }
+    @("rm64")
     auto rol(RM)(RM dst) if (valid!(RM, 64)) => emit!0(0xd3, dst, cl);
+    @("rm64", "imm8")
     auto rol(RM)(RM dst, ubyte imm8) if (valid!(RM, 64))
     {
         if (imm8 == 1)
@@ -2818,15 +2818,9 @@ public:
             return emit!0(0xc1, dst, imm8);
     }
 
-    @(["rm8"])
-    @(["rm8, imm8"])
-    @(["rm16"])
-    @(["rm16, imm8"])
-    @(["rm32"])
-    @(["rm32, imm8"])
-    @(["rm64"])
-    @(["rm64, imm8"])
+    @("rm8")
     auto ror(RM)(RM dst) if (valid!(RM, 8)) => emit!1(0xd2, dst, cl);
+    @("rm8", "imm8")
     auto ror(RM)(RM dst, ubyte imm8) if (valid!(RM, 8))
     {
         if (imm8 == 1)
@@ -2834,7 +2828,9 @@ public:
         else
             return emit!1(0xc0, dst, imm8);
     }
+    @("rm16")
     auto ror(RM)(RM dst) if (valid!(RM, 16)) => emit!1(0xd3, dst, cl);
+    @("rm16", "imm8")
     auto ror(RM)(RM dst, ubyte imm8) if (valid!(RM, 16))
     {
         if (imm8 == 1)
@@ -2842,7 +2838,9 @@ public:
         else
             return emit!1(0xc1, dst, imm8);
     }
+    @("rm32")
     auto ror(RM)(RM dst) if (valid!(RM, 32)) => emit!1(0xd3, dst, cl);
+    @("rm32", "imm8")
     auto ror(RM)(RM dst, ubyte imm8) if (valid!(RM, 32))
     {
         if (imm8 == 1)
@@ -2850,7 +2848,9 @@ public:
         else
             return emit!1(0xc1, dst, imm8);
     }
+    @("rm64")
     auto ror(RM)(RM dst) if (valid!(RM, 64)) => emit!1(0xd3, dst, cl);
+    @("rm64", "imm8")
     auto ror(RM)(RM dst, ubyte imm8) if (valid!(RM, 64))
     {
         if (imm8 == 1)
@@ -2859,53 +2859,54 @@ public:
             return emit!1(0xc1, dst, imm8);
     }
 
-    @(["rm16"])
+    @("rm16")
     auto verr(RM)(RM dst) if (valid!(RM, 16)) => emit!4(0xf0, 0x00, dst);
-    @(["rm16"])
+    @("rm16")
     auto verw(RM)(RM dst) if (valid!(RM, 16)) => emit!5(0xf0, 0x00, dst);
 
-    @(["imm8"])
-    @(["imm16"])
-    @(["imm32"])
-    @(["rm8, imm8"])
-    @(["rm16, imm16"])
-    @(["rm32, imm32"])
-    @(["rm64, imm32"])
-    @(["rm8, r8"])
-    @(["rm16, r16"])
-    @(["rm32, r32"])
-    @(["rm64, r64"])
+    @("imm8")
     auto test(ubyte imm8) => emit!0(0xa8, imm8);
+    @("imm16")
     auto test(ushort imm16) => emit!0(0xa9, imm16);
+    @("imm32")
     auto test(uint imm32) => emit!0(0xa9, imm32);
+    @("imm64")
     auto test(ulong imm32) => emit!0(0xa9, cast(long)imm32);
 
+    @("rm8", "imm8")
     auto test(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => emit!0(0xf6, dst, imm8);
+    @("rm16", "imm16")
     auto test(RM)(RM dst, ushort imm16) if (valid!(RM, 16)) => emit!0(0xf7, dst, imm16);
+    @("rm32", "imm32")
     auto test(RM)(RM dst, uint imm32) if (valid!(RM, 32)) => emit!0(0xf7, dst, imm32);
+    @("rm64", "imm32")
     auto test(RM)(RM dst, uint imm32) if (valid!(RM, 64)) => emit!0(0xf7, dst, cast(long)imm32);
 
+    @("rm8", "r8")
     auto test(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x84, dst, src);
+    @("rm16", "r16")
     auto test(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x85, dst, src);
+    @("rm32", "r32")
     auto test(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x85, dst, src);
+    @("rm64", "r64")
     auto test(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x85, dst, src);
 
-    @(["m16"])
-    @(["m32"])
-    @(["m64"])
-    @(["r16"])
-    @(["r32"])
-    @(["r64"])
+    @("m16")
     auto pop(Address!16 dst) => emit!0(0x8f, dst);
     static if (!X64)
+    @("m32")
     auto pop(Address!32 dst) => emit!(0, NP)(0x8f, dst);
     static if (X64)
+    @("m64")
     auto pop(Address!64 dst) => emit!(0, NP)(0x8f, dst);
 
+    @("r16")
     auto pop(R16 dst) => emit!(0, NRM)(0x58, dst);
     static if (!X64)
+    @("r32")
     auto pop(R32 dst) => emit!(0, NRM)(0x58, dst);
     static if (X64)
+    @("r64")
     auto pop(R64 dst) => emit!(0, NRM)(0x58, dst);
 
     @([])
@@ -2931,29 +2932,29 @@ public:
     @([])
     auto popfq() => emit!0(0x9d);
 
-    @(["m16"])
-    @(["m32"])
-    @(["m64"])
-    @(["r16"])
-    @(["r32"])
-    @(["r64"])
-    @(["imm8"])
-    @(["imm16"])
-    @(["imm32"])
+    @("m16")
     auto push(Address!16 dst) => emit!6(0xff, dst);
     static if (!X64)
+    @("m32")
     auto push(Address!32 dst) => emit!(6, NP)(0xff, dst);
     static if (X64)
+    @("m64")
     auto push(Address!64 dst) => emit!(6, NP)(0xff, dst);
 
+    @("r16")
     auto push(R16 dst) => emit!(0, NRM)(0x50, dst);
     static if (!X64)
+    @("r32")
     auto push(R32 dst) => emit!(0, NRM)(0x50, dst);
     static if (X64)
+    @("r64")
     auto push(R64 dst) => emit!(0, NRM)(0x50, dst);
 
+    @("imm8")
     auto push(ubyte imm8) => emit!0(0x6a, imm8);
+    @("imm16")
     auto push(ushort imm16) => emit!0(0x68, imm16);
+    @("imm32")
     auto push(uint imm32) => emit!0(0x68, imm32);
 
     @([])
@@ -2981,29 +2982,29 @@ public:
     @([])
     auto pushfq() => emit!0(0x9c);
 
-    @(["rm8, r8"])
-    @(["rm16, r16"])
-    @(["rm32, r32"])
-    @(["rm64, r64"])
+    @("rm8", "r8")
     auto xadd(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x0f, 0xc0, dst, src);
+    @("rm16", "r16")
     auto xadd(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x0f, 0xc1, dst, src);
+    @("rm32", "r32")
     auto xadd(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x0f, 0xc1, dst, src);
+    @("rm64", "r64")
     auto xadd(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x0f, 0xc1, dst, src);
 
-    @(["r16"])
-    @(["r32"])
-    @(["r64"])
+    @("r16")
     auto xchg(R16 dst) => emit!(0, NRM)(90, dst);
+    @("r32")
     auto xchg(R32 dst) => emit!(0, NRM)(90, dst);
+    @("r64")
     auto xchg(R64 dst) => emit!(0, NRM)(90, dst);
 
-    @(["rm8, rm8"])
-    @(["rm16, rm16"])
-    @(["rm32, rm32"])
-    @(["rm64, rm64"])
+    @("rm8", "rm8")
     auto xchg(A, B)(A dst, B src) if (valid!(A, 8) && valid!(B, 8)) => emit!0(0x86, dst, src);
+    @("rm16", "rm16")
     auto xchg(A, B)(A dst, B src) if (valid!(A, 16) && valid!(B, 16)) => emit!0(0x87, dst, src);
+    @("rm32", "rm32")
     auto xchg(A, B)(A dst, B src) if (valid!(A, 32) && valid!(B, 32)) => emit!0(0x87, dst, src);
+    @("rm64", "rm64")
     auto xchg(A, B)(A dst, B src) if (valid!(A, 64) && valid!(B, 64)) => emit!0(0x87, dst, src);
 
     @([])
@@ -3015,13 +3016,13 @@ public:
     @([])
     auto xlatb() => emit!0(0x48, 0xd7);
 
-    @(["r16", "m16"])
-    @(["r16", "r16"])
-    @(["r32", "m16"])
-    @(["r32", "r32"])
+    @("r16", "m16")
     auto lar(R16 dst, Address!16 src) => emit!0(0x0f, 0x02, dst, src);
+    @("r16", "r16")
     auto lar(R16 dst, R16 src) => emit!0(0x0f, 0x02, dst, src);
+    @("r32", "m16")
     auto lar(R32 dst, Address!16 src) => emit!0(0x0f, 0x02, dst, src);
+    @("r32", "r32")
     auto lar(R32 dst, R32 src) => emit!0(0x0f, 0x02, dst, src);
 
     @([])
@@ -3029,300 +3030,300 @@ public:
     @([])
     auto das() => emit!0(0x2f);
 
-    @(["rm8"])
-    @(["rm16"])
-    @(["rm32"])
-    @(["rm64"])
+    @("rm8")
     auto mul(RM)(RM dst) if (valid!(RM, 8)) => emit!4(0xf6, dst);
+    @("rm16")
     auto mul(RM)(RM dst) if (valid!(RM, 16)) => emit!4(0xf7, dst);
+    @("rm32")
     auto mul(RM)(RM dst) if (valid!(RM, 32)) => emit!4(0xf7, dst);
+    @("rm64")
     auto mul(RM)(RM dst) if (valid!(RM, 64)) => emit!4(0xf7, dst);
 
-    @(["rm8"])
-    @(["rm16"])
-    @(["rm32"])
-    @(["rm64"])
-    @(["r16, rm16"])
-    @(["r32, rm32"])
-    @(["r64, rm64"])
-    @(["r16, rm16, imm8"])
-    @(["r32, rm32, imm8"])
-    @(["r64, rm64, imm8"])
-    @(["r16, rm16, imm16"])
-    @(["r32, rm32, imm32"])
-    @(["r64, rm64, imm32"])
+    @("rm8")
     auto imul(RM)(RM dst) if (valid!(RM, 8)) => emit!5(0xf6, dst);
+    @("rm16")
     auto imul(RM)(RM dst) if (valid!(RM, 16)) => emit!5(0xf7, dst);
+    @("rm32")
     auto imul(RM)(RM dst) if (valid!(RM, 32)) => emit!5(0xf7, dst);
+    @("rm64")
     auto imul(RM)(RM dst) if (valid!(RM, 64)) => emit!5(0xf7, dst);
 
+    @("r16", "rm16")
     auto imul(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0xaf, dst, src);
+    @("r32", "rm32")
     auto imul(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0xaf, dst, src);
+    @("r64", "rm64")
     auto imul(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0xaf, dst, src);
 
+    @("r16", "rm16", "imm8")
     auto imul(RM)(R16 dst, RM src, ubyte imm8) if (valid!(RM, 16)) => emit!0(0x6b, dst, src, imm8);
+    @("r32", "rm32", "imm8")
     auto imul(RM)(R32 dst, RM src, ubyte imm8) if (valid!(RM, 32)) => emit!0(0x6b, dst, src, imm8);
+    @("r64", "rm64", "imm8")
     auto imul(RM)(R64 dst, RM src, ubyte imm8) if (valid!(RM, 64)) => emit!0(0x6b, dst, src, imm8);
+    @("r16", "rm16", "imm16")
     auto imul(RM)(R16 dst, RM src, ushort imm16) if (valid!(RM, 16)) => emit!0(0x69, dst, src, imm16);
+    @("r32", "rm32", "imm32")
     auto imul(RM)(R32 dst, RM src, uint imm32) if (valid!(RM, 32)) => emit!0(0x69, dst, src, imm32);
+    @("r64", "rm64", "imm32")
     auto imul(RM)(R64 dst, RM src, uint imm32) if (valid!(RM, 64)) => emit!0(0x69, dst, src, imm32);
 
-    @(["rm8"])
-    @(["rm16"])
-    @(["rm32"])
-    @(["rm64"])
+    @("rm8")
     auto div(RM)(RM dst) if (valid!(RM, 8)) => emit!6(0xf6, dst);
+    @("rm16")
     auto div(RM)(RM dst) if (valid!(RM, 16)) => emit!6(0xf7, dst);
+    @("rm32")
     auto div(RM)(RM dst) if (valid!(RM, 32)) => emit!6(0xf7, dst);
+    @("rm64")
     auto div(RM)(RM dst) if (valid!(RM, 64)) => emit!6(0xf7, dst);
 
-    @(["rm8"])
-    @(["rm16"])
-    @(["rm32"])
-    @(["rm64"])
+    @("rm8")
     auto idiv(RM)(RM dst) if (valid!(RM, 8)) => emit!7(0xf6, dst);
+    @("rm16")
     auto idiv(RM)(RM dst) if (valid!(RM, 16)) => emit!7(0xf7, dst);
+    @("rm32")
     auto idiv(RM)(RM dst) if (valid!(RM, 32)) => emit!7(0xf7, dst);
+    @("rm64")
     auto idiv(RM)(RM dst) if (valid!(RM, 64)) => emit!7(0xf7, dst);
 
-    @(["rm8, r8"])
-    @(["rm16, r16"])
-    @(["rm32. r32"])
-    @(["rm64, r64"])
-    @(["r8, m8"])
-    @(["r16, m16"])
-    @(["r32, m32"])
-    @(["r64, m64"])
-    @(["r8, imm8"])
-    @(["r16, imm16"])
-    @(["r32, imm32"])
-    @(["r64, imm64"])
-    @(["m8, imm8"])
-    @(["m16, imm16"])
-    @(["m32, imm32"])
-    @(["m64, imm32"])
-    @(["r32, cr"])
-    @(["r64, cr"])
-    @(["cr, r32"])
-    @(["cr, r64"])
-    @(["r32, dr"])
-    @(["r64, dr"])
-    @(["dr, r32"])
-    @(["dr, r64"])
+    @("rm8", "r8")
     auto mov(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x88, dst, src);
+    @("rm16", "r16")
     auto mov(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x89, dst, src);
+    @("rm32", "r32")
     auto mov(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x89, dst, src);
+    @("rm64", "r64")
     auto mov(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x89, dst, src);
 
+    @("r8", "m8")
     auto mov(R8 dst, Address!8 src) => emit!0(0x8a, dst, src);
+    @("r16", "m16")
     auto mov(R16 dst, Address!16 src) => emit!0(0x8b, dst, src);
+    @("r32", "m32")
     auto mov(R32 dst, Address!32 src) => emit!0(0x8b, dst, src);
+    @("r64", "m64")
     auto mov(R64 dst, Address!64 src) => emit!0(0x8b, dst, src);
     
+    @("r8", "imm8")
     auto mov(R8 dst, ubyte imm8) => emit!(0, NRM)(0xb0, dst, imm8);
+    @("r16", "imm16")
     auto mov(R16 dst, ushort imm16) => emit!(0, NRM)(0xb8, dst, imm16);
+    @("r32", "imm32")
     auto mov(R32 dst, uint imm32) => emit!(0, NRM)(0xb8, dst, imm32);
+    @("r64", "imm64")
     auto mov(R64 dst, ulong imm64) => emit!(0, NRM)(0xb8, dst, imm64);
 
+    @("m8", "imm8")
     auto mov(Address!8 dst, ubyte imm8) => emit!0(0xc6, dst, imm8);
+    @("m16", "imm16")
     auto mov(Address!16 dst, ushort imm16) => emit!0(0xc7, dst, imm16);
+    @("m32", "imm32")
     auto mov(Address!32 dst, uint imm32) => emit!0(0xc7, dst, imm32);
+    @("m64", "imm32")
     auto mov(Address!64 dst, uint imm32) => emit!0(0xc7, dst, imm32);
 
+    @("r32", "cr")
     auto mov(R32 dst, CR src) => emit!0(0x0f, 0x20, dst, src);
+    @("r64", "cr")
     auto mov(R64 dst, CR src) => emit!0(0x0f, 0x20, dst, src);
+    @("cr", "r32")
     auto mov(CR dst, R32 src) => emit!0(0x0f, 0x22, dst, src);
+    @("cr", "r64")
     auto mov(CR dst, R64 src) => emit!0(0x0f, 0x22, dst, src);
 
+    @("r32", "dr")
     auto mov(R32 dst, DR src) => emit!0(0x0f, 0x21, dst, src);
+    @("r64", "dr")
     auto mov(R64 dst, DR src) => emit!0(0x0f, 0x21, dst, src);
+    @("dr", "r32")
     auto mov(DR dst, R32 src) => emit!0(0x0f, 0x23, dst, src);
+    @("dr", "r64")
     auto mov(DR dst, R64 src) => emit!0(0x0f, 0x23, dst, src);
 
-    @(["r16, rm8"])
-    @(["r32, rm8"])
-    @(["r64, rm8"])
-    @(["r32, rm16"])
-    @(["r64, rm16"])
+    @("r16", "rm8")
     auto movsx(RM)(R16 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xbe, dst, src);
+    @("r32", "rm8")
     auto movsx(RM)(R32 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xbe, dst, src);
+    @("r64", "rm8")
     auto movsx(RM)(R64 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xbe, dst, src);
 
+    @("r32", "rm16")
     auto movsx(RM)(R32 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0xbf, dst, src);
+    @("r64", "rm16")
     auto movsx(RM)(R64 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0xbf, dst, src);
 
-    @(["r16, rm16"])
-    @(["r32, rm32"])
-    @(["r64, rm32"])
+    @("r16", "rm16")
     auto movsxd(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x63, dst, src);
+    @("r32", "rm32")
     auto movsxd(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x63, dst, src);
+    @("r64", "rm32")
     auto movsxd(RM)(R64 dst, RM src) if (valid!(RM, 32)) => emit!0(0x63, dst, src);
 
-    @(["r16, rm8"])
-    @(["r32, rm8"])
-    @(["r64, rm8"])
-    @(["r32, rm16"])
-    @(["r64, rm16"])
+    @("r16", "rm8")
     auto movzx(RM)(R16 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xb6, dst, src);
+    @("r32", "rm8")
     auto movzx(RM)(R32 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xb6, dst, src);
+    @("r64", "rm8")
     auto movzx(RM)(R64 dst, RM src) if (valid!(RM, 8)) => emit!0(0x0f, 0xb6, dst, src);
 
+    @("r32", "rm16")
     auto movzx(RM)(R32 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0xb7, dst, src);
+    @("r64", "rm16")
     auto movzx(RM)(R64 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0xb7, dst, src);
 
-    @(["imm16"])
-    @(["imm32"])
-    @(["r16"])
-    @(["r32"])
-    @(["r64"])
-    @(["m16"])
-    @(["m32"])
-    @(["m64"])
+    @("imm16")
     auto call(ushort rel16) => emit!0(0xe8, rel16);
+    @("imm32")
     auto call(uint rel32) => emit!0(0xe8, rel32);
 
+    @("r16")
     auto call(R16 dst) => emit!2(0xff, dst);
+    @("r32")
     auto call(R32 dst) => emit!2(0xff, dst);
+    @("r64")
     auto call(R64 dst) => emit!2(0xff, dst);
 
+    @("m16")
     auto call(Address!16 dst) => emit!3(0xff, dst);
+    @("m32")
     auto call(Address!32 dst) => emit!3(0xff, dst);
+    @("m64")
     auto call(Address!64 dst) => emit!3(0xff, dst);
 
-    @(["jump"])
+    @("jump")
     auto loop(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "loop", name !in labels);
-    @(["jump"])
+    @("jump")
     auto loope(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "loope", name !in labels);
-    @(["jump"])
+    @("jump")
     auto loopne(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "loopne", name !in labels);
 
-    @(["jump"])
-    @(["rm16"])
-    @(["rm32"])
-    @(["rm64"])
-    @(["imm16"])
-    @(["imm32"])
+    @("jump")
     auto jmp(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jmp", name !in labels);
+    @("rm16")
     auto jmp(RM)(RM dst) if (valid!(RM, 16)) => emit!4(0xff, dst);
+    @("rm32")
     auto jmp(RM)(RM dst) if (valid!(RM, 32)) => emit!4(0xff, dst);
+    @("rm64")
     auto jmp(RM)(RM dst) if (valid!(RM, 64)) => emit!4(0xff, dst);
 
     /* auto jmp(Address!16 dst) => emit!5(0xff, dst);
     auto jmp(Address!32 dst) => emit!5(0xff, dst);
     auto jmp(Address!64 dst) => emit!5(0xff, dst); */
 
+    @("imm16")
     auto jmp(ushort imm16) => emit!0(0xea, imm16);
+    @("imm32")
     auto jmp(uint imm32) => emit!0(0xea, imm32);
 
-    @(["jump"])
+    @("jump")
     auto ja(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "ja", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jae(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jae", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jb(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jb", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jbe(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jbe", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jc(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jc", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jcxz(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jcxz", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jecxz(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jecxz", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jrcxz(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jrcxz", name !in labels);
-    @(["jump"])
+    @("jump")
     auto je(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "je", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jg(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jg", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jge(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jge", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jl(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jl", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jle(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jle", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jna(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jna", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnae(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnae", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnb(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnb", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnbe(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnbe", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnc(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnc", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jne(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jne", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jng(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jng", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnge(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnge", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnl(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnl", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnle(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnle", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jno(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jno", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnp(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnp", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jns(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jns", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jnz(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jnz", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jo(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jo", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jp(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jp", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jpe(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jpe", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jpo(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jpo", name !in labels);
-    @(["jump"])
+    @("jump")
     auto js(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "js", name !in labels);
-    @(["jump"])
+    @("jump")
     auto jz(string name) => branches ~= tuple(cast(ptrdiff_t)buffer.length, name, "jz", name !in labels);
         
-    @(["prefix"])
+    @("prefix")
     auto rep(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0xf3~buffer[(buffer.length - size)..$];
         return size + 1;
     }
         
-    @(["prefix"])
+    @("prefix")
     auto repe(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0xf3~buffer[(buffer.length - size)..$];
         return size + 1;
     }
         
-    @(["prefix"])
+    @("prefix")
     auto repz(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0xf3~buffer[(buffer.length - size)..$];
         return size + 1;
     }
         
-    @(["prefix"])
+    @("prefix")
     auto repne(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0xf2~buffer[(buffer.length - size)..$];
         return size + 1;
     }
 
-    @(["prefix"])
+    @("prefix")
     auto repnz(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0xf2~buffer[(buffer.length - size)..$];
         return size + 1;
     }
 
-    @(["m8, m8"])
-    @(["m16, m16"])
-    @(["m32, m32"])
-    @(["m64, m64"])
+    @("m8", "m8")
     auto movs(Address!8 dst, Address!8 src) => emit!0(0xa4, dst, src);
+    @("m16", "m16")
     auto movs(Address!16 dst, Address!16 src) => emit!0(0xa5, dst, src);
+    @("m32", "m32")
     auto movs(Address!32 dst, Address!32 src) => emit!0(0xa5, dst, src);
+    @("m64", "m64")
     auto movs(Address!64 dst, Address!64 src) => emit!0(0xa5, dst, src);
 
     @([])
@@ -3334,13 +3335,13 @@ public:
     @([])
     auto movsq() => emit!0(0x48, 0xa5);
 
-    @(["m8, m8"])
-    @(["m16, m16"])
-    @(["m32, m32"])
-    @(["m64, m64"])
+    @("m8", "m8")
     auto cmps(Address!8 dst, Address!8 src) => emit!0(0xa6, dst, src);
+    @("m16", "m16")
     auto cmps(Address!16 dst, Address!16 src) => emit!0(0xa7, dst, src);
+    @("m32", "m32")
     auto cmps(Address!32 dst, Address!32 src) => emit!0(0xa7, dst, src);
+    @("m64", "m64")
     auto cmps(Address!64 dst, Address!64 src) => emit!0(0xa7, dst, src);
 
     @([])
@@ -3352,13 +3353,13 @@ public:
     @([])
     auto cmpsq() => emit!0(0x48, 0xa7);
 
-    @(["m8"])
-    @(["m16"])
-    @(["m32"])
-    @(["m64"])
+    @("m8")
     auto scas(Address!8 dst) => emit!0(0xae, dst);
+    @("m16")
     auto scas(Address!16 dst) => emit!0(0xaf, dst);
+    @("m32")
     auto scas(Address!32 dst) => emit!0(0xaf, dst);
+    @("m64")
     auto scas(Address!64 dst) => emit!0(0xaf, dst);
 
     @([])
@@ -3370,13 +3371,13 @@ public:
     @([])
     auto scasq() => emit!0(0x48, 0xaf);
 
-    @(["m8"])
-    @(["m16"])
-    @(["m32"])
-    @(["m64"])
+    @("m8")
     auto lods(Address!8 dst) => emit!0(0xac, dst);
+    @("m16")
     auto lods(Address!16 dst) => emit!0(0xad, dst);
+    @("m32")
     auto lods(Address!32 dst) => emit!0(0xad, dst);
+    @("m64")
     auto lods(Address!64 dst) => emit!0(0xad, dst);
 
     @([])
@@ -3388,13 +3389,13 @@ public:
     @([])
     auto lodsq() => emit!0(0x48, 0xad);
 
-    @(["m8"])
-    @(["m16"])
-    @(["m32"])
-    @(["m64"])
+    @("m8")
     auto stos(Address!8 dst) => emit!0(0xaa, dst);
+    @("m16")
     auto stos(Address!16 dst) => emit!0(0xab, dst);
+    @("m32")
     auto stos(Address!32 dst) => emit!0(0xab, dst);
+    @("m64")
     auto stos(Address!64 dst) => emit!0(0xab, dst);
 
     @([])
@@ -3406,21 +3407,21 @@ public:
     @([])
     auto stosq() => emit!0(0x48, 0xab);
 
-    @(["imm8"])
-    @([])
+    @("imm8")
     auto inal(ubyte imm8) => emit!0(0xe4, imm8);
+    @([])
     auto inal() => emit!0(0xec);
 
-    @(["imm8"])
-    @([])
+    @("imm8")
     auto _in(ubyte imm8) => emit!0(0xe5, imm8);
+    @([])
     auto _in() => emit!0(0xed);
 
-    @(["m8"])
-    @(["m16"])
-    @(["m32"])
+    @("m8")
     auto ins(Address!8 dst) => emit!0(0x6c, dst);
+    @("m16")
     auto ins(Address!16 dst) => emit!0(0x6d, dst);
+    @("m32")
     auto ins(Address!32 dst) => emit!0(0x6d, dst);
 
     @([])
@@ -3430,21 +3431,21 @@ public:
     @([])
     auto insd() => emit!0(0x6d);
     
-    @(["imm8"])
-    @([])
+    @("imm8")
     auto outal(ubyte imm8) => emit!0(0xe6, imm8);
+    @([])
     auto outal() => emit!0(0xee);
 
-    @(["imm8"])
-    @([])
+    @("imm8")
     auto _out(ubyte imm8) => emit!0(0xe7, imm8);
+    @([])
     auto _out() => emit!0(0xef);
 
-    @(["m8"])
-    @(["m16"])
-    @(["m32"])
+    @("m8")
     auto outs(Address!8 dst) => emit!0(0x6e, dst);
+    @("m16")
     auto outs(Address!16 dst) => emit!0(0x6f, dst);
+    @("m32")
     auto outs(Address!32 dst) => emit!0(0x6f, dst);
 
     @([])
@@ -3454,101 +3455,74 @@ public:
     @([])
     auto outsd() => emit!0(0x6f);
 
-    @(["rm8"])
+    @("rm8")
     auto seta(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x97, dst);
-    @(["rm8"])
+    @("rm8")
     auto setae(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x93, dst);
-    @(["rm8"])
+    @("rm8")
     auto setb(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x92, dst);
-    @(["rm8"])
+    @("rm8")
     auto setbe(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x96, dst);
-    @(["rm8"])
+    @("rm8")
     auto setc(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x92, dst);
-    @(["rm8"])
+    @("rm8")
     auto sete(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x94, dst);
-    @(["rm8"])
+    @("rm8")
     auto setg(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9f, dst);
-    @(["rm8"])
+    @("rm8")
     auto setge(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9d, dst);
-    @(["rm8"])
+    @("rm8")
     auto setl(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9c, dst);
-    @(["rm8"])
+    @("rm8")
     auto setle(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9e, dst);
-    @(["rm8"])
+    @("rm8")
     auto setna(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x96, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnae(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x92, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnb(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x93, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnbe(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x97, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnc(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x93, dst);
-    @(["rm8"])
+    @("rm8")
     auto setne(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x95, dst);
-    @(["rm8"])
+    @("rm8")
     auto setng(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9e, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnge(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9c, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnl(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9d, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnle(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9f, dst);
-    @(["rm8"])
+    @("rm8")
     auto setno(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x91, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnp(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9b, dst);
-    @(["rm8"])
+    @("rm8")
     auto setns(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x99, dst);
-    @(["rm8"])
+    @("rm8")
     auto setnz(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x95, dst);
-    @(["rm8"])
+    @("rm8")
     auto seto(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x90, dst);
-    @(["rm8"])
+    @("rm8")
     auto setp(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9a, dst);
-    @(["rm8"])
+    @("rm8")
     auto setpe(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9a, dst);
-    @(["rm8"])
+    @("rm8")
     auto setpo(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x9b, dst);
-    @(["rm8"])
+    @("rm8")
     auto sets(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x98, dst);
-    @(["rm8"])
+    @("rm8")
     auto setz(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0x0f, 0x94, dst);
 
-    Address!8 bytePtr(Args...)(Args args)
-    {
-        return Address!8(args);
-    }
-
-    Address!16 wordPtr(Args...)(Args args)
-    {
-        return Address!16(args);
-    }
-
-    Address!32 dwordPtr(Args...)(Args args)
-    {
-        return Address!32(args);
-    }
-
-    Address!64 qwordPtr(Args...)(Args args)
-    {
-        return Address!64(args);
-    }
-
-    Address!128 xmmwordPtr(Args...)(Args args)
-    {
-        return Address!128(args);
-    }
-
-    Address!256 ymmwordPtr(Args...)(Args args)
-    {
-        return Address!256(args);
-    }
-
-    Address!512 zmmwordPtr(Args...)(Args args)
-    {
-        return Address!512(args);
-    }
+    Address!8 bytePtr(ARGS...)(ARGS args) => Address!8(args);
+    Address!16 wordPtr(ARGS...)(ARGS args) => Address!16(args);
+    Address!32 dwordPtr(ARGS...)(ARGS args) => Address!32(args);
+    Address!64 qwordPtr(ARGS...)(ARGS args) => Address!64(args);
+    Address!128 xmmwordPtr(ARGS...)(ARGS args) => Address!128(args);
+    Address!256 ymmwordPtr(ARGS...)(ARGS args) => Address!256(args);
+    Address!512 zmmwordPtr(ARGS...)(ARGS args) => Address!512(args);
 }
 
 unittest
@@ -3617,3 +3591,6 @@ unittest
     import std.stdio;
     debug writeln(block.finalize().toHexString);
 }
+
+static foreach (S; __traits(getOverloads, Block!true, "andn", true))
+    pragma(msg, S.stringof);
