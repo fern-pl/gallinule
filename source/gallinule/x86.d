@@ -2296,6 +2296,7 @@ public:
     auto cdqe() => emit!0(0x48, 0x98);
 
     auto cpuid() => emit!0(0x0f, 0xa2);
+    @("imm32")
     auto cpuid(uint imm32) => mov(eax, imm32) + cpuid();
 
     auto clc() => emit!0(0xf8);
@@ -2305,27 +2306,38 @@ public:
 
     auto cmc() => emit!0(0xf5);
 
+    @("rm8")
     auto dec(RM)(RM dst) if (valid!(RM, 8)) => emit!1(0xfe, dst);
     static if (X64)
+    @("rm16")
     auto dec(RM)(RM dst) if (valid!(RM, 16)) => emit!1(0xff, dst);
     static if (!X64)
+    @("m16")
     auto dec(Address!16 dst) => emit!1(0xff, dst);
     static if (X64)
+    @("rm32")
     auto dec(RM)(RM dst) if (valid!(RM, 32)) => emit!1(0xff, dst);
     static if (!X64)
+    @("m32")
     auto dec(Address!32 dst) => emit!1(0xff, dst);
+    @("rm64")
     auto dec(RM)(RM dst) if (valid!(RM, 64)) => emit!1(0xff, dst);
 
     static if (!X64)
+    @("r16")
     auto dec(R16 dst) => emit!(0, NRM)(0x48, dst);
     static if (!X64)
+    @("r32")
     auto dec(R32 dst) => emit!(0, NRM)(0x48, dst);
 
     auto int3() => emit!0(0xcc);
+    @("imm8")
     auto _int(ubyte imm8) => emit!0(0xcd, imm8);
     auto into() => emit!0(0xce);
     auto int1() => emit!0(0xf1);
+    @("r32", "rm32")
     auto ud0(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0xff, dst, src);
+    @("r32", "rm32")
     auto ud1(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0xb9, dst, src);
     auto ud2() => emit!0(0x0f, 0x0b);
     
@@ -2333,26 +2345,35 @@ public:
     auto iretd() => emit!0(0xcf);
     auto iretq() => emit!0(0xcf);
 
+    @("rm8")
     auto inc(RM)(RM dst) if (valid!(RM, 8)) => emit!0(0xfe, dst);
     static if (X64)
+    @("rm16")
     auto inc(RM)(RM dst) if (valid!(RM, 16)) => emit!0(0xff, dst);
     static if (!X64)
+    @("m16")
     auto inc(Address!16 dst) => emit!0(0xff, dst);
     static if (X64)
+    @("rm32")
     auto inc(RM)(RM dst) if (valid!(RM, 32)) => emit!0(0xff, dst);
     static if (!X64)
+    @("m32")
     auto inc(Address!32 dst) => emit!0(0xff, dst);
+    @("rm64")
     auto inc(RM)(RM dst) if (valid!(RM, 64)) => emit!0(0xff, dst);
 
     static if (!X64)
+    @("r16")
     auto inc(R16 dst) => emit!(0, NRM)(0x40, dst);
     static if (!X64)
+    @("r32")
     auto inc(R32 dst) => emit!(0, NRM)(0x40, dst);
 
     auto hlt() => emit!0(0xf4);
     auto pause() => emit!0(0xf3, 0x90);
     auto swapgs() => emit!0(0x0f, 0x01, 0xf8);
     
+    @("prefix")
     auto lock(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0xf0~buffer[(buffer.length - size)..$];
@@ -2368,107 +2389,180 @@ public:
     auto rsm() => emit!0(0x0f, 0xaa);
 
     auto leave() => emit!0(0xc9);
+    @("imm16")
     auto enter(ushort imm16) => emit!0(0xc8, imm16, 0x00);
+    @("imm16", "imm8")
     auto enter(ushort imm16, ubyte imm8) => emit!0(0xc8, imm16, imm8);
     
+    @("r16", "m16")
     auto lea(RM)(R16 dst, Address!16) => emit!0(0x8d, dst, src);
+    @("r32", "m32")
     auto lea(RM)(R32 dst, Address!32) => emit!0(0x8d, dst, src);
+    @("r64", "m64")
     auto lea(RM)(R64 dst, Address!64) => emit!0(0x8d, dst, src);
 
+    @("r16", "m16")
     auto lds(RM)(R16 dst, Address!16) => emit!0(0xc5, dst, src);
+    @("r32", "m32")
     auto lds(RM)(R32 dst, Address!32) => emit!0(0xc5, dst, src);
 
+    @("r16", "m16")
     auto lss(RM)(R16 dst, Address!16) => emit!0(0x0f, 0xb2, dst, src);
+    @("r32", "m32")
     auto lss(RM)(R32 dst, Address!32) => emit!0(0x0f, 0xb2, dst, src);
+    @("r64", "m64")
     auto lss(RM)(R64 dst, Address!64) => emit!0(0x0f, 0xb2, dst, src);
 
+    @("r16", "m16")
     auto les(RM)(R16 dst, Address!16) => emit!0(0xc4, dst, src);
+    @("r32", "m32")
     auto les(RM)(R32 dst, Address!32) => emit!0(0xc4, dst, src);
 
+    @("r16", "m16")
     auto lfs(RM)(R16 dst, Address!16) => emit!0(0x0f, 0xb4, dst, src);
+    @("r32", "m32")
     auto lfs(RM)(R32 dst, Address!32) => emit!0(0x0f, 0xb4, dst, src);
+    @("r64", "m64")
     auto lfs(RM)(R64 dst, Address!64) => emit!0(0x0f, 0xb4, dst, src);
 
+    @("r16", "m16")
     auto lgs(RM)(R16 dst, Address!16) => emit!0(0x0f, 0xb5, dst, src);
+    @("r32", "m32")
     auto lgs(RM)(R32 dst, Address!32) => emit!0(0x0f, 0xb5, dst, src);
+    @("r64", "m64")
     auto lgs(RM)(R64 dst, Address!64) => emit!0(0x0f, 0xb5, dst, src);
 
+    @("r16", "rm16")
     auto lsl(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x03, dst, src);
+    @("r32", "r32")
     auto lsl(R32 dst, R32 src) => emit!0(0x0f, 0x03, dst, src);
+    @("r64", "r32")
     auto lsl(R64 dst, R32 src) => emit!0(0x0f, 0x03, dst, src);
+    @("r32", "m16")
     auto lsl(R32 dst, Address!16 src) => emit!0(0x0f, 0x03, dst, src);
+    @("r64", "m16")
     auto lsl(R64 dst, Address!16 src) => emit!0(0x0f, 0x03, dst, src);
 
+    @("rm16")
     auto ltr(RM)(RM dst) if (valid!(RM, 16)) => emit!3(0x0f, 0x00, dst);
+    @("rm16")
     auto str(RM)(RM dst) if (valid!(RM, 16)) => emit!1(0x0f, 0x00, dst);
 
+    @("rm8")
     auto neg(RM)(RM dst) if (valid!(RM, 8)) => emit!3(0xf6, dst);
+    @("rm16")
     auto neg(RM)(RM dst) if (valid!(RM, 16)) => emit!3(0xf7, dst);
+    @("rm32")
     auto neg(RM)(RM dst) if (valid!(RM, 32)) => emit!3(0xf7, dst);
+    @("rm64")
     auto neg(RM)(RM dst) if (valid!(RM, 64)) => emit!3(0xf7, dst);
 
     auto nop() => emit!0(0x90);
-    auto nop(RM)(RM dst) if (valid!(RM, 16)) => emit!0(0x0f, 0x1f, dst);
+    @("rm16")
     auto nop(RM)(RM dst) if (valid!(RM, 16)) => emit!0(0x0f, 0x1f, dst);
 
+    @("rm8")
     auto not(RM)(RM dst) if (valid!(RM, 8)) => emit!2(0xf6, dst);
+    @("rm16")
     auto not(RM)(RM dst) if (valid!(RM, 16)) => emit!2(0xf7, dst);
+    @("rm32")
     auto not(RM)(RM dst) if (valid!(RM, 32)) => emit!2(0xf7, dst);
+    @("rm64")
     auto not(RM)(RM dst) if (valid!(RM, 64)) => emit!2(0xf7, dst);
 
     auto ret() => emit!0(0xc3);
+    @("imm16")
     auto ret(ushort imm16) => emit!0(0xc2, imm16);
     auto retf() => emit!0(0xcb);
+    @("imm16")
     auto retf(ushort imm16) => emit!0(0xca, imm16);
 
     auto stc() => emit!0(0xf9);
     auto std() => emit!0(0xfd);
     auto sti() => emit!0(0xfb);
 
+    @("imm8")
     auto sub(ubyte imm8) => emit!0(0x2c, imm8);
+    @("imm16")
     auto sub(ushort imm16) => emit!0(0x2d, imm16);
+    @("imm32")
     auto sub(uint imm32) => emit!0(0x2d, imm32);
+    @("imm64")
     auto sub(ulong imm32) => emit!0(0x2d, cast(long)imm32);
 
+    @("rm8", "imm8")
     auto sub(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => emit!5(0x80, dst, imm8);
+    @("rm16", "imm16")
     auto sub(RM)(RM dst, ushort imm16) if (valid!(RM, 16)) => emit!5(0x81, dst, imm16);
+    @("rm32", "imm32")
     auto sub(RM)(RM dst, uint imm32) if (valid!(RM, 32)) => emit!5(0x81, dst, imm32);
+    @("rm64", "imm32")
     auto sub(RM)(RM dst, uint imm32) if (valid!(RM, 64)) => emit!5(0x81, dst, imm32);
+    @("rm16", "imm8")
     auto sub(RM)(RM dst, ubyte imm8) if (valid!(RM, 16)) => emit!5(0x83, dst, imm8);
+    @("rm32", "imm8")
     auto sub(RM)(RM dst, ubyte imm8) if (valid!(RM, 32)) => emit!5(0x83, dst, imm8);
+    @("rm64", "imm8")
     auto sub(RM)(RM dst, ubyte imm8) if (valid!(RM, 64)) => emit!5(0x83, dst, imm8);
 
+    @("rm8", "r8")
     auto sub(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x28, dst, src);
+    @("rm16", "r16")
     auto sub(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x29, dst, src);
+    @("rm32", "r32")
     auto sub(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x29, dst, src);
+    @("rm64", "r64")
     auto sub(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x29, dst, src);
 
+    @("r8", "m8")
     auto sub(R8 dst, Address!8 src) => emit!0(0x2a, dst, src);
+    @("r16", "m16")
     auto sub(R16 dst, Address!16 src) => emit!0(0x2b, dst, src);
+    @("r32", "m32")
     auto sub(R32 dst, Address!32 src) => emit!0(0x2b, dst, src);
+    @("r64", "m64")
     auto sub(R64 dst, Address!64 src) => emit!0(0x2b, dst, src);
 
+    @("imm8")
     auto sbb(ubyte imm8) => emit!0(0x1c, imm8);
+    @("imm16")
     auto sbb(ushort imm16) => emit!0(0x1d, imm16);
+    @("imm32")
     auto sbb(uint imm32) => emit!0(0x1d, imm32);
+    @("imm64")
     auto sbb(ulong imm32) => emit!0(0x1d, cast(long)imm32);
 
+    @("rm8", "imm8")
     auto sbb(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => emit!3(0x80, dst, imm8);
+    @("rm16", "imm16")
     auto sbb(RM)(RM dst, ushort imm16) if (valid!(RM, 16)) => emit!3(0x81, dst, imm16);
+    @("rm32", "imm32")
     auto sbb(RM)(RM dst, uint imm32) if (valid!(RM, 32)) => emit!3(0x81, dst, imm32);
+    @("rm64", "imm32")
     auto sbb(RM)(RM dst, uint imm32) if (valid!(RM, 64)) => emit!3(0x81, dst, imm32);
+    @("rm16", "imm8")
     auto sbb(RM)(RM dst, ubyte imm8) if (valid!(RM, 16)) => emit!3(0x83, dst, imm8);
+    @("rm32", "imm8")
     auto sbb(RM)(RM dst, ubyte imm8) if (valid!(RM, 32)) => emit!3(0x83, dst, imm8);
+    @("rm64", "imm8")
     auto sbb(RM)(RM dst, ubyte imm8) if (valid!(RM, 64)) => emit!3(0x83, dst, imm8);
 
+    @("rm8", "r8")
     auto sbb(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x18, dst, src);
+    @("rm16", "r16")
     auto sbb(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x19, dst, src);
+    @("rm32", "r32")
     auto sbb(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x19, dst, src);
+    @("rm64", "r64")
     auto sbb(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x19, dst, src);
 
+    @("r8", "m8")
     auto sbb(R8 dst, Address!8 src) => emit!0(0x1a, dst, src);
+    @("r16", "m16")
     auto sbb(R16 dst, Address!16 src) => emit!0(0x1b, dst, src);
+    @("r32", "m32")
     auto sbb(R32 dst, Address!32 src) => emit!0(0x1b, dst, src);
+    @("r64", "m64")
     auto sbb(R64 dst, Address!64 src) => emit!0(0x1b, dst, src);
 
     @("imm8")
@@ -2477,7 +2571,7 @@ public:
     auto xor(ushort imm16) => emit!0(0x35, imm16);
     @("imm32")
     auto xor(uint imm32) => emit!0(0x35, imm32);
-    @("imm64")
+    @("imm32")
     auto xor(ulong imm32) => emit!0(0x35, cast(long)imm32);
 
     @("r8", "imm8")
@@ -2909,27 +3003,17 @@ public:
     @("r64")
     auto pop(R64 dst) => emit!(0, NRM)(0x58, dst);
 
-    @([])
     auto popds() => emit!0(0x1f);
-    @([])
     auto popes() => emit!0(0x07);
-    @([])
     auto popss() => emit!0(0x17);
-    @([])
     auto popfs() => emit!0(0x0f, 0xa1);
-    @([])
     auto popgs() => emit!0(0x0f, 0xa9); 
 
-    @([])
     auto popa() => emit!0(0x61);
-    @([])
     auto popad() => emit!0(0x61);
 
-    @([])
     auto popf() => emit!0(0x9d);
-    @([])
     auto popfd() => emit!0(0x9d);
-    @([])
     auto popfq() => emit!0(0x9d);
 
     @("m16")
@@ -2957,29 +3041,18 @@ public:
     @("imm32")
     auto push(uint imm32) => emit!0(0x68, imm32);
 
-    @([])
     auto pushcs() => emit!0(0x0e);
-    @([])
     auto pushss() => emit!0(0x16);
-    @([])
     auto pushds() => emit!0(0x1e);
-    @([])
     auto pushes() => emit!0(0x06);
-    @([])
     auto pushfs() => emit!0(0x0f, 0xa0);
-    @([])
     auto pushgs() => emit!0(0x0f, 0xa8); 
 
-    @([])
     auto pusha() => emit!0(0x60);
-    @([])
     auto pushad() => emit!0(0x60);
 
-    @([])
     auto pushf() => emit!0(0x9c);
-    @([])
     auto pushfd() => emit!0(0x9c);
-    @([])
     auto pushfq() => emit!0(0x9c);
 
     @("rm8", "r8")
@@ -3007,13 +3080,10 @@ public:
     @("rm64", "rm64")
     auto xchg(A, B)(A dst, B src) if (valid!(A, 64) && valid!(B, 64)) => emit!0(0x87, dst, src);
 
-    @([])
     auto xlat() => emit!0(0xd7);
     static if (!X64)
-    @([])
     auto xlatb() => emit!0(0xd7);
     static if (X64)
-    @([])
     auto xlatb() => emit!0(0x48, 0xd7);
 
     @("r16", "m16")
@@ -3025,9 +3095,7 @@ public:
     @("r32", "r32")
     auto lar(R32 dst, R32 src) => emit!0(0x0f, 0x02, dst, src);
 
-    @([])
     auto daa() => emit!0(0x27);
-    @([])
     auto das() => emit!0(0x2f);
 
     @("rm8")
@@ -3326,13 +3394,9 @@ public:
     @("m64", "m64")
     auto movs(Address!64 dst, Address!64 src) => emit!0(0xa5, dst, src);
 
-    @([])
     auto movsb() => emit!0(0xa4);
-    @([])
     auto movsw() => emit!0(0x66, 0xa5);
-    @([])
     auto movsd() => emit!0(0xa5);
-    @([])
     auto movsq() => emit!0(0x48, 0xa5);
 
     @("m8", "m8")
@@ -3344,13 +3408,9 @@ public:
     @("m64", "m64")
     auto cmps(Address!64 dst, Address!64 src) => emit!0(0xa7, dst, src);
 
-    @([])
     auto cmpsb() => emit!0(0xa6);
-    @([])
     auto cmpsw() => emit!0(0x66, 0xa7);
-    @([])
     auto cmpsd() => emit!0(0xa7);
-    @([])
     auto cmpsq() => emit!0(0x48, 0xa7);
 
     @("m8")
@@ -3362,13 +3422,9 @@ public:
     @("m64")
     auto scas(Address!64 dst) => emit!0(0xaf, dst);
 
-    @([])
     auto scasb() => emit!0(0xae);
-    @([])
     auto scasw() => emit!0(0x66, 0xaf);
-    @([])
     auto scasd() => emit!0(0xaf);
-    @([])
     auto scasq() => emit!0(0x48, 0xaf);
 
     @("m8")
@@ -3380,13 +3436,9 @@ public:
     @("m64")
     auto lods(Address!64 dst) => emit!0(0xad, dst);
 
-    @([])
     auto lodsb() => emit!0(0xac);
-    @([])
     auto lodsw() => emit!0(0x66, 0xad);
-    @([])
     auto lodsd() => emit!0(0xad);
-    @([])
     auto lodsq() => emit!0(0x48, 0xad);
 
     @("m8")
@@ -3398,23 +3450,17 @@ public:
     @("m64")
     auto stos(Address!64 dst) => emit!0(0xab, dst);
 
-    @([])
     auto stosb() => emit!0(0xaa);
-    @([])
     auto stosw() => emit!0(0x66, 0xab);
-    @([])
     auto stosd() => emit!0(0xab);
-    @([])
     auto stosq() => emit!0(0x48, 0xab);
 
     @("imm8")
     auto inal(ubyte imm8) => emit!0(0xe4, imm8);
-    @([])
     auto inal() => emit!0(0xec);
 
     @("imm8")
     auto _in(ubyte imm8) => emit!0(0xe5, imm8);
-    @([])
     auto _in() => emit!0(0xed);
 
     @("m8")
@@ -3424,21 +3470,16 @@ public:
     @("m32")
     auto ins(Address!32 dst) => emit!0(0x6d, dst);
 
-    @([])
     auto insb() => emit!0(0x6c);
-    @([])
     auto insw() => emit!0(0x66, 0x6d);
-    @([])
     auto insd() => emit!0(0x6d);
     
     @("imm8")
     auto outal(ubyte imm8) => emit!0(0xe6, imm8);
-    @([])
     auto outal() => emit!0(0xee);
 
     @("imm8")
     auto _out(ubyte imm8) => emit!0(0xe7, imm8);
-    @([])
     auto _out() => emit!0(0xef);
 
     @("m8")
@@ -3448,11 +3489,8 @@ public:
     @("m32")
     auto outs(Address!32 dst) => emit!0(0x6f, dst);
 
-    @([])
     auto outsb() => emit!0(0x6e);
-    @([])
     auto outsw() => emit!0(0x66, 0x6f);
-    @([])
     auto outsd() => emit!0(0x6f);
 
     @("rm8")
