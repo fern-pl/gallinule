@@ -1909,124 +1909,213 @@ public:
 
     /* ====== CMOV ====== */
 
+    @("r16", "rm16")
     auto cmova(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x47, dst, src);
+    @("r32", "rm32")
     auto cmova(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x47, dst, src);
+    @("r64", "rm64")
     auto cmova(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x47, dst, src);
     
+    @("r16", "rm16")
     auto cmovae(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x43, dst, src);
+    @("r32", "rm32")
     auto cmovae(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x43, dst, src);
+    @("r64", "rm64")
     auto cmovae(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x43, dst, src);
     
+    @("r16", "rm16")
     auto cmovb(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x42, dst, src);
+    @("r32", "rm32")
     auto cmovb(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x42, dst, src);
+    @("r64", "rm64")
     auto cmovb(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x42, dst, src);
     
+    @("r16", "rm16")
     auto cmovbe(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x46, dst, src);
+    @("r32", "rm32")
     auto cmovbe(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x46, dst, src);
+    @("r64", "rm64")
     auto cmovbe(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x46, dst, src);
     
+    @("r16", "rm16")
     auto cmovc(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x42, dst, src);
+    @("r32", "rm32")
     auto cmovc(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x42, dst, src);
+    @("r64", "rm64")
     auto cmovc(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x42, dst, src);
     
+    @("r16", "rm16")
     auto cmove(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x44, dst, src);
+    @("r32", "rm32")
     auto cmove(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x44, dst, src);
+    @("r64", "rm64")
     auto cmove(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x44, dst, src);
     
+    @("r16", "rm16")
     auto cmovg(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4f, dst, src);
+    @("r32", "rm32")
     auto cmovg(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4f, dst, src);
+    @("r64", "rm64")
     auto cmovg(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4f, dst, src);
     
+    @("r16", "rm16")
     auto cmovge(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4d, dst, src);
+    @("r32", "rm32")
     auto cmovge(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4d, dst, src);
+    @("r64", "rm64")
     auto cmovge(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4d, dst, src);
     
+    @("r16", "rm16")
     auto cmovl(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4c, dst, src);
+    @("r32", "rm32")
     auto cmovl(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4c, dst, src);
+    @("r64", "rm64")
     auto cmovl(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4c, dst, src);
     
+    @("r16", "rm16")
     auto cmovle(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4e, dst, src);
+    @("r32", "rm32")
     auto cmovle(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4e, dst, src);
+    @("r64", "rm64")
     auto cmovle(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4e, dst, src);
     
+    @("r16", "rm16")
     auto cmovna(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x46, dst, src);
+    @("r32", "rm32")
     auto cmovna(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x46, dst, src);
+    @("r64", "rm64")
     auto cmovna(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x46, dst, src);
     
+    @("r16", "rm16")
     auto cmovnae(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x42, dst, src);
+    @("r32", "rm32")
     auto cmovnae(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x42, dst, src);
+    @("r64", "rm64")
     auto cmovnae(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x42, dst, src);
     
+    @("r16", "rm16")
     auto cmovnb(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x43, dst, src);
+    @("r32", "rm32")
     auto cmovnb(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x43, dst, src);
+    @("r64", "rm64")
     auto cmovnb(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x43, dst, src);
     
+    @("r16", "rm16")
     auto cmovnbe(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x47, dst, src);
+    @("r32", "rm32")
     auto cmovnbe(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x47, dst, src);
+    @("r64", "rm64")
     auto cmovnbe(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x47, dst, src);
     
+    @("r16", "rm16")
     auto cmovnc(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x43, dst, src);
+    @("r32", "rm32")
     auto cmovnc(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x43, dst, src);
+    @("r64", "rm64")
     auto cmovnc(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x43, dst, src);
     
+    @("r16", "rm16")
     auto cmovne(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x45, dst, src);
+    @("r32", "rm32")
     auto cmovne(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x45, dst, src);
+    @("r64", "rm64")
     auto cmovne(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x45, dst, src);
     
+    @("r16", "rm16")
     auto cmovng(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4e, dst, src);
+    @("r32", "rm32")
     auto cmovng(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4e, dst, src);
     auto cmovng(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4e, dst, src);
     
+    @("r16", "rm16")
     auto cmovnge(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4c, dst, src);
+    @("r32", "rm32")
     auto cmovnge(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4c, dst, src);
+    @("r64", "rm64")
     auto cmovnge(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4c, dst, src);
     
+    @("r16", "rm16")
     auto cmovnl(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4d, dst, src);
+    @("r32", "rm32")
     auto cmovnl(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4d, dst, src);
+    @("r64", "rm64")
     auto cmovnl(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4d, dst, src);
     
+    @("r16", "rm16")
     auto cmovnle(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4f, dst, src);
+    @("r32", "rm32")
     auto cmovnle(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4f, dst, src);
+    @("r64", "rm64")
     auto cmovnle(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4f, dst, src);
     
+    @("r16", "rm16")
     auto cmovno(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x41, dst, src);
+    @("r32", "rm32")
     auto cmovno(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x41, dst, src);
+    @("r64", "rm64")
     auto cmovno(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x41, dst, src);
     
+    @("r16", "rm16")
     auto cmovnp(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4b, dst, src);
+    @("r32", "rm32")
     auto cmovnp(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4b, dst, src);
+    @("r64", "rm64")
     auto cmovnp(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4b, dst, src);
     
+    @("r16", "rm16")
     auto cmovns(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x49, dst, src);
+    @("r32", "rm32")
     auto cmovns(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x49, dst, src);
+    @("r64", "rm64")
     auto cmovns(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x49, dst, src);
     
+    @("r16", "rm16")
     auto cmovnz(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x45, dst, src);
+    @("r32", "rm32")
     auto cmovnz(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x45, dst, src);
+    @("r64", "rm64")
     auto cmovnz(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x45, dst, src);
     
+    @("r16", "rm16")
     auto cmovo(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x40, dst, src);
+    @("r32", "rm32")
     auto cmovo(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x40, dst, src);
+    @("r64", "rm64")
     auto cmovo(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x40, dst, src);
     
+    @("r16", "rm16")
     auto cmovp(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4a, dst, src);
+    @("r32", "rm32")
     auto cmovp(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4a, dst, src);
+    @("r64", "rm64")
     auto cmovp(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4a, dst, src);
     
+    @("r16", "rm16")
     auto cmovpe(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4a, dst, src);
+    @("r32", "rm32")
     auto cmovpe(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4a, dst, src);
+    @("r64", "rm64")
     auto cmovpe(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4a, dst, src);
     
+    @("r16", "rm16")
     auto cmovpo(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x4b, dst, src);
+    @("r32", "rm32")
     auto cmovpo(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x4b, dst, src);
+    @("r64", "rm64")
     auto cmovpo(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x4b, dst, src);
     
+    @("r16", "rm16")
     auto cmovs(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x48, dst, src);
+    @("r32", "rm32")
     auto cmovs(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x48, dst, src);
+    @("r64", "rm64")
     auto cmovs(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x48, dst, src);
     
+    @("r16", "rm16")
     auto cmovz(RM)(R16 dst, RM src) if (valid!(RM, 16)) => emit!0(0x0f, 0x44, dst, src);
+    @("r32", "rm32")
     auto cmovz(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0x0f, 0x44, dst, src);
+    @("r64", "rm64")
     auto cmovz(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x44, dst, src);
 
     /* ====== CLFL ====== */
@@ -2042,18 +2131,31 @@ public:
     /* ====== CET ====== */
     // Shadow stack instruction set.
 
+    @("r32")
     auto incsspd(R32 dst) => emit!5(0xf3, 0x0f, 0xae, dst);
+    @("r64")
     auto incsspq(R64 dst) => emit!5(0xf3, 0x0f, 0xae, dst);
+
+    @("m64")
     auto clrssbsy(Mem!64 dst) => emit!6(0xf3, 0x0f, 0xae, dst);
     auto setssbsy() => emit!0(0xf3, 0x0f, 0x01, 0xe8);
 
+    @("r32")
     auto rdsspd(R32 dst) => emit!1(0xf3, 0x0f, 0x1e, dst);
+    @("r64")
     auto rdsspq(R64 dst) => emit!1(0xf3, 0x0f, 0x1e, dst);
+
+    @("m32", "r32")
     auto wrssd(Mem!32 dst, R32 src) => emit!0(0xf3, 0x38, 0xf6, dst, src);
+    @("m64", "r64")
     auto wrssq(Mem!64 dst, R64 src) => emit!0(0xf3, 0x38, 0xf6, dst, src);
+
+    @("m32", "r32")
     auto wrussd(Mem!32 dst, R32 src) => emit!1(0x66, 0xf3, 0x38, 0xf5, dst, src);
+    @("m64", "r64")
     auto wrussq(Mem!64 dst, R64 src) => emit!1(0x66, 0xf3, 0x38, 0xf5, dst, src);
 
+    @("m64")
     auto rstorssp(Mem!64 dst) => emit!5(0xf3, 0x0f, 0x01, dst);
     auto saveprevssp() => emit!5(0xf3, 0x0f, 0x01, 0xae, edx);
 
@@ -2062,19 +2164,31 @@ public:
 
     /* ====== FSGSBASE ====== */
 
+    @("r32")
     auto rdfsbase(R32 dst) => emit!0(0xf3, 0x0f, 0xae, dst);
+    @("r64")
     auto rdfsbase(R64 dst) => emit!0(0xf3, 0x0f, 0xae, dst);
+
+    @("r32")
     auto rdgsbase(R32 dst) => emit!1(0xf3, 0x0f, 0xae, dst);
+    @("r64")
     auto rdgsbase(R64 dst) => emit!1(0xf3, 0x0f, 0xae, dst);
 
+    @("r32")
     auto wrfsbase(R32 dst) => emit!2(0xf3, 0x0f, 0xae, dst);
+    @("r64")
     auto wrfsbase(R64 dst) => emit!2(0xf3, 0x0f, 0xae, dst);
+    
+    @("r32")
     auto wrgsbase(R32 dst) => emit!3(0xf3, 0x0f, 0xae, dst);
+    @("r64")
     auto wrgsbase(R64 dst) => emit!3(0xf3, 0x0f, 0xae, dst);
 
     /* ====== RDPID ====== */
 
+    @("r32")
     auto rdpid(R32 dst) => emit!7(0xf3, 0x0f, 0xc7, dst);
+    @("r64")
     auto rdpid(R64 dst) => emit!7(0xf3, 0x0f, 0xc7, dst);
 
     /* ====== OSPKE ====== */
@@ -2088,14 +2202,27 @@ public:
     auto stui() => emit!0(0xf3, 0x0f, 0x01, 0xef);
     auto clui() => emit!0(0xf3, 0x0f, 0x01, 0xee);
     auto uiret() => emit!0(0xf3, 0x0f, 0x01, 0xec);
-    auto senduipi(RM)(RM dst) if (valid!(RM, 8) || valid!(RM, 16) || valid!(RM, 32) || valid!(RM, 64)) => emit!6(0xf3, 0x0f, 0xc7, dst);
+
+    @("rm8")
+    auto senduipi(RM)(RM dst) if (valid!(RM, 8)) => emit!6(0xf3, 0x0f, 0xc7, dst);
+    @("rm16")
+    auto senduipi(RM)(RM dst) if (valid!(RM, 16)) => emit!6(0xf3, 0x0f, 0xc7, dst);
+    @("rm32")
+    auto senduipi(RM)(RM dst) if (valid!(RM, 32)) => emit!6(0xf3, 0x0f, 0xc7, dst);
+    @("rm64")
+    auto senduipi(RM)(RM dst) if (valid!(RM, 64)) => emit!6(0xf3, 0x0f, 0xc7, dst);
 
     /* ====== WAITPKG ====== */
     
+    @("r32")
     auto umwait(R32 dst) => emit!6(0xf2, 0x0f, 0xae, dst);
+    @("r16")
     auto umonitor(R16 dst) => emit!6(0xf3, 0x0f, 0xae, dst);
+    @("r32")
     auto umonitor(R32 dst) => emit!6(0xf3, 0x0f, 0xae, dst);
+    @("r64")
     auto umonitor(R64 dst) => emit!6(0xf3, 0x0f, 0xae, dst);
+    @("r32")
     auto tpause(R32 dst) => emit!6(0x0f, 0xae, dst);
 
     /* ====== CLDEMOTE ====== */
@@ -2234,14 +2361,17 @@ public:
     auto vmovq(RM)(XMM dst, RM src) if (valid!(RM, 128, 64)) => emit!(0, VEX, 128, DEFAULT, 0xf3)(0x7e, dst, src);
     auto vmovq(Mem!64 dst, XMM src) => emit!(0, VEX, 128, DEFAULT, 0x66)(0xd6, dst, src);
 
+    @("r128", "rm32")
     auto vmovd(RM)(XMM dst, RM src) if (valid!(RM, 32)) => emit!(0, VEX, 128, DEFAULT, 0x66)(0x6e, dst, src);
     auto vmovd(RM)(RM dst, XMM src) if (valid!(RM, 32)) => emit!(0, VEX, 128, DEFAULT, 0x66)(0x7e, dst, src);
 
+    @("r128", "rm64")
     auto vmovq(RM)(XMM dst, RM src) if (valid!(RM, 64)) => emit!(0, VEX, 128, DEFAULT, 0x66)(0x6e, dst, src);
     auto vmovq(RM)(RM dst, XMM src) if (valid!(RM, 64)) => emit!(0, VEX, 128, DEFAULT, 0x66)(0x7e, dst, src);
 
     /* ====== AES ====== */
 
+    @("r128", "rm128")
     auto aesdec(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xde, dst, src);
     auto vaesdec(RM)(XMM dst, XMM src, RM stor) if (valid!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xde, dst, src, stor);
     auto vaesdec(RM)(YMM dst, YMM src, RM stor) if (valid!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xde, dst, src, stor);
@@ -2249,6 +2379,7 @@ public:
     auto aesdec128kl(XMM dst, Mem!384 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xdd, dst, src);
     auto aesdec256kl(XMM dst, Mem!512 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xdf, dst, src);
 
+    @("r128", "rm128")
     auto aesdeclast(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdf, dst, src);
     auto vaesdeclast(RM)(XMM dst, XMM src, RM stor) if (valid!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdf, dst, src, stor);
     auto vaesdeclast(RM)(YMM dst, YMM src, RM stor) if (valid!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xdf, dst, src, stor);
@@ -2256,6 +2387,7 @@ public:
     auto aesdecwide128kl(Mem!384 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, ecx);
     auto aesdecwide256kl(Mem!512 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, ebx);
 
+    @("r128", "rm128")
     auto aesenc(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdc, dst, src);
     auto vaesenc(RM)(XMM dst, XMM src, RM stor) if (valid!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdc, dst, src, stor);
     auto vaesenc(RM)(YMM dst, YMM src, RM stor) if (valid!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xdc, dst, src, stor);
@@ -2263,6 +2395,7 @@ public:
     auto aesenc128kl(XMM dst, Mem!384 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xdc, dst, src);
     auto aesenc256kl(XMM dst, Mem!512 src) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xde, dst, src);
 
+    @("r128", "rm128")
     auto aesenclast(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdd, dst, src);
     auto vaesenclast(RM)(XMM dst, XMM src, RM stor) if (valid!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdd, dst, src, stor);
     auto vaesenclast(RM)(YMM dst, YMM src, RM stor) if (valid!(RM, 256)) => emit!(0, VEX, 256, F38, 0x66)(0xdd, dst, src, stor);
@@ -2270,22 +2403,32 @@ public:
     auto aesencwide128kl(Mem!384 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, eax);
     auto aesencwide256kl(Mem!512 dst) => emit!(0, SSE)(0xf3, 0x0f, 0x38, 0xd8, dst, edx);
 
+    @("r128", "rm128")
     auto aesimc(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x38, 0xdb, dst, src);
+    @("r128", "rm128")
     auto vaesimc(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, VEX, 128, F38, 0x66)(0xdb, dst, src);
 
+    @("r128", "rm128", "imm8")
     auto aeskeygenassist(RM)(XMM dst, RM src, ubyte imm8) if (valid!(RM, 128)) => emit!(0, SSE)(0x66, 0x0f, 0x3a, 0xdf, dst, src, imm8);
+    @("r128", "rm128", "imm8")
     auto vaeskeygenassist(RM)(XMM dst, RM src, ubyte imm8) if (valid!(RM, 128)) => emit!(0, VEX, 128, F3A, 0x66)(0xdf, dst, src, imm8);
 
     /* ====== SHA ====== */
 
+    @("r128", "rm128")
     auto sha1msg1(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xc9, dst, src);
+    @("r128", "rm128")
     auto sha1msg2(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xca, dst, src);
+    @("r128", "rm128")
     auto sha1nexte(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xc8, dst, src);
 
+    @("r128", "rm128")
     auto sha256msg1(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xcc, dst, src);
 
+    @("r128", "rm128", "imm8")
     auto sha1rnds4(RM)(XMM dst, RM src, ubyte imm8) if (valid!(RM, 128)) => emit!(0, SSE)(0x0f, 0x3a, 0xcc, dst, src, imm8);
 
+    @("r128", "rm128")
     auto sha256rnds2(RM)(XMM dst, RM src) if (valid!(RM, 128)) => emit!(0, SSE)(0x0f, 0x38, 0xcb, dst, src);
 
     /* ====== MAIN ====== */
@@ -2293,61 +2436,95 @@ public:
     // NOTE: Branch hints are generally useless in the modern day, AMD CPUs don't even acknowledge them;
     // and thus these should not be used on any modern CPU.
 
+    @("prefix")
     auto not_taken(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0x2e~buffer[(buffer.length - size)..$];
         return size + 1;
     }
 
+    @("prefix")
     auto taken(size_t size)
     {
         buffer = buffer[0..(buffer.length - size)]~0x3e~buffer[(buffer.length - size)..$];
         return size + 1;
     }
 
+    @("r32", "rm8")
     auto crc32(RM)(R32 dst, RM src) if (valid!(RM, 8)) => emit!0(0xf2, 0x0f, 0x38, 0xf0, dst, src);
+    @("r32", "rm16")
     auto crc32(RM)(R32 dst, RM src) if (valid!(RM, 16)) => emit!0(0xf2, 0x0f, 0x38, 0xf1, dst, src);
+    @("r32", "rm32")
     auto crc32(RM)(R32 dst, RM src) if (valid!(RM, 32)) => emit!0(0xf2, 0x0f, 0x38, 0xf1, dst, src);
 
+    @("r64", "rm8")
     auto crc32(RM)(R64 dst, RM src) if (valid!(RM, 8)) => emit!0(0xf2, 0x0f, 0x38, 0xf0, dst, src);
+    @("r64", "rm64")
     auto crc32(RM)(R64 dst, RM src) if (valid!(RM, 64)) => emit!0(0xf2, 0x0f, 0x38, 0xf1, dst, src);
 
     // literally 1984
+    // Why did I write this comment? What is literally 1984????
+    @("r32", "m512")
     auto enqcmd(R32 dst, Mem!512 src) => emit!0(0xf2, 0x0f, 0x38, 0xf8, dst, src);
+    @("r64", "m512")
     auto enqcmd(R64 dst, Mem!512 src) => emit!0(0xf2, 0x0f, 0x38, 0xf8, dst, src);
 
+    @("rm8", "r8")
     auto cmpxchg(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x0f, 0xb0, dst, src);
+    @("rm16", "r16")
     auto cmpxchg(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x0f, 0xb1, dst, src);
+    @("rm32", "r32")
     auto cmpxchg(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x0f, 0xb1, dst, src);
+    @("rm64", "r64")
     auto cmpxchg(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x0f, 0xb1, dst, src);
 
     auto aaa() => emit!0(0x37);
     auto aad() => emit!0(0xd5, 0x0a);
+    @("imm8")
     auto aad(ubyte imm8) => emit!0(0xd5, imm8);
     auto aam() => emit!0(0xd4, 0x0a);
+    @("imm8")
     auto aam(ubyte imm8) => emit!0(0xd4, imm8);
     auto aas() => emit!0(0x3f);
 
+    @("imm8")
     auto add(ubyte imm8) => emit!0(0x04, imm8);
+    @("imm16")
     auto add(ushort imm16) => emit!0(0x05, imm16);
+    @("imm32")
     auto add(uint imm32) => emit!0(0x05, imm32);
 
+    @("rm8", "imm8")
     auto add(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => emit!0(0x80, dst, imm8);
+    @("rm16", "imm16")
     auto add(RM)(RM dst, ushort imm16) if (valid!(RM, 16)) => emit!0(0x81, dst, imm16);
+    @("rm32", "imm32")
     auto add(RM)(RM dst, uint imm32) if (valid!(RM, 32)) => emit!0(0x81, dst, imm32);
+    @("rm64", "imm32")
     auto add(RM)(RM dst, uint imm32) if (valid!(RM, 64)) => emit!0(0x81, dst, imm32);
+    @("rm16", "imm8")
     auto add(RM)(RM dst, ubyte imm8) if (valid!(RM, 16)) => emit!0(0x83, dst, imm8);
+    @("rm32", "imm8")
     auto add(RM)(RM dst, ubyte imm8) if (valid!(RM, 32)) => emit!0(0x83, dst, imm8);
+    @("rm64", "imm8")
     auto add(RM)(RM dst, ubyte imm8) if (valid!(RM, 64)) => emit!0(0x83, dst, imm8);
 
+    @("rm8", "r8")
     auto add(RM)(RM dst, R8 src) if (valid!(RM, 8)) => emit!0(0x00, dst, src);
+    @("rm16", "r16")
     auto add(RM)(RM dst, R16 src) if (valid!(RM, 16)) => emit!0(0x01, dst, src);
+    @("rm32", "r32")
     auto add(RM)(RM dst, R32 src) if (valid!(RM, 32)) => emit!0(0x01, dst, src);
+    @("rm64", "r64")
     auto add(RM)(RM dst, R64 src) if (valid!(RM, 64)) => emit!0(0x01, dst, src);
 
+    @("r8", "m8")
     auto add(R8 dst, Mem!8 src) => emit!0(0x02, dst, src);
+    @("r16", "m16")
     auto add(R16 dst, Mem!16 src) => emit!0(0x03, dst, src);
+    @("r32", "m32")
     auto add(R32 dst, Mem!32 src) => emit!0(0x03, dst, src);
+    @("r64", "m64")
     auto add(R64 dst, Mem!64 src) => emit!0(0x03, dst, src);
 
     @("imm8")
@@ -2357,11 +2534,11 @@ public:
     @("imm32")
     auto and(uint imm32) => emit!0(0x25, imm32);
 
-    @("rm64", "imm8")
+    @("rm8", "imm8")
     auto and(RM)(RM dst, ubyte imm8) if (valid!(RM, 8)) => emit!4(0x80, dst, imm8);
-    @("rm64", "imm16")
+    @("rm16", "imm16")
     auto and(RM)(RM dst, ushort imm16) if (valid!(RM, 16)) => emit!4(0x81, dst, imm16);
-    @("rm64", "imm32")
+    @("rm32", "imm32")
     auto and(RM)(RM dst, uint imm32) if (valid!(RM, 32)) => emit!4(0x81, dst, imm32);
     @("rm64", "imm32")
     auto and(RM)(RM dst, uint imm32) if (valid!(RM, 64)) => emit!4(0x81, dst, imm32);
@@ -3233,13 +3410,13 @@ public:
     auto push(Mem!64 dst) => emit!(6, NP)(0xff, dst);
 
     @("r16")
-    auto push(R16 dst) => emit!(0, NRM)(0x50, dst);
+    auto push(R16 dst) => emit!(0, NP)(0x50, dst);
     static if (!X64)
     @("r32")
-    auto push(R32 dst) => emit!(0, NRM)(0x50, dst);
+    auto push(R32 dst) => emit!(0, NP)(0x50, dst);
     static if (X64)
     @("r64")
-    auto push(R64 dst) => emit!(0, NRM)(0x50, dst);
+    auto push(R64 dst) => emit!(0, NP)(0x50, dst);
 
     @("imm8")
     auto push(ubyte imm8) => emit!0(0x6a, imm8);
