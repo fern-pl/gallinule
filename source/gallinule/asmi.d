@@ -69,12 +69,25 @@ pure string parse(string path)()
                 (word.startsWith('m') && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1)) ||
                 (word.startsWith("rm") && (word.endsWith("xx") || word[2..$].filter!(x => x.isDigit).length == word.length - 2)) || 
                 word == "st" || word == "dr" || word == "cr")
-                details ~= word;
-            else
             {
-                mnemonic = word;
-                combo ~= word;
+                if (mnemonic == null && i > 0)
+                {
+                    mnemonic = line.split(' ')[i - 1];
+
+                    if (emit.length > 0)
+                        emit = emit[0..$-mnemonic.length-2];
+                    else if (combo.length > 0)
+                        combo = combo[0..$-mnemonic.length];
+                }
+                else if (i == 0)
+                    throw new Throwable("Mnemonic must come before parameters!");
+                    
+                details ~= word;
             }
+            else if (emit.length > 0)
+                emit ~= word~", ";
+            else
+                combo ~= word;
         }
 
         foreach (i, detail; details)
@@ -148,19 +161,31 @@ pure string parse(string path)()
 
         if (operands.length > 0)
             operands = operands[0..$-2];
+
         
         if (emit.length > 0)
         {
+            if (mnemonic == null)
+            {
+                mnemonic = line.split(' ')[$-1];
+                emit = emit[0..$-mnemonic.length-2];
+            }
+
             string mapping = mappings[0]~", "~mappings[1]~", "~mappings[2]~", "~mappings[3]~", "~mappings[4];
             emit = "emit!("~mapping~")("~emit[0..$-2]~')';
         }
-        else if (combo.length > mnemonic.length)
-            emit = combo[0..$-mnemonic.length].replace(")", ") + ")[0..$-3];
+        else if (combo.length > 0)
+        {
+            if (mnemonic == null)
+            {
+                mnemonic = line.split(' ')[$-1];
+                combo = combo[0..$-mnemonic.length];
+            }
+
+            emit = combo.replace(")", ") + ")[0..$-3];
+        }
         else
             throw new Throwable("No instruction emission or combo data found!");
-
-        if (mnemonic == null)
-            throw new Throwable("Instruction mnemonic was not provided!");
 
         string attr = details.length == 0 ? null : "@("~details.to!string[1..$-1]~")\n";
         string _body = "auto "~mnemonic~generics~"("~operands~") "~conditional~"=> "~emit~";\n\n";
