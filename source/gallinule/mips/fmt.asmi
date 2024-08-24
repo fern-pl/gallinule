@@ -1,7 +1,0 @@
-0b010001 S 0 $0 $1 0b000101 abss r r
-0b010001 D 0 $0 $1 0b000101 absd r r
-0b010001 PS 0 $0 $1 0b000101 absps r r
-
-0b010001 S $0 $1 $2 0b000000 adds r r r
-0b010001 D $0 $1 $2 0b000000 addd r r r
-0b010001 PS $0 $1 $2 0b000000 addps r r r

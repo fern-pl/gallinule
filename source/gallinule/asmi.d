@@ -31,8 +31,8 @@ pure string parse(string path)()
                 mappings[4] = "0x"~word[0..2];
                 word = word[3..$];
             }
-
-            if (word.startsWith("0x"))
+            
+            if (word.startsWith("0x") || word.startsWith("0b") || (word.filter!(x => x.isDigit).length == word.length && combo.length == 0))
                 emit ~= word~", ";
             else if (word.startsWith('$'))
             {
@@ -110,27 +110,27 @@ pure string parse(string path)()
                 generics ~= type~", ";
 
                 if (type == "RMXX")
-                    conditional ~= "(isInstanceOf!(Register, "~type~") | isInstanceOf!(Memory, "~type~"))";
+                    conditional ~= "(isInstanceOf!(Reg, "~type~") | isInstanceOf!(Mem, "~type~")) && ";
                 else
-                    conditional ~= "valid!("~type~", "~detail[2..$]~')';
+                    conditional ~= "valid!("~type~", "~detail[2..$]~") && ";
             }
             else if (type == "IXX")
             {
                 type = type~i.to!string;
                 generics ~= type~", ";
-                conditional ~= "isIntegral!"~type;
+                conditional ~= "isIntegral!"~type~" && ";
             }
             else if (type == "RXX")
             {
                 type = type~i.to!string;
                 generics ~= type~", ";
-                conditional ~= "isInstanceOf!(Register, "~type~')';
+                conditional ~= "isInstanceOf!(Reg, "~type~") && ";
             }
             else if (type == "MXX")
             {
                 type = type~i.to!string;
                 generics ~= type~", ";
-                conditional ~= "isInstanceOf!(Memory, "~type~')';
+                conditional ~= "isInstanceOf!(Mem, "~type~") && ";
             }
 
             switch (type)
@@ -162,7 +162,7 @@ pure string parse(string path)()
         if (generics.length > 0)
         {
             generics = '('~generics[0..$-2]~')';
-            conditional = "if ("~conditional~") ";
+            conditional = "if ("~conditional[0..$-3]~") ";
         }
 
         if (mappings[1] == null)
@@ -173,7 +173,6 @@ pure string parse(string path)()
         if (operands.length > 0)
             operands = operands[0..$-2];
 
-        
         if (emit.length > 0)
         {
             if (mnemonic == null)
@@ -185,7 +184,7 @@ pure string parse(string path)()
             string mapping = mappings[0]~", "~mappings[1]~", "~mappings[2]~", "~mappings[3]~", "~mappings[4];
             emit = "emit!("~mapping~")("~emit[0..$-2]~')';
         }
-        else if (combo.length > 0)
+        else 
         {
             if (mnemonic == null)
             {
@@ -195,8 +194,6 @@ pure string parse(string path)()
 
             emit = combo.replace(")", ") + ")[0..$-3];
         }
-        else
-            throw new Throwable("No instruction emission or combo data found!");
 
         string attr = details.length == 0 ? null : "@("~details.to!string[1..$-1]~")\n";
         string _body = "auto "~mnemonic~generics~"("~operands~") "~conditional~"=> "~emit~";\n\n";
