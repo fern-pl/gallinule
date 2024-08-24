@@ -56,11 +56,11 @@ pure string parse(string path)()
                 mappings[2] = word[3..6];
                 mappings[1] ~= "EVEX ^ "~(word.endsWith(".i") ? "INT ^ " : null);
             }
-            else if (word.endsWith("/e"))
+            else if (word == "/e")
                 mappings[1] ~= "ENCODED ^ ";
-            else if (word.endsWith("/f"))
+            else if (word == "/f")
                 mappings[1] ~= "FLIP ^ ";
-            else if (word.endsWith("/rx"))
+            else if (word == "/r")
                 mappings[1] ~= "NO_REX ^ ";
             else if (word.startsWith('/'))
                 mappings[0] = word[1..$];

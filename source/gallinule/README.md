@@ -33,7 +33,7 @@ Mnemonic must come before parameters and pseudo-instuction combos, all other rep
 | AVX | `avx{size}[.i]*` **will make the prefix integral-kind.* |
 | VEX Prefix Field | `0xnnp` |
 | VEX Map Field | `[m*]` **where `m` is any map* |
-| Toggle REX Off | `/rx` |
+| Toggle REX Off | `/r` |
 | Toggle Register Flipping On | `/f` |
 | Toggle Direct Encoding On | `/e` |
 

@@ -57,8 +57,8 @@ return size 1;
 0x9b 0xdb 0xe2 fclex
 0xdb 0xe2 fnclex
 
-0xd8 $0 fadd m32 /rx
-0xdc $0 fadd m64 /rx
+0xd8 $0 fadd m32 /r
+0xdc $0 fadd m64 /r
 fadd ST ST 
 {
 if .index == 
@@ -69,18 +69,18 @@ else
 assert "Cannot encode 'fadd' with no 'st0' operand!" 
 }
 0xde 0xc0 $0 faddp ST /e
-0xde $0 fiadd m16 /rx
-0xda $0 fiadd m32 /rx
+0xde $0 fiadd m16 /r
+0xda $0 fiadd m32 /r
 
-0xdf $0 fbld m80 /4 /rx
-0xdf $0 fbstp m80 /6 /rx
+0xdf $0 fbld m80 /4 /r
+0xdf $0 fbstp m80 /6 /r
 
-0xd8 $0 fcom m32 /2 /rx
-0xdc $0 fcom m64 /2 /rx
+0xd8 $0 fcom m32 /2 /r
+0xdc $0 fcom m64 /2 /r
 0xd8 0xd0 $0 fcom ST /2 /e
 
-0xd8 $0 fcomp m32 /3 /rx
-0xdc $0 fcomp m64 /3 /rx
+0xd8 $0 fcomp m32 /3 /r
+0xdc $0 fcomp m64 /3 /r
 0xd8 0xd8 $0 fcomp ST /2 /e
 0xde 0xd9 fcompp
 
@@ -89,10 +89,10 @@ assert "Cannot encode 'fadd' with no 'st0' operand!"
 0xdb 0xe8 $0 fucomi ST /e
 0xdf 0xe8 $0 fucomip ST /e
 
-0xde $0 ficom m16 /2 /rx
-0xda $0 ficom m32 /2 /rx
-0xde $0 ficomp m16 /2 /rx
-0xda $0 ficomp m32 /2 /rx
+0xde $0 ficom m16 /2 /r
+0xda $0 ficom m32 /2 /r
+0xde $0 ficomp m16 /2 /r
+0xda $0 ficomp m32 /2 /r
 
 0xdd 0xe0 $0 fucom ST /2 /e
 0xdd 0xe8 $0 fucomp ST /2 /e
@@ -112,42 +112,42 @@ assert "Cannot encode 'fadd' with no 'st0' operand!"
 0xd9 0xf6 fdecstp
 0xd9 0xf7 fincstp
 
-0xdf $0 fild m16 /rx
-0xdb $0 fild m32 /rx
-0xdf $0 fild m64 /5 /rx
+0xdf $0 fild m16 /r
+0xdb $0 fild m32 /r
+0xdf $0 fild m64 /5 /r
 
-0xdf $0 fist m16 /2 /rx
-0xdb $0 fist m32 /2 /rx
+0xdf $0 fist m16 /2 /r
+0xdb $0 fist m32 /2 /r
 
-0xdf $0 fistp m16 /3 /rx
-0xdb $0 fistp m32 /3 /rx
-0xdf $0 fistp m64 /7 /rx
+0xdf $0 fistp m16 /3 /r
+0xdb $0 fistp m32 /3 /r
+0xdf $0 fistp m64 /7 /r
 
-0xdf $0 fisttp m16 /1 /rx
-0xdb $0 fisttp m32 /1 /rx
-0xdd $0 fisttp m64 /1 /rx
+0xdf $0 fisttp m16 /1 /r
+0xdb $0 fisttp m32 /1 /r
+0xdd $0 fisttp m64 /1 /r
 
-0xd9 $0 fldcw m16 /5 /rx
-0x9b 0xd9 $0 fstcw m16 /7 /rx
-0xd9 $0 fnstcw m16 /7 /rx
+0xd9 $0 fldcw m16 /5 /r
+0x9b 0xd9 $0 fstcw m16 /7 /r
+0xd9 $0 fnstcw m16 /7 /r
 
-0xd9 $0 fldenv m112 /4 /rx
-0xd9 $0 fldenv m224 /4 /rx
+0xd9 $0 fldenv m112 /4 /r
+0xd9 $0 fldenv m224 /4 /r
 
-0x9b 0xd9 $0 fstenv m112 /6 /rx
-0x9b 0xd9 $0 fstenv m224 /6 /rx
+0x9b 0xd9 $0 fstenv m112 /6 /r
+0x9b 0xd9 $0 fstenv m224 /6 /r
 
-0xd9 $0 fnstenv m112 /6 /rx
-0xd9 $0 fnstenv m224 /6 /rx
+0xd9 $0 fnstenv m112 /6 /r
+0xd9 $0 fnstenv m224 /6 /r
 
-0x9b 0xdd $0 fstsw m16 /7 /rx
+0x9b 0xdd $0 fstsw m16 /7 /r
 0x9b 0xdf 0xe0 fstsw
-0xdd $0 fnstsw m16 /7 /rx
+0xdd $0 fnstsw m16 /7 /r
 0xdf 0xe0 fnstsw
 
-0xd9 $0 fld m32 /rx
-0xdd $0 fld m64 /rx
-0xdb $0 fld m80 /5 /rx
+0xd9 $0 fld m32 /r
+0xdd $0 fld m64 /r
+0xdb $0 fld m80 /5 /r
 0xd9 0xc0 $0 fld ST /e
 0xd9 0xe8 fld1
 0xd9 0xe9 fldl2t
@@ -157,17 +157,17 @@ assert "Cannot encode 'fadd' with no 'st0' operand!"
 0xd9 0xed fldln2
 0xd9 0xee fldz
 
-0xd9 $0 fst m32 /2 /rx
-0xdd $0 fst m64 /2 /rx
+0xd9 $0 fst m32 /2 /r
+0xdd $0 fst m64 /2 /r
 0xdd 0xd0 $0 fst ST /e
 
-0xd9 $0 fstp m32 /3 /rx
-0xdd $0 fstp m64 /3 /rx
-0xdb $0 fstp m80 /7 /rx
+0xd9 $0 fstp m32 /3 /r
+0xdd $0 fstp m64 /3 /r
+0xdb $0 fstp m80 /7 /r
 0xdd 0xd8 $0 fstp ST /e
 
-0xd8 $0 fdiv m32 /6 /rx
-0xdc $0 fdiv m64 /6 /rx
+0xd8 $0 fdiv m32 /6 /r
+0xdc $0 fdiv m64 /6 /r
 fdiv ST ST 
 {
 if .index == 
@@ -178,11 +178,11 @@ else
 assert "Cannot encode 'fadd' with no 'st0' operand!" 
 }
 0xde 0xf8 $0 fdivp ST /e
-0xde $0 fidiv m16 /6 /rx
-0xda $0 fidiv m32 /6 /rx
+0xde $0 fidiv m16 /6 /r
+0xda $0 fidiv m32 /6 /r
 
-0xd8 $0 fdivr m32 /7 /rx
-0xdc $0 fdivr m64 /7 /rx
+0xd8 $0 fdivr m32 /7 /r
+0xdc $0 fdivr m64 /7 /r
 fdivr ST ST 
 {
 if .index == 
@@ -193,8 +193,8 @@ else
 assert "Cannot encode 'fadd' with no 'st0' operand!" 
 }
 0xde 0xf0 $0 fdivrp ST /e
-0xde $0 fidivr m16 /7 /rx
-0xda $0 fidivr m32 /7 /rx
+0xde $0 fidivr m16 /7 /r
+0xda $0 fidivr m32 /7 /r
 0xd9 0xfd fscale
 0xd9 0xfc frndint
 0xd9 0xe5 fexam
@@ -214,16 +214,16 @@ assert "Cannot encode 'fadd' with no 'st0' operand!"
 0xdd $0 frstor m752 /4
 0xdd $0 frstor m864 /4
 static if !X64 
-0x0f 0xae $0 fxsave m4096 /rx
+0x0f 0xae $0 fxsave m4096 /r
 static if X64 
-0x48 0x0f 0xae $0 fxsave m4096 /rx
+0x48 0x0f 0xae $0 fxsave m4096 /r
 static if !X64 
-0x0f 0xae $0 fxrstor m4096 /1 /rx
+0x0f 0xae $0 fxrstor m4096 /1 /r
 static if X64 
-0x48 0x0f 0xae $0 fxrstor m4096 /1 /rx
+0x48 0x0f 0xae $0 fxrstor m4096 /1 /r
 
-0xd8 $0 fmul m32 /1 /rx
-0xdc $0 fmul m64 /1 /rx
+0xd8 $0 fmul m32 /1 /r
+0xdc $0 fmul m64 /1 /r
 fmul ST ST 
 {
 if .index == 
@@ -234,11 +234,11 @@ else
 assert "Cannot encode 'fadd' with no 'st0' operand!" 
 }
 0xde 0xc8 $0 fmulp ST /e
-0xde $0 fimul m16 /1 /rx
-0xda $0 fimul m32 /1 /rx
+0xde $0 fimul m16 /1 /r
+0xda $0 fimul m32 /1 /r
 
-0xd8 $0 fsub m32 /4 /rx
-0xdc $0 fsub m64 /4 /rx
+0xd8 $0 fsub m32 /4 /r
+0xdc $0 fsub m64 /4 /r
 fsub ST ST 
 {
 if .index == 
@@ -249,11 +249,11 @@ else
 assert "Cannot encode 'fadd' with no 'st0' operand!" 
 }
 0xde 0xe8 $0 fsubp ST /e
-0xde $0 fisub m16 /4 /rx
-0xda $0 fisub m32 /4 /rx
+0xde $0 fisub m16 /4 /r
+0xda $0 fisub m32 /4 /r
 
-0xd8 $0 fsubr m32 /5 /rx
-0xdc $0 fsubr m64 /5 /rx
+0xd8 $0 fsubr m32 /5 /r
+0xdc $0 fsubr m64 /5 /r
 fsubr ST ST 
 {
 if .index == 
@@ -264,8 +264,8 @@ else
 assert "Cannot encode 'fadd' with no 'st0' operand!" 
 }
 0xde 0xe0 $0 fsubrp ST /e
-0xde $0 fisubr m16 /5 /rx
-0xda $0 fisubr m32 /5 /rx
+0xde $0 fisubr m16 /5 /r
+0xda $0 fisubr m32 /5 /r
 
 0xda 0xc0 $0 fcmovb ST /e
 0xda 0xc8 $0 fcmove ST /e
@@ -407,7 +407,7 @@ assert "Cannot encode 'fadd' with no 'st0' operand!"
 0x0f 0x44 $0 $1 cmovz r64 rm64
 /* ====== CLfL ====== */
 
-0x0f 0xae $0 clflush rm8 /7 /rx
+0x0f 0xae $0 clflush rm8 /7 /r
 /* ====== HrESET ====== */
 
 
@@ -447,13 +447,13 @@ assert "Cannot encode 'fadd' with no 'st0' operand!"
 /* ====== BmI2 ====== */
 
 /* ====== r64 ====== */
-0x0f 0x6f $0 $1 movq r64 rm64 /rx /f
-0x0f 0x7f $0 $1 movq m64 r64 /rx /f
-0x0f 0x6e $0 $1 movd r64 rm32 /rx /f
-0x0f 0x7e $0 $1 movd rm32 r64 /rx /f
+0x0f 0x6f $0 $1 movq r64 rm64 /r /f
+0x0f 0x7f $0 $1 movq m64 r64 /r /f
+0x0f 0x6e $0 $1 movd r64 rm32 /r /f
+0x0f 0x7e $0 $1 movd rm32 r64 /r /f
 0x0f 0x6e $0 $1 movq r64 rm64
 0x0f 0x7e $0 $1 movq rm r64 rm64
-/* ====== /rx /f ====== */
+/* ====== /r /f ====== */
 
 /* ====== SSE2 ====== */
 
@@ -480,46 +480,46 @@ vex1 0x66p 0x6e $0 $1 vmovq r128 rm6428
 vex1 0x66p 0x7e $0 $1 vmovq rm64 r12828
 /* ====== AES ====== */
 
-0x66 0x0f 0x38 0xde $0 $1 aesdec r128 rm128 /rx /f
+0x66 0x0f 0x38 0xde $0 $1 aesdec r128 rm128 /r /f
 vex128 [38] 0x66p 0xde $0 $1 $2 vaesdec r128 r128 rm128
 vex256 [38] 0x66p 0xde $0 $1 $2 vaesdec r256 r256 rm256
-0xf3 0x0f 0x38 0xdd $0 $1 aesdec128kl r128 m384 /rx /f
-0xf3 0x0f 0x38 0xdf $0 $1 aesdec256kl r128 m512 /rx /f
+0xf3 0x0f 0x38 0xdd $0 $1 aesdec128kl r128 m384 /r /f
+0xf3 0x0f 0x38 0xdf $0 $1 aesdec256kl r128 m512 /r /f
 
-0x66 0x0f 0x38 0xdf $0 $1 aesdeclast r128 rm128 /rx /f
+0x66 0x0f 0x38 0xdf $0 $1 aesdeclast r128 rm128 /r /f
 vex128 [38] 0x66p 0xdf $0 $1 $2 vaesdeclast r128 r128 rm128
 vex256 [38] 0x66p 0xdf $0 $1 $2 vaesdeclast r256 r256 rm256
-0xf3 0x0f 0x38 0xd8 $0 ecx aesdecwide128kl m384 /rx /f
-0xf3 0x0f 0x38 0xd8 $0 ebx aesdecwide256kl m512 /rx /f
+0xf3 0x0f 0x38 0xd8 $0 ecx aesdecwide128kl m384 /r /f
+0xf3 0x0f 0x38 0xd8 $0 ebx aesdecwide256kl m512 /r /f
 
-0x66 0x0f 0x38 0xdc $0 $1 aesenc r128 rm128 /rx /f
+0x66 0x0f 0x38 0xdc $0 $1 aesenc r128 rm128 /r /f
 vex128 [38] 0x66p 0xdc $0 $1 $2 vaesenc r128 r128 rm128
 vex256 [38] 0x66p 0xdc $0 $1 $2 vaesenc r256 r256 rm256
-0xf3 0x0f 0x38 0xdc $0 $1 aesenc128kl r128 m384 /rx /f
-0xf3 0x0f 0x38 0xde $0 $1 aesenc256kl r128 m512 /rx /f
+0xf3 0x0f 0x38 0xdc $0 $1 aesenc128kl r128 m384 /r /f
+0xf3 0x0f 0x38 0xde $0 $1 aesenc256kl r128 m512 /r /f
 
-0x66 0x0f 0x38 0xdd $0 $1 aesenclast r128 rm128 /rx /f
+0x66 0x0f 0x38 0xdd $0 $1 aesenclast r128 rm128 /r /f
 vex128 [38] 0x66p 0xdd $0 $1 $2 vaesenclast r128 r128 rm128
 vex256 [38] 0x66p 0xdd $0 $1 $2 vaesenclast r256 r256 rm256
-0xf3 0x0f 0x38 0xd8 $0 eax aesencwide128kl m384 /rx /f
-0xf3 0x0f 0x38 0xd8 $0 edx aesencwide256kl m512 /rx /f
+0xf3 0x0f 0x38 0xd8 $0 eax aesencwide128kl m384 /r /f
+0xf3 0x0f 0x38 0xd8 $0 edx aesencwide256kl m512 /r /f
 
-0x66 0x0f 0x38 0xdb $0 $1 aesimc r128 rm128 /rx /f
+0x66 0x0f 0x38 0xdb $0 $1 aesimc r128 rm128 /r /f
 vex128 [38] 0x66p 0xdb $0 $1 vaesimc r128 rm128
 
-0x66 0x0f 0x3a 0xdf $0 $1 i8 aeskeygenassist r128 rm128 i8 /rx /f
+0x66 0x0f 0x3a 0xdf $0 $1 i8 aeskeygenassist r128 rm128 i8 /r /f
 vex128 [3a] 0x66p 0xdf $0 $1 i8 vaeskeygenassist r128 rm128 i8
 /* ====== SHA ====== */
 
-0x0f 0x38 0xc9 $0 $1 sha1msg1 r128 rm128 /rx /f
-0x0f 0x38 0xca $0 $1 sha1msg2 r128 rm128 /rx /f
-0x0f 0x38 0xc8 $0 $1 sha1nexte r128 rm128 /rx /f
+0x0f 0x38 0xc9 $0 $1 sha1msg1 r128 rm128 /r /f
+0x0f 0x38 0xca $0 $1 sha1msg2 r128 rm128 /r /f
+0x0f 0x38 0xc8 $0 $1 sha1nexte r128 rm128 /r /f
 
-0x0f 0x38 0xcc $0 $1 sha256msg1 r128 rm128 /rx /f
+0x0f 0x38 0xcc $0 $1 sha256msg1 r128 rm128 /r /f
 
-0x0f 0x3a 0xcc $0 $1 i8 sha1rnds4 r128 rm128 i8 /rx /f
+0x0f 0x3a 0xcc $0 $1 i8 sha1rnds4 r128 rm128 i8 /r /f
 
-0x0f 0x38 0xcb $0 $1 sha256rnds2 r128 rm128 /rx /f
+0x0f 0x38 0xcb $0 $1 sha256rnds2 r128 rm128 /r /f
 /* ====== mAIN ====== */
 // NOTE: Branch hints are generally useless in the modern day AmD CPUs don't even acknowledge them;
 // and thus these should not be used on any modern CPU.
@@ -1133,9 +1133,9 @@ else
 
 0x8f $0 pop m16
 static if !X64 
-0x8f $0 pop m32 /rx
+0x8f $0 pop m32 /r
 static if X64 
-0x8f $0 pop m64 /rx
+0x8f $0 pop m64 /r
 
 0x58 $0 pop r16 /e /e
 static if !X64 
@@ -1155,9 +1155,9 @@ static if X64
 
 0xff $0 push m16 /6
 static if !X64 
-0xff $0 push m32 /6 /rx
+0xff $0 push m32 /6 /r
 static if X64 
-0xff $0 push m64 /6 /rx
+0xff $0 push m64 /6 /r
 
 0x50 $0 push r16 /e /e
 static if !X64 

@@ -1,1 +1,1 @@
-0x0f 0xc7 $0 cmpxchg8b m64 /1 /rx
+0x0f 0xc7 $0 cmpxchg8b m64 /1 /r
