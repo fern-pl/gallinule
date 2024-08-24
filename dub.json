@@ -1,4 +1,4 @@
-	{
+{
 	"authors": [
 		"cet"
 	],
@@ -9,5 +9,6 @@
 	"description": "Runtime dynamic assembler for JIT compilation.",
 	"license": "AGPL-3.0-only",
 	"name": "gallinule",
-    "targetType": "autodetect"
+    "targetType": "autodetect",
+	"dflags": ["-J./source/gallinule/amd64/"]
 }

@@ -1,0 +1,133 @@
+mov(rax, cr4) shr(rax, CRID.PVI) and(rax, 1) cridpvi
+mov(rax, cr4) shr(rax, CRID.TSD) and(rax, 1) cridtsd
+mov(rax, cr4) shr(rax, CRID.DE) and(rax, 1) cridde
+mov(rax, cr4) shr(rax, CRID.PSE) and(rax, 1) cridpse
+mov(rax, cr4) shr(rax, CRID.PAE) and(rax, 1) cridpae
+mov(rax, cr4) shr(rax, CRID.MCE) and(rax, 1) cridmce
+mov(rax, cr4) shr(rax, CRID.PGE) and(rax, 1) cridpge
+mov(rax, cr4) shr(rax, CRID.PCE) and(rax, 1) cridpce
+mov(rax, cr4) shr(rax, CRID.OSFXSR) and(rax, 1) cridosfxsr
+mov(rax, cr4) shr(rax, CRID.OSr128EXCPT) and(rax, 1) cridosr128excpt
+mov(rax, cr4) shr(rax, CRID.UMIP) and(rax, 1) cridumip
+mov(rax, cr4) shr(rax, CRID.VMXE) and(rax, 1) cridvmxe
+mov(rax, cr4) shr(rax, CRID.SMXE) and(rax, 1) cridsmxe
+mov(rax, cr4) shr(rax, CRID.FSGSBASE) and(rax, 1) cridfsgsbase
+mov(rax, cr4) shr(rax, CRID.PCIDE) and(rax, 1) cridpcide
+mov(rax, cr4) shr(rax, CRID.OSXSAVE) and(rax, 1) cridosxsave
+mov(rax, cr4) shr(rax, CRID.SMEP) and(rax, 1) cridsmep
+mov(rax, cr4) shr(rax, CRID.SMAP) and(rax, 1) cridsmap
+mov(rax, cr4) shr(rax, CRID.PKE) and(rax, 1) cridpke
+mov(rax, cr4) shr(rax, CRID.CET) and(rax, 1) cridcet
+mov(rax, cr4) shr(rax, CRID.PKS) and(rax, 1) cridpks
+mov(rax, cr4) shr(rax, CRID.UINTR) and(rax, 1) criduintr
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512VL) and(ebx, 1) idavx512vl
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512BW) and(ebx, 1) idavx512bw
+cpuid(7) shr(ebx, CPUID7_EBX.SHA) and(ebx, 1) idsha
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512CD) and(ebx, 1) idavx512cd
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512ER) and(ebx, 1) idavx512er
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512PF) and(ebx, 1) idavx512pf
+cpuid(7) shr(ebx, CPUID7_EBX.PT) and(ebx, 1) idpt
+cpuid(7) shr(ebx, CPUID7_EBX.CLWB) and(ebx, 1) idclwb
+cpuid(7) shr(ebx, CPUID7_EBX.CLFLUSHOPT) and(ebx, 1) idclflushopt
+cpuid(7) shr(ebx, CPUID7_EBX.PCOMMIT) and(ebx, 1) idpcommit
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512IFMA) and(ebx, 1) idavx512ifma
+cpuid(7) shr(ebx, CPUID7_EBX.SMAP) and(ebx, 1) idsmap
+cpuid(7) shr(ebx, CPUID7_EBX.ADX) and(ebx, 1) idadx
+cpuid(7) shr(ebx, CPUID7_EBX.RDSEED) and(ebx, 1) idrdseed
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512DQ) and(ebx, 1) idavx512dq
+cpuid(7) shr(ebx, CPUID7_EBX.AVX512F) and(ebx, 1) idavx512f
+cpuid(7) shr(ebx, CPUID7_EBX.PQE) and(ebx, 1) idpqe
+cpuid(7) shr(ebx, CPUID7_EBX.RTM) and(ebx, 1) idrtm
+cpuid(7) shr(ebx, CPUID7_EBX.INVPCID) and(ebx, 1) idinvpcid
+cpuid(7) shr(ebx, CPUID7_EBX.ErmS) and(ebx, 1) iderms
+cpuid(7) shr(ebx, CPUID7_EBX.BMI2) and(ebx, 1) idbmi2
+cpuid(7) shr(ebx, CPUID7_EBX.SMEP) and(ebx, 1) idsmep
+cpuid(7) shr(ebx, CPUID7_EBX.FPDP) and(ebx, 1) idfpdp
+cpuid(7) shr(ebx, CPUID7_EBX.AVX2) and(ebx, 1) idavx2
+cpuid(7) shr(ebx, CPUID7_EBX.HLE) and(ebx, 1) idhle
+cpuid(7) shr(ebx, CPUID7_EBX.BMI1) and(ebx, 1) idbmi1
+cpuid(7) shr(ebx, CPUID7_EBX.SGX) and(ebx, 1) idsgx
+cpuid(7) shr(ebx, CPUID7_EBX.TSC_ADJUST) and(ebx, 1) idtscadj
+cpuid(7) shr(ebx, CPUID7_EBX.FSGSBASE) and(ebx, 1) idfsgsbase
+cpuid(7) shr(ecx, CPUID7_ECX.PREFETCHWT1) and(ecx, 1) idprefetchwt1
+cpuid(7) shr(ecx, CPUID7_ECX.AVX512VBMI) and(ecx, 1) idavx512vbmi
+cpuid(7) shr(ecx, CPUID7_ECX.UMIP) and(ecx, 1) idumip
+cpuid(7) shr(ecx, CPUID7_ECX.PKU) and(ecx, 1) idpku
+cpuid(7) shr(ecx, CPUID7_ECX.OSPKE) and(ecx, 1) idospke
+cpuid(7) shr(ecx, CPUID7_ECX.AVX512VBMI2) and(ecx, 1) idavx512vbmi2
+cpuid(7) shr(ecx, CPUID7_ECX.CET) and(ecx, 1) idcet
+cpuid(7) shr(ecx, CPUID7_ECX.GFNI) and(ecx, 1) idgfni
+cpuid(7) shr(ecx, CPUID7_ECX.VAES) and(ecx, 1) idvaes
+cpuid(7) shr(ecx, CPUID7_ECX.VPCL) and(ecx, 1) idvpcl
+cpuid(7) shr(ecx, CPUID7_ECX.AVX512VNNI) and(ecx, 1) idavx512vnni
+cpuid(7) shr(ecx, CPUID7_ECX.AVX512BITALG) and(ecx, 1) idavx512bitalg
+cpuid(7) shr(ecx, CPUID7_ECX.TME) and(ecx, 1) idtme
+cpuid(7) shr(ecx, CPUID7_ECX.AVX512VP) and(ecx, 1) idavx512vp
+cpuid(7) shr(ecx, CPUID7_ECX.VA57) and(ecx, 1) idva57
+cpuid(7) shr(ecx, CPUID7_ECX.RDPID) and(ecx, 1) idrdpid
+cpuid(7) shr(ecx, CPUID7_ECX.SGX_LC) and(ecx, 1) idsgxlc
+cpuid(7) shr(edx, CPUID7_EDX.AVX512QVNNIW) and(edx, 1) idavx512qvnniw
+cpuid(7) shr(edx, CPUID7_EDX.AVX512QFMA) and(edx, 1) idavx512qfma
+cpuid(7) shr(edx, CPUID7_EDX.PCONFIG) and(edx, 1) idpconfig
+cpuid(7) shr(edx, CPUID7_EDX.IBRS_IBPB) and(edx, 1) idibrsibpb
+cpuid(7) shr(edx, CPUID7_EDX.STIBP) and(edx, 1) iibp
+cpuid(1) shr(ecx, CPUID1_ECX.SSE3) and(ecx, 1) idsse3
+cpuid(1) shr(ecx, CPUID1_ECX.PCLMUL) and(ecx, 1) idpclmul
+cpuid(1) shr(ecx, CPUID1_ECX.DTES64) and(ecx, 1) iddtes64
+cpuid(1) shr(ecx, CPUID1_ECX.MON) and(ecx, 1) idmon
+cpuid(1) shr(ecx, CPUID1_ECX.DSCPL) and(ecx, 1) iddscpl
+cpuid(1) shr(ecx, CPUID1_ECX.VMX) and(ecx, 1) idvmx
+cpuid(1) shr(ecx, CPUID1_ECX.SMX) and(ecx, 1) idsmx
+cpuid(1) shr(ecx, CPUID1_ECX.EST) and(ecx, 1) idest
+cpuid(1) shr(ecx, CPUID1_ECX.TM2) and(ecx, 1) idtm2
+cpuid(1) shr(ecx, CPUID1_ECX.SSSE3) and(ecx, 1) idssse3
+cpuid(1) shr(ecx, CPUID1_ECX.CID) and(ecx, 1) idcid
+cpuid(1) shr(ecx, CPUID1_ECX.SDBG) and(ecx, 1) idsdbg
+cpuid(1) shr(ecx, CPUID1_ECX.FMA) and(ecx, 1) idfma
+cpuid(1) shr(ecx, CPUID1_ECX.CX16) and(ecx, 1) idcx16
+cpuid(1) shr(ecx, CPUID1_ECX.XTPR) and(ecx, 1) idxtpr
+cpuid(1) shr(ecx, CPUID1_ECX.PDCM) and(ecx, 1) idpdcm
+cpuid(1) shr(ecx, CPUID1_ECX.PCID) and(ecx, 1) idpcid
+cpuid(1) shr(ecx, CPUID1_ECX.DCA) and(ecx, 1) iddca
+cpuid(1) shr(ecx, CPUID1_ECX.SSE4_1) and(ecx, 1) idsse41
+cpuid(1) shr(ecx, CPUID1_ECX.SSE4_2) and(ecx, 1) idsse42
+cpuid(1) shr(ecx, CPUID1_ECX.X2APIC) and(ecx, 1) idx2apic
+cpuid(1) shr(ecx, CPUID1_ECX.MOVBE) and(ecx, 1) idmovbe
+cpuid(1) shr(ecx, CPUID1_ECX.POPCNT) and(ecx, 1) idpopcnt
+cpuid(1) shr(ecx, CPUID1_ECX.TSCD) and(ecx, 1) idtscd
+cpuid(1) shr(ecx, CPUID1_ECX.AES) and(ecx, 1) idaes
+cpuid(1) shr(ecx, CPUID1_ECX.XSAVE) and(ecx, 1) idxsave
+cpuid(1) shr(ecx, CPUID1_ECX.OSXSAVE) and(ecx, 1) idosxsave
+cpuid(1) shr(ecx, CPUID1_ECX.AVX) and(ecx, 1) idavx
+cpuid(1) shr(ecx, CPUID1_ECX.F16C) and(ecx, 1) idf16c
+cpuid(1) shr(ecx, CPUID1_ECX.RDRAND) and(ecx, 1) idrdrand
+cpuid(1) shr(ecx, CPUID1_ECX.HV) and(ecx, 1) idhv
+cpuid(1) shr(edx, CPUID1_EDX.FPU) and(edx, 1) idfpu
+cpuid(1) shr(edx, CPUID1_EDX.VME) and(edx, 1) idvme
+cpuid(1) shr(edx, CPUID1_EDX.DE) and(edx, 1) idde
+cpuid(1) shr(edx, CPUID1_EDX.PSE) and(edx, 1) idpse
+cpuid(1) shr(edx, CPUID1_EDX.TSC) and(edx, 1) idtsc
+cpuid(1) shr(edx, CPUID1_EDX.MSR) and(edx, 1) idmsr
+cpuid(1) shr(edx, CPUID1_EDX.PAE) and(edx, 1) idpae
+cpuid(1) shr(edx, CPUID1_EDX.CX8) and(edx, 1) idcx8
+cpuid(1) shr(edx, CPUID1_EDX.APIC) and(edx, 1) idapic
+cpuid(1) shr(edx, CPUID1_EDX.SEP) and(edx, 1) idsep
+cpuid(1) shr(edx, CPUID1_EDX.MTRR) and(edx, 1) idmtrr
+cpuid(1) shr(edx, CPUID1_EDX.PGE) and(edx, 1) idpge
+cpuid(1) shr(edx, CPUID1_EDX.MCA) and(edx, 1) idmca
+cpuid(1) shr(edx, CPUID1_EDX.CMOV) and(edx, 1) idcmov
+cpuid(1) shr(edx, CPUID1_EDX.PAT) and(edx, 1) idpat
+cpuid(1) shr(edx, CPUID1_EDX.PSE36) and(edx, 1) idpse36
+cpuid(1) shr(edx, CPUID1_EDX.PSN) and(edx, 1) idpsn
+cpuid(1) shr(edx, CPUID1_EDX.CLFL) and(edx, 1) idclfl
+cpuid(1) shr(edx, CPUID1_EDX.DS) and(edx, 1) idds
+cpuid(1) shr(edx, CPUID1_EDX.ACPI) and(edx, 1) idacpi
+cpuid(1) shr(edx, CPUID1_EDX.r64) and(edx, 1) idr64
+cpuid(1) shr(edx, CPUID1_EDX.FXSR) and(edx, 1) idfxsr
+cpuid(1) shr(edx, CPUID1_EDX.NP) and(edx, 1) idsse
+cpuid(1) shr(edx, CPUID1_EDX.SSE2) and(edx, 1) idsse2
+cpuid(1) shr(edx, CPUID1_EDX.SS) and(edx, 1) idss
+cpuid(1) shr(edx, CPUID1_EDX.HTT) and(edx, 1) idhtt
+cpuid(1) shr(edx, CPUID1_EDX.TM) and(edx, 1) idtm
+cpuid(1) shr(edx, CPUID1_EDX.IA64) and(edx, 1) idia64
+cpuid(1) shr(edx, CPUID1_EDX.PBE) and(edx, 1) idpbe
