@@ -1,0 +1,10 @@
+0x0f 0x37 getsec
+
+mov(eax, 0) getsec() getsec_capabilities
+mov(eax, 2) getsec() getsec_enteraccs
+mov(eax, 3) getsec() getsec_exitac
+mov(eax, 4) getsec() getsec_senter
+mov(eax, 5) getsec() getsec_sexit
+mov(eax, 6) getsec() getsec_parameters
+mov(eax, 7) getsec() getsec_smctrl
+mov(eax, 8) getsec() getsec_wakeup

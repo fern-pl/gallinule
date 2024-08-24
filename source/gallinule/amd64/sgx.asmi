@@ -1,0 +1,41 @@
+0x0f 0x01 0xcf encls
+
+mov(eax, 0) encls() encls_ecreate
+mov(eax, 1) encls() encls_eadd
+mov(eax, 2) encls() encls_einit
+mov(eax, 3) encls() encls_eremove
+mov(eax, 4) encls() encls_edbgrd
+mov(eax, 5) encls() encls_edbgwr
+mov(eax, 6) encls() encls_eextend 
+mov(eax, 7) encls() encls_eldb 
+mov(eax, 8) encls() encls_eldu 
+mov(eax, 9) encls() encls_eblock 
+
+mov(eax, 0xa) encls() encls_epa
+mov(eax, 0xb) encls() encls_ewb
+mov(eax, 0xc) encls() encls_etrack
+mov(eax, 0xd) encls() encls_eaug
+mov(eax, 0xe) encls() encls_emodpr
+mov(eax, 0xf) encls() encls_emodt
+mov(eax, 0x10) encls() encls_erdinfo 
+mov(eax, 0x11) encls() encls_etrackc
+mov(eax, 0x12) encls() encls_eldbc
+mov(eax, 0x13) encls() encls_elduc
+
+0x0f 0x01 0xd7 enclu
+
+mov(eax, 0) enclu() enclu_ereport
+mov(eax, 1) enclu() enclu_egetkey
+mov(eax, 2) enclu() enclu_eenter
+mov(eax, 3) enclu() enclu_eresume
+mov(eax, 4) enclu() enclu_eexit
+mov(eax, 5) enclu() enclu_eaccept
+mov(eax, 6) enclu() enclu_emodpe
+mov(eax, 7) enclu() enclu_eacceptcopy
+mov(eax, 9) enclu() enclu_edeccssa
+
+0x0f 0x01 0xc0 enclv
+
+mov(eax, 0) enclv() enclv_edecvirtchild
+mov(eax, 1) enclv() enclv_eincvirtchild
+mov(eax, 2) enclv() enclv_esetcontext

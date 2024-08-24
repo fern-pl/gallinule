@@ -64,10 +64,10 @@ pure string parse(string path)()
                 mappings[1] ~= "NO_REX ^ ";
             else if (word.startsWith('/'))
                 mappings[0] = word[1..$];
-            else if (word.startsWith('r') && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1) ||
-                word.startsWith('i') && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1) ||
-                word.startsWith('m') && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1) ||
-                word.startsWith("rm") && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1) || 
+            else if ((word.startsWith('r') && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1)) ||
+                (word.startsWith('i') && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1)) ||
+                (word.startsWith('m') && (word.endsWith("xx") || word[1..$].filter!(x => x.isDigit).length == word.length - 1)) ||
+                (word.startsWith("rm") && (word.endsWith("xx") || word[2..$].filter!(x => x.isDigit).length == word.length - 2)) || 
                 word == "st" || word == "dr" || word == "cr")
                 details ~= word;
             else
@@ -162,7 +162,7 @@ pure string parse(string path)()
         if (mnemonic == null)
             throw new Throwable("Instruction mnemonic was not provided!");
 
-        string attr = "@("~details.to!string[1..$-1]~")\n";
+        string attr = details.length == 0 ? null : "@("~details.to!string[1..$-1]~")\n";
         string _body = "auto "~mnemonic~generics~"("~operands~") "~conditional~"=> "~emit~";\n\n";
         ret ~= attr~_body;
     }
