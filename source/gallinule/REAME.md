@@ -1,5 +1,9 @@
 ASMI is the assembly representation standardized for Gallinule.
 
+- [x] x86 - x86_64
+- [ ] ARM64 - ARM
+- [ ] CIL
+
 ```
     0x4a 0x00 $0 0xf3 $1 mnemonic r32 imm8
 
