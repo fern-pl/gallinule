@@ -9,12 +9,14 @@ ASMI is the assembly representation standardized for Gallinule.
 
     vex128.i [xop] 0xf2 0x88 $0 $1 $2 mnemonic r128 imm rm128
 
-    mvex256 0xf3p 0x00 $0 $1 mnemonic m64 rm64
+f3.    mvex256 0x00 $0 $1 mnemonic m64 rm64
 ```
 
 Representation of an instruction should be done on a single line, with the number of references equal to or greater than the number of parameters. Pseudo-instructions may be added by simply writing D code instead of emission data, this is limited to calling functions, like `cpuid(1) shr(edx, 3) mnemonic` to create a pseudo-instruction.
 
 Mnemonic must come before parameters and pseudo-instuction combos, all other representation items may appear at any point in a line, so long as they conform to the following table.
+
+Absence of parameters (references) but presence of details (ie: `r32 m64`) will result in all references being added sequentially at the end of emission data.
 
 | Item | Representation |
 |--------|----------------|
@@ -30,7 +32,6 @@ Mnemonic must come before parameters and pseudo-instuction combos, all other rep
 | MVEX | `mvex{size}[.i]*` **will make the prefix integral-kind.* |
 | EVEX | `evex{size}[.i]*` **will make the prefix integral-kind.* |
 | VEX | `vex{size}[.i]*` **will make the prefix integral-kind.* |
-| AVX | `avx{size}[.i]*` **will make the prefix integral-kind.* |
 | VEX Prefix Field | `0xnnp` |
 | VEX Map Field | `[m*]` **where `m` is any map* |
 | Toggle REX Off | `/r` |

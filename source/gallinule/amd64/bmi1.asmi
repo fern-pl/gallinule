@@ -8,3 +8,6 @@
 
 vex128.i [38] 0xf2 $0 $1 $2 andn r32 r32 rm32
 vex128.i [38] 0xf2 $0 $1 $2 andn r64 r64 rm64
+
+vex128.i [38] 0xf7 $0 $1 $2 bextr r32 rm32 r32
+vex128.i [38] 0xf7 $0 $1 $2 bextr r64 rm64 r64

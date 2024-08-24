@@ -4028,5 +4028,5 @@ unittest
     //0fh 0fh $0 $1 9ah pfsub r64 rm64
     auto pfsub(RM641)(R64 o0, RM641 o1) if (valid!(RM641, 64)) => emit!(0, 0, 128, 1, 0)(0x0f, 0x0f, o0, o1, 0x9a);
     */
-    pragma(msg, parse!("3dnow.asmi"));
+    pragma(msg, parse!("avx.asmi"));
 }

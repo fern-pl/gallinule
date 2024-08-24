@@ -1,0 +1,27 @@
+66.vex128 0x58 vaddpd r128 r128 rm128
+66.vex256 0x58 vaddpd r256 r256 rm256
+vex128 0x58 vaddps r128 r128 rm128
+vex256 0x58 vaddps r256 r256 rm256
+
+f2.vex128 0x58 vaddsd r128 r128 r128
+f2.vex128 0x58 vaddsd r128 r128 m64
+f3.vex128 0x58 vaddss r128 r128 r128
+f3.vex128 0x58 vaddss r128 r128 m32
+
+66.vex128 0xd0 vaddsubpd r128 r128 rm128
+66.vex256 0xd0 vaddsubpd r256 r256 rm256
+f2.vex128 0xd0 vaddsubps r128 r128 rm128
+f2.vex256 0xd0 vaddsubps r256 r256 rm256
+
+f3.vex128 0x7e vmovq r128 r128
+f3.vex128 0x7e vmovq r128 m64
+66.vex128 0xd6 vmovq m64 r128
+
+66.vex128 0x6e vmovd r128 rm32
+66.vex128 0x7e vmovd rm32 r128
+
+66.vex128 0x6e vmovq r128 rm64
+66.vex128 0x7e vmovq rm64 r128
+
+66.vex128 [3a] 0x0d vblendpd r128 r128 rm128 i8
+66.vex256 [3a] 0x0d vblendpd r256 r256 rm256 i8

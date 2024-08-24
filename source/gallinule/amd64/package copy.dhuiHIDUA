@@ -460,55 +460,38 @@ assert "Cannot encode 'fadd' with no 'st0' operand!"
 /* ====== SSE3 ====== */
 
 /* ====== AVX ====== */
-vex1 0x66p 0x58 $0 $1 $2 vaddpd r128 r128 rm12828
-vex2 0x66p 0x58 $0 $1 $2 vaddpd r256 r256 rm25656
-vex1 0x58 $0 $1 $2 vaddps r128 r128 rm12828
-vex2 0x58 $0 $1 $2 vaddps r256 r256 rm25656
-vex1 0x58 $0 $1 $2 vaddsd r128 r128 rm /1286428xf2
-vex1 0x58 $0 $1 $2 vaddss r128 r128 rm /1283228xf3
-vex1 0x66p 0xd0 $0 $1 $2 vaddsubpd r128 r128 rm12828
-vex2 0x66p 0xd0 $0 $1 $2 vaddsubpd r256 r256 rm25656
-vex1 0xd0 $0 $1 $2 vaddsubps r128 r128 rm12828xf2
-vex2 0xd0 $0 $1 $2 vaddsubps r256 r256 rm25656xf2
-vex1 0x7e $0 $1 vmovq r128 rm /1286428xf3
-vex1 0x66p 0xd6 $0 $1 vmovq m64 r12828
 
-vex1 0x66p 0x6e $0 $1 vmovd r128 rm3228
-vex1 0x66p 0x7e $0 $1 vmovd rm32 r12828
-
-vex1 0x66p 0x6e $0 $1 vmovq r128 rm6428
-vex1 0x66p 0x7e $0 $1 vmovq rm64 r12828
 /* ====== AES ====== */
 
 0x66 0x0f 0x38 0xde $0 $1 aesdec r128 rm128 /r /f
-vex128 [38] 0x66p 0xde $0 $1 $2 vaesdec r128 r128 rm128
-vex256 [38] 0x66p 0xde $0 $1 $2 vaesdec r256 r256 rm256
+66.vex128 [38] 0xde $0 $1 $2 vaesdec r128 r128 rm128
+66.vex256 [38] 0xde $0 $1 $2 vaesdec r256 r256 rm256
 0xf3 0x0f 0x38 0xdd $0 $1 aesdec128kl r128 m384 /r /f
 0xf3 0x0f 0x38 0xdf $0 $1 aesdec256kl r128 m512 /r /f
 
 0x66 0x0f 0x38 0xdf $0 $1 aesdeclast r128 rm128 /r /f
-vex128 [38] 0x66p 0xdf $0 $1 $2 vaesdeclast r128 r128 rm128
-vex256 [38] 0x66p 0xdf $0 $1 $2 vaesdeclast r256 r256 rm256
+66.vex128 [38] 0xdf $0 $1 $2 vaesdeclast r128 r128 rm128
+66.vex256 [38] 0xdf $0 $1 $2 vaesdeclast r256 r256 rm256
 0xf3 0x0f 0x38 0xd8 $0 ecx aesdecwide128kl m384 /r /f
 0xf3 0x0f 0x38 0xd8 $0 ebx aesdecwide256kl m512 /r /f
 
 0x66 0x0f 0x38 0xdc $0 $1 aesenc r128 rm128 /r /f
-vex128 [38] 0x66p 0xdc $0 $1 $2 vaesenc r128 r128 rm128
-vex256 [38] 0x66p 0xdc $0 $1 $2 vaesenc r256 r256 rm256
+66.vex128 [38] 0xdc $0 $1 $2 vaesenc r128 r128 rm128
+66.vex256 [38] 0xdc $0 $1 $2 vaesenc r256 r256 rm256
 0xf3 0x0f 0x38 0xdc $0 $1 aesenc128kl r128 m384 /r /f
 0xf3 0x0f 0x38 0xde $0 $1 aesenc256kl r128 m512 /r /f
 
 0x66 0x0f 0x38 0xdd $0 $1 aesenclast r128 rm128 /r /f
-vex128 [38] 0x66p 0xdd $0 $1 $2 vaesenclast r128 r128 rm128
-vex256 [38] 0x66p 0xdd $0 $1 $2 vaesenclast r256 r256 rm256
+66.vex128 [38] 0xdd $0 $1 $2 vaesenclast r128 r128 rm128
+66.vex256 [38] 0xdd $0 $1 $2 vaesenclast r256 r256 rm256
 0xf3 0x0f 0x38 0xd8 $0 eax aesencwide128kl m384 /r /f
 0xf3 0x0f 0x38 0xd8 $0 edx aesencwide256kl m512 /r /f
 
 0x66 0x0f 0x38 0xdb $0 $1 aesimc r128 rm128 /r /f
-vex128 [38] 0x66p 0xdb $0 $1 vaesimc r128 rm128
+66.vex128 [38] 0xdb $0 $1 vaesimc r128 rm128
 
 0x66 0x0f 0x3a 0xdf $0 $1 i8 aeskeygenassist r128 rm128 i8 /r /f
-vex128 [3a] 0x66p 0xdf $0 $1 i8 vaeskeygenassist r128 rm128 i8
+66.vex128 [3a] 0xdf $0 $1 i8 vaeskeygenassist r128 rm128 i8
 /* ====== SHA ====== */
 
 0x0f 0x38 0xc9 $0 $1 sha1msg1 r128 rm128 /r /f

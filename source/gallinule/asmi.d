@@ -26,13 +26,14 @@ pure string parse(string path)()
 
         foreach (i, word; line.split(' '))
         {
-            if (word.startsWith("0x"))
+            if (word.length > 3 && word[2] == '.')
             {
-                if (word.endsWith('p'))
-                    mappings[4] = word[0..$-1];
-                else
-                    emit ~= word~", ";
+                mappings[4] = "0x"~word[0..2];
+                word = word[3..$];
             }
+
+            if (word.startsWith("0x"))
+                emit ~= word~", ";
             else if (word.startsWith('$'))
             {
                 string operand = 'o'~word[1..$];
@@ -88,6 +89,16 @@ pure string parse(string path)()
                 emit ~= word~", ";
             else
                 combo ~= word;
+        }
+
+        if (parameters.length == 0 && details.length != 0)
+        {
+            foreach (i, detail; details)
+            {
+                string operand = 'o'~i.to!string;
+                emit ~= operand~", ";
+                parameters ~= operand;
+            }
         }
 
         foreach (i, detail; details)
