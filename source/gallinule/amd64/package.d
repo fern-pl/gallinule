@@ -7,6 +7,7 @@ import tern.traits : Attributes;
 import std.typecons;
 import tern.algorithm;
 import tern.state;
+import gallinule.asmi;
 
 /* ====== ADDRESSING ====== */
 
@@ -2306,14 +2307,7 @@ public:
 
     /* ====== MMX ====== */
 
-    auto movq(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!(0, NO_REX | FLIP)(0x0f, 0x6f, dst, src);
-    auto movq(Mem!64 dst, MMX src) => emit!(0, NO_REX | FLIP)(0x0f, 0x7f, dst, src);
-
-    auto movd(RM)(MMX dst, RM src) if (valid!(RM, 32)) => emit!(0, NO_REX | FLIP)(0x0f, 0x6e, dst, src);
-    auto movd(RM)(RM dst, MMX src) if (valid!(RM, 32)) => emit!(0, NO_REX | FLIP)(0x0f, 0x7e, dst, src);
-
-    auto movq(RM)(MMX dst, RM src) if (valid!(RM, 64)) => emit!0(0x0f, 0x6e, dst, src);
-    auto movq(RM)(RM dst, MMX src) if (valid!(RM, 64)) => emit!0(0x0f, 0x7e, dst, src);
+    mixin(parse!("mmx.asmi"));
 
     /* ====== NO_REX | FLIP ====== */
 
@@ -4017,7 +4011,7 @@ unittest
 
 unittest
 {
-    import gallinule.asmi;
+    
 
     /*
     @("r64", "rm64")
@@ -4028,5 +4022,5 @@ unittest
     //0fh 0fh $0 $1 9ah pfsub r64 rm64
     auto pfsub(RM641)(R64 o0, RM641 o1) if (valid!(RM641, 64)) => emit!(0, 0, 128, 1, 0)(0x0f, 0x0f, o0, o1, 0x9a);
     */
-    pragma(msg, parse!("avx.asmi"));
+    pragma(msg, parse!("mmx.asmi"));
 }

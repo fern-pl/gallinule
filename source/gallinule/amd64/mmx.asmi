@@ -1,0 +1,8 @@
+0x0f 0x6f $0 $1 movq r64 rm64 /r /f
+0x0f 0x7f $0 $1 movq m64 r64 /r /f
+
+0x0f 0x6e $0 $1 movd r64 rm32 /r /f
+0x0f 0x7e $0 $1 movd rm32 r64 /r /f
+
+0x0f 0x6e $0 $1 movq r64 rm64 /r /f
+0x0f 0x7e $0 $1 movq rm64 r64 /r /f

@@ -132,6 +132,8 @@ pure string parse(string path)()
                 generics ~= type~", ";
                 conditional ~= "isInstanceOf!(Mem, "~type~") && ";
             }
+            else if (type.startsWith('M'))
+                type = "Mem!"~type[1..$];
 
             switch (type)
             {
